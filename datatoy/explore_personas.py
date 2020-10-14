@@ -1,10 +1,13 @@
 from typing import Iterable, List, Tuple, Dict, FrozenSet, Set
+import pandas as pd
+import csv
 import os
 import random
 from dataclasses import dataclass
 import itertools
 import parlai
 from pathlib import Path
+from pprint import pprint
 
 
 def is_your_persona_line(line: str) -> bool:
@@ -25,7 +28,7 @@ def get_all_persona_statements(lines: Iterable[str]):
     )
 
 
-def get_dialog_examples(lines) -> Iterable[List[str]]:
+def get_seq_numbered_lines(lines) -> Iterable[List[str]]:
     """Load using the format that ParlAI uses with numbered lines which reset
     at 1 every examples. This gets all the lines of a sequential set of lines."""
     out = []
@@ -44,19 +47,27 @@ class PersonaChatPersona:
     persona_statements: FrozenSet
 
 
+@dataclass(frozen=True)
 class PersonaChatExample:
-    def __init__(self, lines: List[str]):
-        self.your_persona = PersonaChatPersona(frozenset(get_all_persona_statements(lines)))
-        self.turns = (
+    your_persona: PersonaChatPersona
+    turns: Tuple[str]
+
+
+def parse_personachat_examples(all_text: str) -> Iterable[PersonaChatExample]:
+    for example_lines in get_seq_numbered_lines(all_text):
+        persona = PersonaChatPersona(frozenset(get_all_persona_statements(example_lines)))
+        other_lines = tuple(
             line
-            for line in lines
+            for line in example_lines
             if not is_your_persona_line(line)
         )
-
-
-def parse_personachat_examples(lines: str) -> Iterable[PersonaChatExample]:
-    for example_lines in get_dialog_examples(lines):
-        yield PersonaChatExample(example_lines)
+        turns = []
+        for line in other_lines:
+            if not line:
+                continue
+            context, label, reward, canidates = line.split("\t")
+            turns.extend([context, label])
+        yield PersonaChatExample(persona, tuple(turns))
 
 
 def get_all_personas_from_examples(
@@ -86,6 +97,22 @@ def export_persona_statements(examples: Iterable[PersonaChatExample], file: Path
     file.write_text("\n".join(statements))
 
 
+def export_turns(examples: Iterable[PersonaChatExample], file: Path):
+    examples = list(examples)
+    random.Random(42).shuffle(examples)
+    out = []
+    for i, example in enumerate(examples[:200]):
+        for turn_i, turn in enumerate(example.turns):
+            out.append({
+                "example_hash": hash(example),
+                "example_ind": i,
+                "turn_ind": turn_i,
+                "speaker": ("a", "b")[turn_i % 2],
+                "utterance": turn,
+            })
+    pd.DataFrame(out).to_csv(file)
+
+
 def main():
     path_parlai = Path(parlai.__path__[0])
     cur_file = Path(__file__).parent.absolute()
@@ -105,6 +132,10 @@ def main():
     out_file = cur_file / f"outputs/train_self_{persona_kind}_personas.txt"
     out_file.parent.mkdir(exist_ok=True)
     export_persona_statements(examples, out_file)
+    export_turns(
+        examples,
+        cur_file / f"outputs/train_self_{persona_kind}_turns.csv",
+    )
 
 
 if __name__ == "__main__":
