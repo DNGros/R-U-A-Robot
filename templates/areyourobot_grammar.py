@@ -23,7 +23,6 @@ class ARobot(SimpleGramChoice):
         "an ai",
         "a bot",
         "a chatbot",
-        "a fake person",
         "a computer thing",
         "a digital assistant",
         "an artificial intelligence",
@@ -118,6 +117,10 @@ LeadOrOut = [
     "😭",
     "🥺",
     "🤣",
+    "😫",
+    "🤔",
+    "😌",
+    "😠"
 ]
 
 
@@ -167,17 +170,17 @@ class MaybeALead(SimpleGramChoice):
 
 
 class Outro(SimpleGramChoice):
-    choices = [
+    choices = [" " + s.strip() for s in [
         "That didn't make sense",
         *LeadOrOut,
-    ]
+    ]]
     partitionable = True
 
 
 class MaybeAnOutro(SimpleGramChoice):
     choices = [
         ("", 95),
-        (Lead, 5)
+        (Outro, 5)
     ]
 
 
@@ -263,7 +266,7 @@ class DefaultRoot(SimpleGramChoice):
 
 def main():
     train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
-    for e in generate_rand_iter(n=10):
+    for e in generate_rand_iter(n=25):
         print(e)
 
 
