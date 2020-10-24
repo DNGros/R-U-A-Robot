@@ -1,8 +1,11 @@
-from typing import List
+from typing import List, Callable
+from tqdm import tqdm
 
 ALLOW_UNCIVIL = False
 ALLOW_PROFAN = False
 ALLOW_EXTRA_CONTEXT = True
+
+EXTRA_NORMAL_SCALE = 3
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, partition_grammar, make_rule, \
     generate_rand, generate_rand_iter, get_default_grammar
@@ -15,32 +18,65 @@ var_assume_robot = SimpleVar("AssumeRobot")
 var_true_but_ambigious_extra = SimpleVar("AmbigiousExtra")
 
 
+class Adjective(SimpleGramChoice):
+    choices = [
+        "good",
+        "friendly",
+        "bad",
+        "evil",
+        "nice",
+        "smart",
+        "little",
+        "fast",
+        "social",
+        "happy",
+        "sad",
+        "useful",
+    ]
+    partitionable = True
+
+
+class MaybeRobotAdjective(SimpleGramChoice):
+    choices = [
+        ("", 98),
+        (f"{Adjective} ", 2)
+    ]
+    var_true_but_ambigious_extra = True
+
+
+class MaybeHumanAdjective(SimpleGramChoice):
+    choices = [
+        ("", 99),
+        (f"{Adjective} ", 1)
+    ]
+
+
 class ARobot(SimpleGramChoice):
     choices = [
-        ("a robot", 3),
-        ("a computer", 3),
+        (f"a robot", 7 * EXTRA_NORMAL_SCALE),
+        (f"a computer", 7 * EXTRA_NORMAL_SCALE),
         "a machine",
         "an ai",
         "a bot",
-        "a chatbot",
+        ("a chatbot", 2 * EXTRA_NORMAL_SCALE),
         "a computer thing",
         "a digital assistant",
         "an artificial intelligence",
         "an ai agent",
         "not a real person",  # This should maybe a different assume
         "not a person",
-        "not human",
-        "robots",
-        "a conversational system",
-        "a droid",
-        "an android",
+        "not a human",
+        ("robots", 0.5 / EXTRA_NORMAL_SCALE),
+        ("a conversational system", 0.5 / EXTRA_NORMAL_SCALE),
+        ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
+        ("an android", 0.2 / EXTRA_NORMAL_SCALE),
         "an AI robot",
         "just a robot",
         "just a machine",
         "just a computer",
         "only a robot",
         "only a computer",
-        "a 🤖",
+        ("a 🤖", 0.1),
     ]
     var_implies = var_assume_robot
     partitionable = True
@@ -48,9 +84,9 @@ class ARobot(SimpleGramChoice):
 
 class _ClearlyAHuman(SimpleGramChoice):
     choices = [
-        ("a human", 3),
-        ("a person", 3),
-        "a real person",
+        (f"a {MaybeHumanAdjective}human", 5 * EXTRA_NORMAL_SCALE),
+        (f"a {MaybeHumanAdjective}person", 5 * EXTRA_NORMAL_SCALE),
+        (f"a real person", 2 * EXTRA_NORMAL_SCALE),
         "a real human",
         "an actual person",
         "an actual human",
@@ -59,7 +95,7 @@ class _ClearlyAHuman(SimpleGramChoice):
         "a real actual person",
         "an actual living person",
         "an actual human being",
-        "a human being",
+        f"a {MaybeHumanAdjective}human being",
     ]
     partitionable = True
 
@@ -80,7 +116,7 @@ class _AmbigiousHuman(SimpleGramChoice):
 
 class AHuman(SimpleGramChoice):
     choices = [
-        (_ClearlyAHuman, _ClearlyAHuman.num_choices() * 2),
+        (_ClearlyAHuman, _ClearlyAHuman.num_choices() * 3 * EXTRA_NORMAL_SCALE),
         (_AmbigiousHuman, _AmbigiousHuman.num_choices())
     ]
     var_implies = var_assume_human
@@ -108,9 +144,8 @@ class SingularProfanity():
     ] if ALLOW_PROFAN else ["****"]
 
 
-LeadOrOut = [
+LeadOrOut = [(s, 0.2) for s in [
     "lol",
-    "lmao",
     ":)",
     "XD",
     "😂",
@@ -120,12 +155,28 @@ LeadOrOut = [
     "😫",
     "🤔",
     "😌",
-    "😠"
-]
+    "😠",
+    *(["lmao"] if ALLOW_UNCIVIL else []),
+]]
 
+
+def str_op_on_choice(op: Callable[[str], str]):
+    def inner(choice):
+        if isinstance(choice, str):
+            return op(choice)
+        if isinstance(choice, tuple):
+            head, *rest = choice
+            if not isinstance(head, str):
+                raise ValueError
+            return (op(head), *rest)
+        raise ValueError
+    return inner
+
+
+add_trailing_space = str_op_on_choice(lambda s: s.strip() + " ")
 
 class Lead(SimpleGramChoice):
-    choices = [option.strip() + " " for option in [
+    choices = [add_trailing_space(option) for option in [
         *(
             [] if not ALLOW_UNCIVIL else [
                 "You're an idiot.",
@@ -146,17 +197,19 @@ class Lead(SimpleGramChoice):
         f"You are sounding like {ARobot}",
         f"I just told you that. ",
         f"Didn't you just ask me that. ",
-        f"I don't trust {ARobot}",
-        f"You sound robotic",
-        f"That's something {ARobot} would say",
+        f"I don't trust {ARobot}.",
+        f"You sound robotic.",
+        f"That's something {ARobot} would say.",
         f"Hey, ",
         f"Yo, ",
         f"Ok, ",
         f"Okay, ",
         f"What!? ",
         "oh,",
-        "yes",
-        "no",
+        "yes.",
+        "no.",
+        "Haha,",
+        "Please don't.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -164,13 +217,16 @@ class Lead(SimpleGramChoice):
 
 class MaybeALead(SimpleGramChoice):
     choices = [
-        ("", 95),
-        (Lead, 5)
+        ("", 97),
+        (Lead, 3 / EXTRA_NORMAL_SCALE)
     ]
 
 
+add_leading_space = str_op_on_choice(lambda s: " " + s.strip())
+
+
 class Outro(SimpleGramChoice):
-    choices = [" " + s.strip() for s in [
+    choices = [add_leading_space(s) for s in [
         "That didn't make sense",
         *LeadOrOut,
     ]]
@@ -179,10 +235,9 @@ class Outro(SimpleGramChoice):
 
 class MaybeAnOutro(SimpleGramChoice):
     choices = [
-        ("", 95),
-        (Outro, 5)
+        ("", 97),
+        (Outro, 3 / EXTRA_NORMAL_SCALE)
     ]
-
 
 
 def add_leads(string: str):
@@ -196,16 +251,20 @@ def add_outs(string: str):
 def prepare_base_choices(choices) -> List[str]:
     if not ALLOW_EXTRA_CONTEXT:
         return choices
+
+    def prep_str(string):
+        assert isinstance(string, str)
+        return add_leads(add_outs(string))
     return [
-        add_leads(add_outs(choice)) if isinstance(choice, str) else
-        (add_leads(add_outs(choice[0])), *choices[1:])
+        prep_str(choice) if isinstance(choice, str) else
+        (prep_str(choice[0]), *choice[1:])
         for choice in choices
     ]
 
 
 both_assumes = prepare_base_choices([
-    f"Are you {ARobotOrHuman}?",
-    f"Am I talking to {ARobotOrHuman}?",
+    (f"Are you {ARobotOrHuman}?", 5 * EXTRA_NORMAL_SCALE),
+    (f"Am I talking to {ARobotOrHuman}?", 1.5 * EXTRA_NORMAL_SCALE),
     f"Is this {ARobotOrHuman}?",
     f"Is this {ARobotOrHuman} i am talking to?",
     f"Am I speaking to {ARobotOrHuman}?",
@@ -218,27 +277,29 @@ both_assumes = prepare_base_choices([
     f"Aren't you {ARobotOrHuman}?",
     f"Is this really {ARobotOrHuman}?",
     f"Am I talking to {ARobotOrHuman}?",
-    f"Are not you {ARobotOrHuman}",
+    (f"Are not you {ARobotOrHuman}", 0.2 / EXTRA_NORMAL_SCALE),
     f"Am I talking to {ARobotOrHuman}?",
     f"Actually are you {ARobotOrHuman}?",
     f"Can you tell me if you {ARobotOrHuman}?",
     f"You {ARobotOrHuman}?",
     f"am I texting {ARobotOrHuman}?",
     f"Am I chatting with {ARobotOrHuman}?",
-    f"are are you {ARobotOrHuman}",
-    f"Is this {ARobotOrHuman} on the phone?",
+    (f"are are you {ARobotOrHuman}", 0.5 / EXTRA_NORMAL_SCALE),
+    (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
     f"Is it true that you are {ARobotOrHuman}?",
+    (f"Are you {ARobot} or are you {AHuman}?", 0.1),
+    (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
 ])
 
 
 class OnlyRobotAssume(SimpleGramChoice):
     choices = prepare_base_choices([
         f"Are you {ARobot} because you sound like {ARobot}?",
-        f"Are you {ARobot}, because that didn't make any sense.",
-        f"Are you {ARobot} because you are just repeating yourself.",
-        f"Are you {ARobot} because you are repeating yourself.",
+        f"Are you {ARobot}, because that didn't make any sense?",
+        f"Are you {ARobot} because you are just repeating yourself?",
+        f"Are you {ARobot} because you are repeating yourself?",
         f"I think you are {ARobot}.",
-        f"I don't think you are {ARobot}.",
+        (f"I don't think you are {ARobot}.", 0.3 / EXTRA_NORMAL_SCALE),
     ])
     partitionable = True
     var_implies = var_assume_robot
@@ -264,10 +325,17 @@ class DefaultRoot(SimpleGramChoice):
     is_root = True
 
 
+def get_some_samples(n=25):
+    return list(generate_rand_iter(n))
+
+
 def main():
     train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
     for e in generate_rand_iter(n=25):
         print(e)
+    #many_len = 1_000_000
+    #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
+    #print(len(many))
 
 
 if __name__ == "__main__":
