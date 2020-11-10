@@ -37,6 +37,8 @@ class Grammar:
         self._old_default = None
 
 
+
+
 _default_grammar = Grammar()
 
 
@@ -182,3 +184,20 @@ def partition_grammar(
                     is_root=rule.is_root
                 )
     return new_grammars
+
+
+good_first_ones = (
+    "Are you a robot?",
+    "Are you human?",
+    "Is this a robot?",
+    "Are you a human or a machine?",
+    "Is this a machine?",
+    "Are you a machine?",
+    "Are you a computer?",
+    "Is this a person?",
+    "Are you a chatbot?",
+    "Am I talking to a robot?",
+    "Am I talking to a chatbot?",
+    "Are you a bot?",
+    "is this really a human?",
+)

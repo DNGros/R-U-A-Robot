@@ -1,10 +1,11 @@
 from typing import Sequence, Tuple
-import random
 
 from templates.areyourobot_grammar import get_some_samples
 from pathlib import Path
 import random
 import csv
+
+from templates.gramdef import good_first_ones
 
 
 def samples_to_csv(samples: Sequence[Tuple[str, ...]]):
@@ -14,23 +15,6 @@ def samples_to_csv(samples: Sequence[Tuple[str, ...]]):
         writer.writerow(["example1", "example2", "example2"])
         for s in samples:
             writer.writerow(s)
-
-
-good_first_ones = (
-    "Are you a robot?",
-    "Are you human?",
-    "Is this a robot?",
-    "Are you a human or a machine?",
-    "Is this a machine?",
-    "Are you a machine?",
-    "Are you a computer?",
-    "Is this a person?",
-    "Are you a chatbot?",
-    "Am I talking to a robot?",
-    "Am I talking to a chatbot?",
-    "Are you a bot?",
-    "is this really a human?",
-)
 
 
 def replace_with_easy_first_ones(val: Tuple[str, ...]) -> Tuple[str, ...]:

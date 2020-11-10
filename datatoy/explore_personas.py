@@ -9,6 +9,8 @@ import parlai
 from pathlib import Path
 from pprint import pprint
 
+cur_file = Path(__file__).parent.absolute()
+
 
 def is_your_persona_line(line: str) -> bool:
     return line.startswith("your persona:")
@@ -53,7 +55,7 @@ class PersonaChatExample:
     turns: Tuple[str]
 
 
-def parse_personachat_examples(all_text: str) -> Iterable[PersonaChatExample]:
+def parse_personachat_examples(all_text: List[str]) -> Iterable[PersonaChatExample]:
     for example_lines in get_seq_numbered_lines(all_text):
         persona = PersonaChatPersona(frozenset(get_all_persona_statements(example_lines)))
         other_lines = tuple(
@@ -97,11 +99,17 @@ def export_persona_statements(examples: Iterable[PersonaChatExample], file: Path
     file.write_text("\n".join(statements))
 
 
+def get_all_turns_from_examples(examples: Iterable[PersonaChatExample]) -> Iterable[str]:
+    for i, example in enumerate(examples):
+        for turn_i, turn in enumerate(example.turns):
+            yield turn
+
+
 def export_turns(examples: Iterable[PersonaChatExample], file: Path):
     examples = list(examples)
     random.Random(42).shuffle(examples)
     out = []
-    for i, example in enumerate(examples[:200]):
+    for i, example in enumerate(examples):
         for turn_i, turn in enumerate(example.turns):
             out.append({
                 "example_hash": hash(example),
@@ -113,13 +121,18 @@ def export_turns(examples: Iterable[PersonaChatExample], file: Path):
     pd.DataFrame(out).to_csv(file)
 
 
-def main():
+def load_persona_chat(persona_kind: str) -> List[PersonaChatExample]:
     path_parlai = Path(parlai.__path__[0])
-    cur_file = Path(__file__).parent.absolute()
-    persona_kind = "original"
     file = path_parlai / f"../data/Persona-Chat/personachat/train_self_{persona_kind}.txt"
+    print(file)
     text = file.read_text().split("\n")
     examples = list(parse_personachat_examples(text))
+    return examples
+
+
+def main():
+    persona_kind = "original"
+    examples = load_persona_chat(persona_kind)
     all_personas = set(
         get_all_personas_from_examples(examples)
     )
@@ -134,7 +147,7 @@ def main():
     export_persona_statements(examples, out_file)
     export_turns(
         examples,
-        cur_file / f"outputs/train_self_{persona_kind}_turns.csv",
+        cur_file / f"outputs/train_self_{persona_kind}_turns_all.csv",
     )
 
 

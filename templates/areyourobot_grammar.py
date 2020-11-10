@@ -109,6 +109,8 @@ class _AmbigiousHuman(SimpleGramChoice):
         "a guy",
         "a boy",
         "a girl",
+        "a boy or girl",
+        "a man or women",
     ]
     var_implies = var_true_but_ambigious_extra
     partitionable = True
@@ -289,6 +291,7 @@ both_assumes = prepare_base_choices([
     f"Is it true that you are {ARobotOrHuman}?",
     (f"Are you {ARobot} or are you {AHuman}?", 0.1),
     (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
+    f"Are you like {ARobotOrHuman}",
 ])
 
 
@@ -330,10 +333,10 @@ def get_some_samples(n=25):
 
 
 def main():
-    train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
-    for e in generate_rand_iter(n=25):
+    #train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
+    for e in generate_rand_iter(n=200):
         print(e)
-    #many_len = 1_000_000
+    #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
     #print(len(many))
 
