@@ -1,4 +1,7 @@
-from typing import List, Tuple
+from dataclasses import dataclass
+import pandas as pd
+import dataclasses
+from typing import List, Tuple, Iterable
 from pathlib import Path
 from tqdm import tqdm
 import random
@@ -12,13 +15,14 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from whoosh.index import create_in
 import whoosh.index
-from whoosh.fields import *
+from whoosh.fields import STORED, TEXT, ID, Schema
 from nltk.tokenize import word_tokenize
 
 from templates.areyourobot_grammar import get_some_samples
 
 cur_file = Path(__file__).parent.absolute()
 indexdir = "indexdir"
+REINDEX: bool = False
 
 
 from datatoy.explore_personas import load_persona_chat, get_all_personas_from_examples, \
@@ -29,13 +33,28 @@ def preproc(s: str):
     return " ".join(word_tokenize(s.lower()))
 
 
-def get_all_utterances_list() -> List[str]:
+@dataclass(frozen=True)
+class Utterance:
+    dataset: str
+    section: str
+    subsection: str
+    text: str
+    proc_text: str
+
+
+def get_all_utterances_list() -> List[Utterance]:
     out = []
     for kind in ("original", "revised"):
         examples = list(load_persona_chat(kind))
         out.extend([
-            *get_all_persona_statements_from_examples(examples),
-            *get_all_turns_from_examples(examples)
+            *(
+                Utterance("PersonaChat", "persona", kind, ex, preproc(ex))
+                for ex in get_all_persona_statements_from_examples(examples)
+            ),
+            *(
+                Utterance("PersonaChat", "turn", kind, ex, preproc(ex))
+                for ex in get_all_turns_from_examples(examples)
+            )
         ])
     return out
 
@@ -46,27 +65,33 @@ class QuickWhooshSearcher:
 
     def search(self, queries: List[str], max_results=10) -> List[List[Tuple[str, float]]]:
         out = []
-        parser = QueryParser("proc_content", self._index.schema, group=qparser.OrGroup)
+        parser = QueryParser("proc_text", self._index.schema, group=qparser.OrGroup)
         with self._index.searcher() as searcher:
             for query in tqdm(queries):
                 query = parser.parse(preproc(query))
-                results = searcher.search(query, limit=10)
+                results = searcher.search(query, limit=max_results)
                 v = []
                 out.append(v)
                 for result in results[:min(len(results), max_results)]:
-                    v.append((result['original'], result.score))
+                    v.append((Utterance(**dict(result)), result.score))
         return out
 
 
-def make_searcher(examples: List[str]) -> QuickWhooshSearcher:
-    schema = Schema(original=STORED(), proc_content=TEXT(stored=True))
+def make_searcher(examples: Iterable[Utterance]) -> QuickWhooshSearcher:
+    schema = Schema(
+        dataset=ID(stored=True),
+        section=ID(stored=True),
+        subsection=ID(stored=True),
+        text=STORED(),
+        proc_text=TEXT(stored=True)
+    )
     #st = RamStorage()
     ix = create_in(indexdir, schema)
     #ix = st.create_index(schema)
     writer = ix.writer(limitmb=256, procs=8, multisegment=False)
     print("adding docs")
     for ex in examples:
-        writer.add_document(original=ex, proc_content=preproc(ex))
+        writer.add_document(**dataclasses.asdict(ex))
     print("commiting")
     writer.commit()
     return QuickWhooshSearcher(ix)
@@ -87,8 +112,10 @@ def load_searcher() -> QuickWhooshSearcher:
 
 def search_some_distractir_examples(n=10):
     print("Load searcher")
-    searcher = load_searcher()
-    #searcher = make_searcher(examples=get_all_utterances_list())
+    if REINDEX:
+        searcher = make_searcher(examples=get_all_utterances_list())
+    else:
+        searcher = load_searcher()
     print("gen examples")
     queries = get_some_samples(n=n)
     print("search")
@@ -112,7 +139,13 @@ def main():
     #print(sample_search_result(results[0]))
     results = list(set(search_some_distractir_examples(n=1000)))
     random.shuffle(results)
-    Path(cur_file / "outputs/distract_persona_0.txt").write_text("\n".join(results))
+    csv_dict = []
+    for result in results:
+        csv_dict.append({
+            "found": "weighted",
+            **dataclasses.asdict(result),
+        })
+    pd.DataFrame(csv_dict).to_csv(cur_file / "outputs/distract_0.csv")
 
 
 if __name__ == "__main__":
