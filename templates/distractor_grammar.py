@@ -1,7 +1,9 @@
 from templates.areyourobot_grammar import ARobotOrHuman, Adjective
 import math
 from num2words import num2words
-from templates.gramdef import SimpleGramChoice, good_first_ones
+from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
+
+
 
 
 class _OpinionVerb(SimpleGramChoice):
@@ -181,3 +183,6 @@ class _DistractorBase(SimpleGramChoice):
         f"You are a {Adjective} robot",
         f'The paper is titled "{SimpleQuestions}"',
     ]
+
+
+distractor_grammar = Grammar(_DistractorBase)

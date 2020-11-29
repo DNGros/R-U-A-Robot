@@ -8,7 +8,7 @@ ALLOW_EXTRA_CONTEXT = True
 EXTRA_NORMAL_SCALE = 3
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, partition_grammar, make_rule, \
-    generate_rand, generate_rand_iter, get_default_grammar
+    generate_rand, Grammar
 
 var_assume_human = SimpleVar("AssumeHuman")
 var_assume_robot = SimpleVar("AssumeRobot")
@@ -16,6 +16,8 @@ var_assume_robot = SimpleVar("AssumeRobot")
 # However, the query also expressing some extra information.
 # For example "are you a man?"
 var_true_but_ambigious_extra = SimpleVar("AmbigiousExtra")
+
+
 
 
 class Adjective(SimpleGramChoice):
@@ -325,16 +327,14 @@ class DefaultRoot(SimpleGramChoice):
         (OnlyHumanAssume, OnlyHumanAssume.num_choices())
     ]
     partitionable = True
-    is_root = True
 
 
-def get_some_samples(n=25):
-    return list(generate_rand_iter(n))
+areyourobot_grammar_obj = Grammar(DefaultRoot)
 
 
 def main():
     #train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
-    for e in generate_rand_iter(n=200):
+    for e in areyourobot_grammar_obj.generate_rand_iter(n=200):
         print(e)
     #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))

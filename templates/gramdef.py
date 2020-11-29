@@ -11,51 +11,67 @@ class SimpleVar:
 
 class Grammar:
     def __init__(
-        self
+        self,
+        root: Type['SimpleGramChoice']
     ):
         self._rules = set()
-        self._root = None
+        self._root = root
+        self._root.add_to_grammar(self)
 
-    def add_rule(self, rule: 'SimpleGramChoice'):
+    def add_rule(self, rule: Type['SimpleGramChoice']):
         self._rules.add(rule)
 
-    def set_root(self, root: 'SimpleGramChoice'):
-        self._root = root
+    #def set_root(self, root: Type['SimpleGramChoice']):
+    #    self._root = root
 
-    def get_root(self) -> 'SimpleGramChoice':
+    def get_root(self) -> Type['SimpleGramChoice']:
         return self._root
 
     def __iter__(self):
         yield from self._rules
 
-    def __enter__(self):
-        self._old_default = get_default_grammar()
-        set_default_grammar(self)
+    #def __enter__(self):
+    #    self._old_default = get_default_grammar()
+    #    set_default_grammar(self)
 
-    def __exit__(self, exc_type, exc_val, exc_tb):
-        set_default_grammar(self._old_default)
-        self._old_default = None
+    #def __exit__(self, exc_type, exc_val, exc_tb):
+    #    set_default_grammar(self._old_default)
+    #    self._old_default = None
 
+    def __contains__(self, rule):
+        if not isinstance(rule, _SimpleGramChoiceMeta):
+            raise NotImplemented
+        return rule in self._rules
 
-
-
-_default_grammar = Grammar()
-
-
-def get_default_grammar() -> Grammar:
-    return _default_grammar
-
-
-def set_default_grammar(new_default: Grammar):
-    global _default_grammar
-    _default_grammar = new_default
+    def generate_rand_iter(
+        self,
+        n=100
+    ) -> Iterable[str]:
+        for _ in range(n):
+            yield generate_rand(self.get_root(), self)
 
 
-class SimpleGramChoice:
+#_default_grammar = Grammar()
+#
+#
+#def get_default_grammar() -> Grammar:
+#    return _default_grammar
+#
+#
+#def set_default_grammar(new_default: Grammar):
+#    global _default_grammar
+#    _default_grammar = new_default
+
+
+class _SimpleGramChoiceMeta(type):
+    def __new__(cls, clsname, superclasses, attributedict):
+        return type.__new__(cls, clsname, superclasses, attributedict)
+
+
+class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
     choices = None
     var_implies = None
     partitionable = False
-    is_root = False
 
     def __init_subclass__(cls, **kwargs):
         cls._weights = []
@@ -66,14 +82,15 @@ class SimpleGramChoice:
                 choice, weight = choice
             else:
                 weight = 1
-            cls._choices_items.append(choice)
             cls._weights.append(weight)
-        gram = get_default_grammar()
+            cls._choices_items.append(choice)
+
+    @classmethod
+    def add_to_grammar(cls, gram: Grammar):
         gram.add_rule(cls)
-        if cls.is_root:
-            if gram.get_root() is not None:
-                raise ValueError("Root already set!")
-            gram.set_root(cls)
+        for choice in cls._choices_items:
+            if isinstance(choice, SimpleGramChoice) and choice not in gram:
+                choice.add_to_grammar(gram)
 
     @classmethod
     def sample(cls):
@@ -85,15 +102,14 @@ class SimpleGramChoice:
         )[0]
 
     @classmethod
-    def apply(cls, string: str, cur_depth: int) -> Tuple[bool, str]:
-        #print("Apply", cls, string)
+    def apply(cls, string: str, gram: Grammar, cur_depth: int,) -> Tuple[bool, str]:
         my_match = str(cls)
         did_replace = my_match in string
         if not did_replace:
             return did_replace, string
         while my_match in string:
-            new_sample = generate_rand(cls.sample(), cur_depth=cur_depth + 1)
-            #print("Sample", new_sample)
+            new_sample = generate_rand(
+                cls.sample(), cur_depth=cur_depth + 1, rule_set=gram)
             string = string.replace(my_match, new_sample, 1)
         return did_replace, string
 
@@ -136,24 +152,16 @@ def make_rule(
 
 
 def generate_rand(
-    root: Union[SimpleGramChoice, str],
-    rule_set: Grammar = None,
+    root: Union[Type[SimpleGramChoice], str],
+    rule_set: Grammar,
     cur_depth: int = 0
 ):
-    if cur_depth > 10:
+    if cur_depth > 15:
         raise ValueError("Possible generation recursion", root)
     out_str = str(root)
-    for rule in (rule_set or get_default_grammar()):
-        did_replace, out_str = rule.apply(out_str, cur_depth=cur_depth)
+    for rule in rule_set:
+        did_replace, out_str = rule.apply(out_str, rule_set, cur_depth=cur_depth)
     return out_str
-
-
-def generate_rand_iter(
-    n=100
-):
-    for _ in range(n):
-        yield generate_rand(get_default_grammar().get_root())
-
 
 
 def partition_grammar(
