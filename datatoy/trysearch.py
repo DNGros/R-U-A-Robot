@@ -15,7 +15,6 @@ import whoosh.index
 from whoosh.fields import STORED, TEXT, ID, Schema
 
 from datatoy.alldata import get_all_utterances_list, preproc, Utterance
-from templates.areyourobot_grammar import get_some_samples
 
 cur_file = Path(__file__).parent.absolute()
 indexdir = "indexdir"

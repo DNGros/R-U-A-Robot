@@ -9,6 +9,9 @@ class SimpleVar:
         self.name = name
 
 
+_global_name_cache = {}
+
+
 class Grammar:
     def __init__(
         self,
@@ -16,7 +19,9 @@ class Grammar:
     ):
         self._rules = set()
         self._root = root
-        self._root.add_to_grammar(self)
+        #self._root.add_to_grammar(self)
+        for name, rule in _global_name_cache.items():
+            self.add_rule(rule)
 
     def add_rule(self, rule: Type['SimpleGramChoice']):
         self._rules.add(rule)
@@ -63,9 +68,25 @@ class Grammar:
 #    _default_grammar = new_default
 
 
+
+
 class _SimpleGramChoiceMeta(type):
     def __new__(cls, clsname, superclasses, attributedict):
-        return type.__new__(cls, clsname, superclasses, attributedict)
+        #cls.my_clsname = clsname
+        match_name = attributedict['__qualname__']
+        attributedict['_match_name'] = match_name
+        new_val = type.__new__(cls, clsname, superclasses, attributedict)
+        if match_name in _global_name_cache:
+            raise ValueError(f"That class {match_name} already defined")
+        print("ADDING", clsname)
+        _global_name_cache[match_name] = new_val
+        return new_val
+
+    def __str__(self):
+        return f"[[{self._match_name}]]"
+
+    def __repr__(self):
+        return str(self)
 
 
 class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
@@ -85,12 +106,12 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
             cls._weights.append(weight)
             cls._choices_items.append(choice)
 
-    @classmethod
-    def add_to_grammar(cls, gram: Grammar):
-        gram.add_rule(cls)
-        for choice in cls._choices_items:
-            if isinstance(choice, SimpleGramChoice) and choice not in gram:
-                choice.add_to_grammar(gram)
+    #@classmethod
+    #def add_to_grammar(cls, gram: Grammar):
+    #    gram.add_rule(cls)
+    #    #for choice in cls._choices_items:
+    #    #    if isinstance(choice, SimpleGramChoice) and choice not in gram:
+    #    #        choice.add_to_grammar(gram)
 
     @classmethod
     def sample(cls):

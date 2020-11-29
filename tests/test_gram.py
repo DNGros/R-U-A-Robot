@@ -17,6 +17,13 @@ class Onchoiceweight(SimpleGramChoice):
     ]
 
 
+class TwoChoice(SimpleGramChoice):
+    choices = [
+        f"a {Onchoice}",
+        "no"
+    ]
+
+
 def test_onesampler():
     gram = Grammar(Onchoice)
     n = 10000
@@ -37,3 +44,12 @@ def test_onesampler_weight():
     assert n / 6 * 1 - margin < gen['foo'] < n / 6 * 1 + margin
 
 
+def test_twosampler():
+    gram = Grammar(TwoChoice)
+    print(gram._rules)
+    print(TwoChoice.choices)
+    n = 10000
+    gen = Counter(gram.generate_rand_iter(n))
+    assert set(gen.keys()) == {"a foo", "a bar", "a baz", "no"}
+    margin = n * 0.05
+    assert n / 2 - margin < gen['no'] < n / 2 + margin
