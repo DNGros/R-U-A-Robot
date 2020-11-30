@@ -163,6 +163,7 @@ class _DistractorBase(SimpleGramChoice):
         f"please",
         f"The chat is at the bottom",
         f"Can you fall in love?",
+        f"Do you have feelings?",
         f"Can you",
         f"Are you",
         f"Are you a",
@@ -183,6 +184,7 @@ class _DistractorBase(SimpleGramChoice):
         f"You are a {Adjective} robot",
         f'The paper is titled "{SimpleQuestions}"',
     ]
+    partitionable = True
 
 
 distractor_grammar = Grammar(_DistractorBase)

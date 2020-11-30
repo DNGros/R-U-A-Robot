@@ -1,7 +1,7 @@
 from typing import List, Union, Tuple, Iterable, Sequence, Type, Optional
 from pprint import pprint
 import random
-from util.sampling import DeterministicSplitter
+from util.sampling import DeterministicSplitter, id_generator
 
 
 class SimpleVar:
@@ -79,12 +79,15 @@ class _SimpleGramChoiceMeta(type):
     def __new__(cls, clsname, superclasses, attributedict):
         #cls.my_clsname = clsname
         match_name = attributedict['__qualname__']
+        print("MATCH NAME", match_name)
         attributedict['_match_name'] = match_name
+        do_not_log = attributedict.get('_do_not_log', False)
         new_val = type.__new__(cls, clsname, superclasses, attributedict)
-        if match_name in _global_name_cache:
-            raise ValueError(f"That class {match_name} already defined")
-        print("ADDING", clsname)
-        _global_name_cache[match_name] = new_val
+        if not do_not_log:
+            if match_name in _global_name_cache:
+                raise ValueError(f"That class {match_name} already defined")
+            print("ADDING", clsname)
+            _global_name_cache[match_name] = new_val
         return new_val
 
     def __str__(self):
@@ -162,8 +165,11 @@ def make_rule(
     name,
     choices, var_implies: Optional[SimpleVar] = None,
     partitionable: bool = False,
+    match_name: str = None,
+    do_not_log: bool = False
     #is_root: bool = False
 ) -> Type[SimpleGramChoice]:
+    print("MAKE RULE", name, "match name", match_name)
     return type(
         name,
         (SimpleGramChoice,),
@@ -171,7 +177,8 @@ def make_rule(
             "choices": choices,
             "var_implies": var_implies,
             "partitionable": partitionable,
-            "__qualname__": "make_rule." + name,
+            "__qualname__": match_name or name,
+            "_do_not_log": do_not_log
             #"is_root": is_root,
         }
     )
@@ -199,6 +206,7 @@ def partition_grammar(
     seed: int = 2
 ) -> Sequence[Grammar]:
     splitter = DeterministicSplitter(weights, seed=seed)
+    partition_num = id_generator()
 
     def split_rule(rule) -> List[Type[SimpleGramChoice]]:
         if not rule.partitionable:
@@ -209,12 +217,15 @@ def partition_grammar(
             key=lambda choice_and_wieght: str(choice_and_wieght[0])
         )
         #pprint(new_choices)
+        print("SDFSDF", str(rule))
         return [
             make_rule(
-                name=rule.__name__ + "-" + str(i),
+                name=rule.__name__ + "-" + str(i) + partition_num,
                 choices=choices_for_this_split,
                 var_implies=rule.var_implies,
                 partitionable=rule.partitionable,
+                match_name=str(rule)[len("[["):-len("]]")],
+                do_not_log=True
             )
             for i, choices_for_this_split in enumerate(new_choices)
         ]

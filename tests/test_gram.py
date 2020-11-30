@@ -79,3 +79,28 @@ def test_partition():
     assert set(train_gen.keys()) | set(test_gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
+
+
+class MoreRecurseChoice(SimpleGramChoice):
+    choices = [
+        f"a {Morechoice}",
+        "no"
+    ]
+    partitionable = False
+
+
+def test_partition2():
+    gram = Grammar(MoreRecurseChoice)
+    n = 100
+    gen = Counter(gram.generate_rand_iter(n))
+    e = {"a foo", "a bar", "a baz", "a pop", "a spam", "a wow", "no"}
+    assert set(gen.keys()) == e
+    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5))
+    train_gen = Counter(train_gram.generate_rand_iter(n))
+    test_gen = Counter(test_gram.generate_rand_iter(n))
+    print(train_gen)
+    print(test_gen)
+    assert set(train_gen.keys()) & set(test_gen.keys()) == {"no"}
+    assert set(train_gen.keys()) | set(test_gen.keys()) == e
+    gen = Counter(gram.generate_rand_iter(n))
+    assert set(gen.keys()) == e

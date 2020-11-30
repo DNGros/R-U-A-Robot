@@ -4,6 +4,7 @@ import random
 from typing import *
 from pathlib import Path
 from datatoy.alldata import preproc
+from templates import areyourobot_grammar
 from templates.gramdef import partition_grammar, Grammar, SimpleGramChoice
 from sklearn.model_selection import train_test_split
 
@@ -17,30 +18,59 @@ def load_negative_queried() -> List[str]:
     return list(distract.proc_text)
 
 
+def train_val_test_split_exact(examples, split_per_kind: Sequence[int], seed=42):
+    assert len(split_per_kind) == 3
+    train_frac = split_per_kind[0] / sum(split_per_kind)
+    random.Random(seed).shuffle(examples)
+    train_ex, test_val_ex = train_test_split(
+        examples, train_size=train_frac, random_state=seed)
+    val_ex, test_ex = train_test_split(
+        test_val_ex,
+        train_size=split_per_kind[1] / sum(split_per_kind[1:]), random_state=seed
+    )
+    assert len(train_ex) >= split_per_kind[0]
+    train_ex = train_ex[:split_per_kind[0]]
+    assert len(val_ex) >= split_per_kind[1]
+    val_ex = val_ex[:split_per_kind[1]]
+    assert len(test_ex) >= split_per_kind[2]
+    test_ex = test_ex[:split_per_kind[2]]
+    return train_ex, val_ex, test_ex
+
+
+def flatten_list(t):
+    return [item for sublist in t for item in sublist]
+
+
+
 def main():
-    want = 500
+    split_per_kind = (300, 50, 100)
+    train_frac = split_per_kind[0] / sum(split_per_kind)
     neg_queried = load_negative_queried()
+    seed = 42
+    queried_splits = train_val_test_split_exact(
+        neg_queried, split_per_kind, seed=seed)
     from templates.distractor_grammar import distractor_grammar
-    neg_samples = list(distractor_grammar.generate_rand_iter(want - len(neg_queried)))
-    print(neg_queried)
-    print(neg_samples)
-    all_neg = neg_queried + neg_samples
-    train = 400
-    train_frac = train / want
-    #train_gram, test_gram = partition_grammar(get_default_grammar(), (train_frac, 1 - train_frac))
-    #with train_gram:
-    #with Grammar():
-    #    from templates.areyourobot_grammar import get_some_samples
-    #    all_pos_train = get_some_samples(want)
-    #all_pos_train = list(map(preproc, all_pos_train))
-    #all_neg = list(map(preproc, all_neg))
-    #print(all_neg)
-    #print(all_pos_train)
-    #print(len(all_pos_train))
-    #print(len(all_neg))
-    #assert len(all_pos_train) == len(all_neg) == want
-    #all_pos_train, all_pos_test = train_test_split(all_pos_train, train_size=train)
-    #all_neg_train, all_neg_test = train_test_split(all_neg, train_size=train)
+    distractor_gram_splits = partition_grammar(
+        distractor_grammar, split_per_kind)
+    distractor_gram_exs_splits = [
+        list(gram.generate_rand_iter(n=amount))
+        for amount, gram in zip(split_per_kind, distractor_gram_splits)
+    ]
+    neg_train, neg_val, neg_test = (
+        list(map(preproc, flatten_list(exs)))
+        for exs in zip(distractor_gram_exs_splits, queried_splits)
+    )
+
+    pos_gram_splits = partition_grammar(
+        areyourobot_grammar.areyourobot_grammar_obj, split_per_kind, seed=seed)
+    pos_train, pos_val, pos_test = (
+        list(map(preproc, gram.generate_rand_iter(n=amount)))
+        for amount, gram in zip(split_per_kind, pos_gram_splits)
+    )
+
+    print(neg_train)
+    print(pos_train)
+
 
     #for f, pos, neg in (("train", all_pos_train, all_neg_train), ("val", all_pos_test, all_neg_test)):
     #    data = []
