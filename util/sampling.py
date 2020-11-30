@@ -1,4 +1,4 @@
-from typing import Sequence
+from typing import Sequence, Iterable, TypeVar, Callable, List, Tuple
 import math
 import hashlib
 import random
@@ -12,6 +12,9 @@ def id_generator(size=6, chars=string.ascii_uppercase + string.digits, seed=None
         return ''.join(rng.choice(chars) for _ in range(size))
     else:
         return ''.join(random.choice(chars) for _ in range(size))
+
+
+T = TypeVar("T")
 
 
 class DeterministicSplitter:
@@ -53,3 +56,13 @@ class DeterministicSplitter:
             if hash_int <= math.ceil(current_ceiling):
                 return i
         raise RuntimeError(f"Unreachable code reached. Splits {self._splits_weights}")
+
+    def split_items(
+        self,
+        items: Iterable[T],
+        key: Callable[[T], str] = lambda v: v
+    ) -> Tuple[List[T]]:
+        out = tuple([] for _ in self._splits_weights)
+        for item in items:
+            out[self.get_split_from_example(key(item))].append(item)
+        return out

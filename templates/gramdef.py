@@ -15,13 +15,18 @@ _global_name_cache = {}
 class Grammar:
     def __init__(
         self,
-        root: Type['SimpleGramChoice']
+        root: Type['SimpleGramChoice'],
+        rules: Iterable['SimpleGramChoice'] = None  # None actually means everything
     ):
         self._rules = set()
         self._root = root
         #self._root.add_to_grammar(self)
-        for name, rule in _global_name_cache.items():
-            self.add_rule(rule)
+        if rules is None:
+            for name, rule in _global_name_cache.items():
+                self.add_rule(rule)
+        else:
+            for rule in rules:
+                self.add_rule(rule)
 
     def add_rule(self, rule: Type['SimpleGramChoice']):
         self._rules.add(rule)
@@ -155,10 +160,9 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
 
 def make_rule(
     name,
-    choices,
-    var_implies: Optional[SimpleVar] = None,
+    choices, var_implies: Optional[SimpleVar] = None,
     partitionable: bool = False,
-    is_root: bool = False
+    #is_root: bool = False
 ) -> Type[SimpleGramChoice]:
     return type(
         name,
@@ -167,7 +171,8 @@ def make_rule(
             "choices": choices,
             "var_implies": var_implies,
             "partitionable": partitionable,
-            "is_root": is_root,
+            "__qualname__": "make_rule." + name,
+            #"is_root": is_root,
         }
     )
 
@@ -179,39 +184,55 @@ def generate_rand(
 ):
     if cur_depth > 15:
         raise ValueError("Possible generation recursion", root)
-    out_str = str(root)
+    if not isinstance(root, str):
+        out_str = str(root)
+    else:
+        out_str = root
     for rule in rule_set:
         did_replace, out_str = rule.apply(out_str, rule_set, cur_depth=cur_depth)
     return out_str
 
 
 def partition_grammar(
-    rules: Grammar,
+    gram: Grammar,
     weights: Sequence[float],
     seed: int = 2
 ) -> Sequence[Grammar]:
-    new_grammars = tuple(Grammar() for _ in weights)
     splitter = DeterministicSplitter(weights, seed=seed)
-    for rule in tuple(rules):
+
+    def split_rule(rule) -> List[Type[SimpleGramChoice]]:
+        if not rule.partitionable:
+            return [rule] * len(weights)
         choices = tuple(zip(rule.get_choices_items(), rule.get_choices_weights()))
-        if rule.partitionable:
-            new_choices = tuple([] for _ in weights)
-            for choice, weight in choices:
-                index = splitter.get_split_from_example(str(choice))
-                new_choices[index].append((choice, weight))
-            assert len(new_grammars) == len(new_choices)
-            pprint(new_choices)
+        new_choices = splitter.split_items(
+            choices,
+            key=lambda choice_and_wieght: str(choice_and_wieght[0])
+        )
+        #pprint(new_choices)
+        return [
+            make_rule(
+                name=rule.__name__ + "-" + str(i),
+                choices=choices_for_this_split,
+                var_implies=rule.var_implies,
+                partitionable=rule.partitionable,
+            )
+            for i, choices_for_this_split in enumerate(new_choices)
+        ]
+    new_roots = split_rule(gram.get_root())
+    all_rules = [[] for _ in weights]
+    for rule in tuple(gram):
+        if rule == gram.get_root():
+            rule_splits = new_roots
         else:
-            new_choices = tuple([choices] * len(weights))
-        for i, choices_for_this_split in enumerate(new_choices):
-            with new_grammars[i]:
-                make_rule(
-                    name=rule.__name__ + "-" + str(i),
-                    choices=choices_for_this_split,
-                    var_implies=rule.var_implies,
-                    partitionable=rule.partitionable,
-                    is_root=rule.is_root
-                )
+            rule_splits = split_rule(rule)
+        assert len(rule_splits) == len(all_rules) == len(weights)
+        for nr, l in zip(rule_splits, all_rules):
+            l.append(nr)
+
+    new_grammars = tuple(
+        Grammar(new_root, new_rules)
+        for new_root, new_rules in zip(new_roots, all_rules)
+    )
     return new_grammars
 
 
