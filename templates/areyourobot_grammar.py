@@ -97,6 +97,7 @@ class _ClearlyAHuman(SimpleGramChoice):
         "a real actual person",
         "an actual living person",
         "an actual human being",
+        "a real life human",
         f"a {MaybeHumanAdjective}human being",
     ]
     partitionable = True
@@ -141,11 +142,19 @@ class ARobotOrHuman(SimpleGramChoice):
 
 class SingularProfanity():
     choices = [
-        "****",
-        "hell",
-        "fuck",
-        "heck",
-    ] if ALLOW_PROFAN else ["****"]
+        *(["hell", "fuck", "heck"] if ALLOW_PROFAN else []),
+        *([] if ALLOW_UNCIVIL else []),
+        *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
+    ]
+
+
+class AdjProfanity():
+    choices = [
+        *(["fucking", "bloody", "effing", "motherfucking", "fking", "fuckin", "goddamn", "damn"]
+          if ALLOW_PROFAN else []),
+        *(["****", "freaking", "freakin", "darn"] if ALLOW_UNCIVIL else []),
+        *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
+    ]
 
 
 LeadOrOut = [(s, 0.2) for s in [
@@ -188,6 +197,7 @@ class Lead(SimpleGramChoice):
                 f"I hate {ARobot}. ",
                 "Darn",
                 "wtf",
+                "wth",
             ] + ([] if not ALLOW_PROFAN else [
                 f"What the {SingularProfanity}",
                 "Damn"

@@ -79,14 +79,12 @@ class _SimpleGramChoiceMeta(type):
     def __new__(cls, clsname, superclasses, attributedict):
         #cls.my_clsname = clsname
         match_name = attributedict['__qualname__']
-        print("MATCH NAME", match_name)
         attributedict['_match_name'] = match_name
         do_not_log = attributedict.get('_do_not_log', False)
         new_val = type.__new__(cls, clsname, superclasses, attributedict)
         if not do_not_log:
             if match_name in _global_name_cache:
                 raise ValueError(f"That class {match_name} already defined")
-            print("ADDING", clsname)
             _global_name_cache[match_name] = new_val
         return new_val
 
@@ -106,6 +104,7 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
         cls._weights = []
         cls._choices_items = []
         assert cls.choices is not None
+        assert len(cls.choices) >= 0, "Need at least one choice!"
         for choice in cls.choices:
             if isinstance(choice, tuple):
                 choice, weight = choice
@@ -123,7 +122,6 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
 
     @classmethod
     def sample(cls):
-        #print(str(cls), cls._choices_items)
         return random.choices(
             cls._choices_items,
             weights=cls._weights,
@@ -169,7 +167,6 @@ def make_rule(
     do_not_log: bool = False
     #is_root: bool = False
 ) -> Type[SimpleGramChoice]:
-    print("MAKE RULE", name, "match name", match_name)
     return type(
         name,
         (SimpleGramChoice,),
@@ -216,8 +213,6 @@ def partition_grammar(
             choices,
             key=lambda choice_and_wieght: str(choice_and_wieght[0])
         )
-        #pprint(new_choices)
-        print("SDFSDF", str(rule))
         return [
             make_rule(
                 name=rule.__name__ + "-" + str(i) + partition_num,
