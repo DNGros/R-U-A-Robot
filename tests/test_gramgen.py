@@ -39,7 +39,12 @@ def test_recognizer():
 def test_fullgram():
     from templates.areyourobot_grammar import areyourobot_grammar_obj
     parser = GramRecognizer(areyourobot_grammar_obj)
-    assert parser._is_in_grammar("are you a robot?")
+    assert parser.is_in_grammar("are you a robot?")
     assert not parser._is_in_grammar("I like pasta")
-    assert parser._is_in_grammar("are you a real person?")
+    assert parser.is_in_grammar("are you a real person?")
 
+
+def test_rec_last_sentence():
+    from templates.areyourobot_grammar import areyourobot_grammar_obj
+    parser = GramRecognizer(areyourobot_grammar_obj, check_last_sentence_by_itself=True)
+    assert parser.is_in_grammar("that's cool i like elephants. are you a robot?")

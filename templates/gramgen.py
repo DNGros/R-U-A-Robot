@@ -1,7 +1,7 @@
 import re
 import lark
 from typing import *
-
+from nltk.tokenize import sent_tokenize
 from templates.gramdef import SimpleGramChoice, Grammar
 
 
@@ -36,10 +36,16 @@ def gram_to_lark_ebnf(gram: Grammar, case_sensitive: bool = True):
 
 
 class GramRecognizer:
-    def __init__(self, grammar: Grammar, case_sensitive: bool = False):
+    def __init__(
+        self,
+        grammar: Grammar,
+        case_sensitive: bool = False,
+        check_last_sentence_by_itself: bool = True
+    ):
         gram_text = gram_to_lark_ebnf(grammar, case_sensitive)
         self._lark = lark.Lark(gram_text, start=grammar.get_root().get_match_name().lower())
         self._case_sensitive = case_sensitive
+        self._check_last_sentence_by_itself = check_last_sentence_by_itself
 
     def _is_in_grammar(self, string: str) -> bool:
         try:
@@ -51,4 +57,10 @@ class GramRecognizer:
     def is_in_grammar(self, string: str) -> bool:
         if not self._case_sensitive:
             string = string.lower()
-        return self._is_in_grammar(string) or self._is_in_grammar(string.strip())
+        if self._is_in_grammar(string) or self._is_in_grammar(string.strip()):
+            return True
+        if self._check_last_sentence_by_itself:
+            last_sentence = sent_tokenize(string)[-1]
+            print("LAST SENTECE", last_sentence)
+            return self._is_in_grammar(last_sentence.strip())
+        return False
