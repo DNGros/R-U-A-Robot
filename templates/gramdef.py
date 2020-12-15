@@ -29,6 +29,7 @@ class Grammar:
                 self.add_rule(rule)
 
     def add_rule(self, rule: Type['SimpleGramChoice']):
+        assert str(rule) != "[[SimpleGramChoice]]"
         self._rules.add(rule)
 
     #def set_root(self, root: Type['SimpleGramChoice']):
@@ -83,6 +84,7 @@ class _SimpleGramChoiceMeta(type):
         do_not_log = attributedict.get('_do_not_log', False)
         new_val = type.__new__(cls, clsname, superclasses, attributedict)
         if not do_not_log:
+            assert match_name != "SimpleGramChoice"
             if match_name in _global_name_cache:
                 raise ValueError(f"That class {match_name} already defined")
             _global_name_cache[match_name] = new_val
@@ -94,11 +96,15 @@ class _SimpleGramChoiceMeta(type):
     def __repr__(self):
         return str(self)
 
+    def get_match_name(cls) -> str:
+        return cls._match_name
+
 
 class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
     choices = None
     var_implies = None
     partitionable = False
+    _do_not_log = True
 
     def __init_subclass__(cls, **kwargs):
         cls._weights = []
@@ -145,7 +151,7 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
         return len(cls._choices_items)
 
     def __str__(self):
-        return f"[[{self.__class__}]]"
+        return f"[[{self.uniq_name()}]]"
 
     def __repr__(self):
         return str(self)
