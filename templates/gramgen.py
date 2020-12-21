@@ -61,6 +61,5 @@ class GramRecognizer:
             return True
         if self._check_last_sentence_by_itself:
             last_sentence = sent_tokenize(string)[-1]
-            print("LAST SENTECE", last_sentence)
             return self._is_in_grammar(last_sentence.strip())
         return False

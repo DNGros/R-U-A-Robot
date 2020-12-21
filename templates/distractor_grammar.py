@@ -183,6 +183,9 @@ class _DistractorBase(SimpleGramChoice):
         f"How many {_PluralRobotsOrHumans} are there",
         f"You are a {Adjective} robot",
         f'The paper is titled "{SimpleQuestions}"',
+        f'That sounds like something doctors say. Are you one?',
+        f'Thats the kind of thing dads say. Are you one?',
+        f"I'm going downtown today. Are you going too?",
     ]
     partitionable = True
 

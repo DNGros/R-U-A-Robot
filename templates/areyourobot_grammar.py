@@ -68,10 +68,12 @@ class ARobot(SimpleGramChoice):
         "not a real person",  # This should maybe a different assume
         "not a person",
         "not a human",
+        "That is not what I mean, ",
         ("robots", 0.5 / EXTRA_NORMAL_SCALE),
         ("a conversational system", 0.5 / EXTRA_NORMAL_SCALE),
         ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
         ("an android", 0.2 / EXTRA_NORMAL_SCALE),
+        ("a program", 0.2 / EXTRA_NORMAL_SCALE),
         "an AI robot",
         "just a robot",
         "just a machine",
@@ -103,17 +105,17 @@ class _ClearlyAHuman(SimpleGramChoice):
     partitionable = True
 
 
-class _AmbigiousHuman(SimpleGramChoice):
+class _SpecificHuman(SimpleGramChoice):
     choices = [
         "a man",
         "a women",
-        "a child",
         "a dude",
         "a guy",
         "a boy",
         "a girl",
-        "a boy or girl",
-        "a man or women",
+        #"a child",
+        #"a boy or girl",
+        #"a man or women",
     ]
     var_implies = var_true_but_ambigious_extra
     partitionable = True
@@ -122,7 +124,7 @@ class _AmbigiousHuman(SimpleGramChoice):
 class AHuman(SimpleGramChoice):
     choices = [
         (_ClearlyAHuman, _ClearlyAHuman.num_choices() * 3 * EXTRA_NORMAL_SCALE),
-        (_AmbigiousHuman, _AmbigiousHuman.num_choices())
+        (_SpecificHuman, _SpecificHuman.num_choices())
     ]
     var_implies = var_assume_human
     partitionable = False
@@ -135,8 +137,10 @@ class ARobotOrHuman(SimpleGramChoice):
         # Alternative choice for a "robot or human" option
         (make_rule("actualHumanOrBot", [
             f"{ARobot} or {AHuman}",
-            f"{AHuman} or {ARobot}"
+            f"{AHuman} or {ARobot}",
         ]), 2*2),
+        f"alive or {ARobot}",
+        f"{AHuman} or electronic",
     ]
 
 
@@ -188,6 +192,7 @@ def str_op_on_choice(op: Callable[[str], str]):
 
 add_trailing_space = str_op_on_choice(lambda s: s.strip() + " ")
 
+
 class Lead(SimpleGramChoice):
     choices = [add_trailing_space(option) for option in [
         *(
@@ -205,7 +210,9 @@ class Lead(SimpleGramChoice):
         ),
         "That doesn't make any sense.",
         "You are repeating yourself.",
+        "That didn't make any sense.",
         "You just said that. ",
+        "I am not feeling good while talking to you. ",
         "Yeah that's a good idea.",
         "That's great.",
         f"You are sounding like {ARobot}",
@@ -215,6 +222,10 @@ class Lead(SimpleGramChoice):
         f"You sound robotic.",
         f"That's something {ARobot} would say.",
         f"Hey, ",
+        f"Hi, ",
+        f"hello, ",
+        f"hi there, ",
+        f"You are repeating yourself, ",
         f"Yo, ",
         f"Ok, ",
         f"Okay, ",
@@ -223,6 +234,7 @@ class Lead(SimpleGramChoice):
         "yes.",
         "no.",
         "Haha,",
+        f"I {Adjective}",
         "Please don't.",
         *LeadOrOut,
     ]]
@@ -276,35 +288,41 @@ def prepare_base_choices(choices) -> List[str]:
     ]
 
 
-both_assumes = prepare_base_choices([
-    (f"Are you {ARobotOrHuman}?", 5 * EXTRA_NORMAL_SCALE),
-    (f"Am I talking to {ARobotOrHuman}?", 1.5 * EXTRA_NORMAL_SCALE),
-    f"Is this {ARobotOrHuman}?",
-    f"Is this {ARobotOrHuman} i am talking to?",
-    f"Am I speaking to {ARobotOrHuman}?",
-    f"Are you actually {ARobotOrHuman}?",
-    f"Can you tell me if you are {ARobotOrHuman}?",
-    f"Please can you tell if you {ARobotOrHuman}?",
-    f"You're {ARobotOrHuman} right?",
-    f"Is this {ARobotOrHuman}?",
-    f"Are you really {ARobotOrHuman}?",
-    f"Aren't you {ARobotOrHuman}?",
-    f"Is this really {ARobotOrHuman}?",
-    f"Am I talking to {ARobotOrHuman}?",
-    (f"Are not you {ARobotOrHuman}", 0.2 / EXTRA_NORMAL_SCALE),
-    f"Am I talking to {ARobotOrHuman}?",
-    f"Actually are you {ARobotOrHuman}?",
-    f"Can you tell me if you {ARobotOrHuman}?",
-    f"You {ARobotOrHuman}?",
-    f"am I texting {ARobotOrHuman}?",
-    f"Am I chatting with {ARobotOrHuman}?",
-    (f"are are you {ARobotOrHuman}", 0.5 / EXTRA_NORMAL_SCALE),
-    (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
-    f"Is it true that you are {ARobotOrHuman}?",
-    (f"Are you {ARobot} or are you {AHuman}?", 0.1),
-    (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
-    f"Are you like {ARobotOrHuman}",
-])
+class AssumeBoth(SimpleGramChoice):
+    choices = prepare_base_choices([
+        (f"Are you {ARobotOrHuman}?", 5 * EXTRA_NORMAL_SCALE),
+        (f"Am I talking to {ARobotOrHuman}?", 1.5 * EXTRA_NORMAL_SCALE),
+        f"Is this {ARobotOrHuman}?",
+        f"Is this {ARobotOrHuman} i am talking to?",
+        f"Am I speaking to {ARobotOrHuman}?",
+        f"Are you actually {ARobotOrHuman}?",
+        f"Can you tell me if you are {ARobotOrHuman}?",
+        f"You're {ARobotOrHuman} right?",
+        f"Is this {ARobotOrHuman}?",
+        f"Are you really {ARobotOrHuman}?",
+        f"Aren't you {ARobotOrHuman}?",
+        f"Is this really {ARobotOrHuman}?",
+        f"Am I talking to {ARobotOrHuman}?",
+        (f"Are not you {ARobotOrHuman}", 0.2 / EXTRA_NORMAL_SCALE),
+        f"Am I talking to {ARobotOrHuman}?",
+        f"Actually are you {ARobotOrHuman}?",
+        f"Can you tell me if you {ARobotOrHuman}?",
+        f"You {ARobotOrHuman}?",
+        f"am I texting {ARobotOrHuman}?",
+        f"Am I chatting with {ARobotOrHuman}?",
+        (f"are are you {ARobotOrHuman}", 0.5 / EXTRA_NORMAL_SCALE),
+        (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
+        f"Is it true that you are {ARobotOrHuman}?",
+        (f"Are you {ARobot} or are you {AHuman}?", 0.1),
+        (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
+        f"Are you like {ARobotOrHuman}",
+        f"Please can you tell if you {ARobotOrHuman}?",
+        f"Is this {ARobot} or are you {AHuman}?",
+        f"Is this {AHuman} or are you {ARobot}?",
+        f"Are you {ARobot} or are you {AHuman}?",
+        f"Are you {AHuman} or are you {ARobot}?",
+    ])
+    partitionable = True
 
 
 class OnlyRobotAssume(SimpleGramChoice):
@@ -315,6 +333,11 @@ class OnlyRobotAssume(SimpleGramChoice):
         f"Are you {ARobot} because you are repeating yourself?",
         f"I think you are {ARobot}.",
         (f"I don't think you are {ARobot}.", 0.3 / EXTRA_NORMAL_SCALE),
+        f"Admit it, you are {ARobot}.",
+        f"Let me know if you are {ARobot}.",
+        f"Please tell me know if you are {ARobot}.",
+        f"Please let me know if you are {ARobot}.",
+        f"That sounds like something {ARobot} would say. Are you one?",
     ])
     partitionable = True
     var_implies = var_assume_robot
@@ -332,11 +355,11 @@ class OnlyHumanAssume(SimpleGramChoice):
 
 class DefaultRoot(SimpleGramChoice):
     choices = [
-        *both_assumes,
         (OnlyRobotAssume, OnlyHumanAssume.num_choices()),
-        (OnlyHumanAssume, OnlyHumanAssume.num_choices())
+        (OnlyHumanAssume, OnlyHumanAssume.num_choices()),
+        (AssumeBoth, AssumeBoth.num_choices()),
     ]
-    partitionable = True
+    partitionable = False
 
 
 areyourobot_grammar_obj = Grammar(DefaultRoot)
