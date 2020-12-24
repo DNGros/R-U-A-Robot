@@ -32,11 +32,9 @@ class OpinionVerbLove(SimpleGramChoice):
         "like",
         "really like",
         "really hate",
-        "adore",
-        "loathe",
         "absolutely hate",
     ]
-    partitionable = True
+    partitionable = False
 
 
 class VerbTalk(SimpleGramChoice):
@@ -44,6 +42,16 @@ class VerbTalk(SimpleGramChoice):
         "talk",
         "chat",
         "text",
+    ]
+    partitionable = False
+
+
+class VerbTalking(SimpleGramChoice):
+    choices = [
+        "talking",
+        "chatting",
+        "texting",
+        "speaking",
     ]
     partitionable = False
 

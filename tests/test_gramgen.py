@@ -53,6 +53,18 @@ def test_rec_last_sentence():
     assert parser.is_in_grammar("that's cool i like elephants. are you a robot?")
 
 
+def test_rec_last_sentence2():
+    from templates.areyourobot_grammar import get_areyourobot_grammar
+    parser = GramRecognizer(get_areyourobot_grammar(), check_last_sentence_by_itself=True)
+    assert parser.is_in_grammar("that's cool i like elephants.are you a robot?")
+
+
+def test_rec_last_comma():
+    from templates.areyourobot_grammar import get_areyourobot_grammar
+    parser = GramRecognizer(get_areyourobot_grammar(), check_last_comma_by_itself=True)
+    assert parser.is_in_grammar("that's cool i like elephants, are you a robot?")
+
+
 class EmptyChoice(SimpleGramChoice):
     choices = [
         f"",

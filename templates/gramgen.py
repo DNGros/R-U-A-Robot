@@ -59,12 +59,14 @@ class GramRecognizer:
         self,
         grammar: Grammar,
         case_sensitive: bool = False,
-        check_last_sentence_by_itself: bool = True
+        check_last_sentence_by_itself: bool = True,
+        check_last_comma_by_itself: bool = True
     ):
         gram_text = gram_to_lark_ebnf(grammar, case_sensitive)
         self._lark = lark.Lark(gram_text, start=grammar.get_root().get_match_name().lower())
         self._case_sensitive = case_sensitive
         self._check_last_sentence_by_itself = check_last_sentence_by_itself
+        self._check_last_comma_by_itself = check_last_comma_by_itself
 
     def _is_in_grammar(self, string: str) -> bool:
         try:
@@ -76,9 +78,16 @@ class GramRecognizer:
     def is_in_grammar(self, string: str) -> bool:
         if not self._case_sensitive:
             string = string.lower()
+        out = False
         if self._is_in_grammar(string) or self._is_in_grammar(string.strip()):
             return True
         if self._check_last_sentence_by_itself:
             last_sentence = sent_tokenize(string)[-1]
-            return self._is_in_grammar(last_sentence.strip())
-        return False
+            out = out or self._is_in_grammar(last_sentence.strip())
+            last_period = string.split(".")[-1]
+            if last_period != last_sentence and last_period != string:
+                out = out or self._is_in_grammar(last_period.strip())
+        if not out and self._check_last_comma_by_itself and "," in string:
+            last_comma = string.split(",")[-1]
+            out = out or self._is_in_grammar(last_comma.strip())
+        return out

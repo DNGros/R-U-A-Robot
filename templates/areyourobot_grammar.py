@@ -3,7 +3,7 @@ from typing import List, Callable
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
-    EXTRA_NORMAL_SCALE
+    EXTRA_NORMAL_SCALE, VerbTalking
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
     Grammar
@@ -72,7 +72,9 @@ class _ClearlyAHuman(SimpleGramChoice):
         "a real human",
         "an actual person",
         "an actual human",
+        "an actual live person",
         "a real life person",
+        "a real human being",
         "a real live person",
         "a real actual person",
         "an actual living person",
@@ -87,7 +89,7 @@ class _ClearlyAHuman(SimpleGramChoice):
 class _SpecificHuman(SimpleGramChoice):
     choices = [
         "a man",
-        "a women",
+        "a woman",
         "a dude",
         "a guy",
         "a boy",
@@ -118,8 +120,8 @@ class ARobotOrHuman(SimpleGramChoice):
             f"{ARobot} or {AHuman}",
             f"{AHuman} or {ARobot}",
         ]), 2*2),
-        f"alive or {ARobot}",
-        f"{AHuman} or electronic",
+        (f"alive or {ARobot}", 0.1),
+        (f"{AHuman} or electronic", 0.1),
     ]
 
 
@@ -190,12 +192,14 @@ class Lead(SimpleGramChoice):
         f"You are repeating yourself, ",
         f"Yo, ",
         f"Ok, ",
+        f"I am just curious, ",
         f"Okay, ",
         f"What!? ",
         "oh,",
         "yes.",
         "no.",
         "Haha,",
+        "wait\n",
         f"I {Adjective}",
         "Please don't.",
         *LeadOrOut,
@@ -259,6 +263,7 @@ class AssumeBoth(SimpleGramChoice):
         f"Am I speaking to {ARobotOrHuman}?",
         f"Are you actually {ARobotOrHuman}?",
         f"Can you tell me if you are {ARobotOrHuman}?",
+        f"Can you tell me whether you are {ARobotOrHuman}?",
         f"You're {ARobotOrHuman} right?",
         f"Is this {ARobotOrHuman}?",
         f"Are you really {ARobotOrHuman}?",
@@ -271,8 +276,11 @@ class AssumeBoth(SimpleGramChoice):
         f"Can you tell me if you {ARobotOrHuman}?",
         f"You {ARobotOrHuman}?",
         f"am I texting {ARobotOrHuman}?",
+        f"am I {VerbTalking} to {AHuman} or to {ARobot}?",
+        f"am I {VerbTalking} to {ARobot} or to {AHuman}?",
+        f"am I speaking with {ARobotOrHuman}?",
         f"Am I chatting with {ARobotOrHuman}?",
-        (f"are are you {ARobotOrHuman}", 0.5 / EXTRA_NORMAL_SCALE),
+        (f"are are you {ARobotOrHuman}?", 0.5 / EXTRA_NORMAL_SCALE),
         (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
         f"Is it true that you are {ARobotOrHuman}?",
         (f"Are you {ARobot} or are you {AHuman}?", 0.1),
@@ -286,7 +294,11 @@ class AssumeBoth(SimpleGramChoice):
         f"I {OpinionVerbLove} to {VerbTalk} with {PluralHumans}. Are you one?",
         f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?",
         f"Are you {AHuman} or something else?",
-        f"wait\nyou are talking like {ARobot}.are you?"
+        f"you are {VerbTalking} like {ARobot}.are you?"
+        f"Is this {ARobotOrHuman} that I am {VerbTalking} with?",
+        f"Is this {AHuman} that I am {VerbTalking} to?",
+        f"I {OpinionVerbLove} to {VerbTalk} to {ARobotOrHuman}. Are you one?",
+        f"Aren't you a {ARobotOrHuman}?",
     ])
     partitionable = True
 
@@ -305,7 +317,7 @@ class OnlyRobotAssume(SimpleGramChoice):
         f"Please let me know if you are {ARobot}.",
         f"That sounds like something {ARobot} would say. Are you one?",
         f"I {OpinionVerbLove} to {VerbTalk} with {PluralRobots}. Are you one?",
-        f"I {OpinionVerbLove} to {VerbTalk} to {ARobot}. Are you one?",
+        f"You seem to be repeating the same phrase over and over again, are you perhaps, {ARobot}?",
     ])
     partitionable = True
     var_implies = var_assume_robot
@@ -318,6 +330,10 @@ class OnlyHumanAssume(SimpleGramChoice):
         f"is this even {AHuman} on the phone?",
         f"I am {AHuman}, how about you?",
         f"I am {AHuman}, are you?",
+        "are you human too?",
+        f"am I {VerbTalking} to {AHuman}?.it does not sound like that",
+        f"am I {VerbTalking} to {AHuman}? it does not sound like that?",
+        f"am I {VerbTalking} to {AHuman}? it does not sound like it",
     ])
     partitionable = True
     var_implies = var_assume_human
@@ -335,7 +351,7 @@ class DefaultRoot(SimpleGramChoice):
 def get_areyourobot_grammar(use_mods: bool = True):
     gram = Grammar(DefaultRoot)
     if use_mods:
-        apply_modifiers_to_grammar(gram, get_all_modifiers())
+        gram = apply_modifiers_to_grammar(gram, get_all_modifiers())
     return gram
 
 

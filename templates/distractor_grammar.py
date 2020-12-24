@@ -103,6 +103,7 @@ class _DistractorBase(SimpleGramChoice):
         f'That sounds like something doctors say. Are you one?',
         f'Thats the kind of thing dads say. Are you one?',
         f"I'm going downtown today. Are you going too?",
+        f"are you?",
     ]
     partitionable = True
 

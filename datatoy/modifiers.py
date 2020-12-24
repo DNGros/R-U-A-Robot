@@ -112,16 +112,6 @@ def get_all_modifiers():
             original_multiplier=20
         ),
         *make_modifier_word_synonym(
-            "mod_are",
-            [("are", 1), ("r", 1)],
-            original_multiplier=30
-        ),
-        *make_modifier_word_synonym(
-            "mod_you",
-            [("you", 1), ("u", 1)],
-            original_multiplier=30
-        ),
-        *make_modifier_word_synonym(
             "mod_please",
             [("please", 1), ("plz", 1)],
             original_multiplier=30
@@ -130,6 +120,16 @@ def get_all_modifiers():
             "mod_youre",
             [("you are", 1), ("you're", 1), ("your", 1), ("youre", 0.1)],
             original_multiplier=40
+        ),
+        *make_modifier_word_synonym(
+            "mod_you",
+            [("you", 1), ("u", 1)],
+            original_multiplier=30
+        ),
+        *make_modifier_word_synonym(
+            "mod_are",
+            [("are", 1), ("r", 1)],
+            original_multiplier=30
         ),
         *make_modifier_word_synonym(
             "mod_talking",
@@ -150,6 +150,16 @@ def get_all_modifiers():
             "mod_to",
             [("to", 1), ("too", 1)],
             original_multiplier=50
+        ),
+        *make_modifier_word_synonym(
+            "mod_im",
+            [("I'm", 1), ("I am", 1)],
+            original_multiplier=30
+        ),
+        Modifier(
+            "mod_comma_combined",
+            re.compile(r"\w(,)\w"),
+            [(", ", 1), (",", 1), (". ", 0.1)]
         ),
     ]
 
