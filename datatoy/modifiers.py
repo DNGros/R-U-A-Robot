@@ -107,7 +107,7 @@ def get_all_modifiers():
             [("?", 3), ("", 1), ("??", 0.1), ("???", 0.01), ("????", 0.03)],
         ),
         *make_modifier_word_synonym(
-            "mod_an",
+            "mod_a",
             [("an", 1), ("a", 1)],
             original_multiplier=20
         ),

@@ -7,7 +7,9 @@ from util.util import flatten_list
 
 
 def escape_bnf_string(s: str) -> str:
-    return '"' + s.replace('"', r'\"') + '"'
+    s = s.replace('"', r'\"')
+    s = s.replace('\n', r'\n')
+    return '"' + s + '"'
 
 
 match_str_regex = re.compile(r"\[\[([^\d\W]\w*)\]\]")

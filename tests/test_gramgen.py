@@ -80,3 +80,15 @@ def test_empty_choice2():
     parser = GramRecognizer(gram)
     assert parser.is_in_grammar("foo")
     assert parser.is_in_grammar("")
+
+
+def test_new_line():
+    class NewLine(SimpleGramChoice):
+        choices = [
+            f"foo\nbar",
+            "foo"
+        ]
+    gram = Grammar(NewLine, [NewLine])
+    parser = GramRecognizer(gram)
+    assert parser.is_in_grammar("foo\nbar")
+    assert parser.is_in_grammar("foo")

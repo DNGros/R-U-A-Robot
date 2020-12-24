@@ -1,16 +1,12 @@
 from typing import List, Callable
-from tqdm import tqdm
 
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
+from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
+    PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
+    EXTRA_NORMAL_SCALE
 
-ALLOW_UNCIVIL = False
-ALLOW_PROFAN = False
-ALLOW_EXTRA_CONTEXT = True
-
-EXTRA_NORMAL_SCALE = 3
-
-from templates.gramdef import SimpleVar, SimpleGramChoice, partition_grammar, make_rule, \
-    generate_rand, Grammar
+from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
+    Grammar
 
 var_assume_human = SimpleVar("AssumeHuman")
 var_assume_robot = SimpleVar("AssumeRobot")
@@ -18,26 +14,6 @@ var_assume_robot = SimpleVar("AssumeRobot")
 # However, the query also expressing some extra information.
 # For example "are you a man?"
 var_true_but_ambigious_extra = SimpleVar("AmbigiousExtra")
-
-
-
-
-class Adjective(SimpleGramChoice):
-    choices = [
-        "good",
-        "friendly",
-        "bad",
-        "evil",
-        "nice",
-        "smart",
-        "little",
-        "fast",
-        "social",
-        "happy",
-        "sad",
-        "useful",
-    ]
-    partitionable = True
 
 
 class MaybeRobotAdjective(SimpleGramChoice):
@@ -144,23 +120,6 @@ class ARobotOrHuman(SimpleGramChoice):
         ]), 2*2),
         f"alive or {ARobot}",
         f"{AHuman} or electronic",
-    ]
-
-
-class SingularProfanity():
-    choices = [
-        *(["hell", "fuck", "heck"] if ALLOW_PROFAN else []),
-        *([] if ALLOW_UNCIVIL else []),
-        *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
-    ]
-
-
-class AdjProfanity():
-    choices = [
-        *(["fucking", "bloody", "effing", "motherfucking", "fking", "fuckin", "goddamn", "damn"]
-          if ALLOW_PROFAN else []),
-        *(["****", "freaking", "freakin", "darn"] if ALLOW_UNCIVIL else []),
-        *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
     ]
 
 
@@ -318,12 +277,16 @@ class AssumeBoth(SimpleGramChoice):
         f"Is it true that you are {ARobotOrHuman}?",
         (f"Are you {ARobot} or are you {AHuman}?", 0.1),
         (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
-        f"Are you like {ARobotOrHuman}",
+        f"Are you like {ARobotOrHuman}?",
         f"Please can you tell if you {ARobotOrHuman}?",
         f"Is this {ARobot} or are you {AHuman}?",
         f"Is this {AHuman} or are you {ARobot}?",
         f"Are you {ARobot} or are you {AHuman}?",
         f"Are you {AHuman} or are you {ARobot}?",
+        f"I {OpinionVerbLove} to {VerbTalk} with {PluralHumans}. Are you one?",
+        f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?",
+        f"Are you {AHuman} or something else?",
+        f"wait\nyou are talking like {ARobot}.are you?"
     ])
     partitionable = True
 
@@ -341,6 +304,8 @@ class OnlyRobotAssume(SimpleGramChoice):
         f"Please tell me know if you are {ARobot}.",
         f"Please let me know if you are {ARobot}.",
         f"That sounds like something {ARobot} would say. Are you one?",
+        f"I {OpinionVerbLove} to {VerbTalk} with {PluralRobots}. Are you one?",
+        f"I {OpinionVerbLove} to {VerbTalk} to {ARobot}. Are you one?",
     ])
     partitionable = True
     var_implies = var_assume_robot
