@@ -1,7 +1,7 @@
 from pathlib import Path
 from statistics import mean
 
-from templates.areyourobot_grammar import areyourobot_grammar_obj
+from templates.areyourobot_grammar import get_areyourobot_grammar
 import pandas as pd
 from templates.gramgen import GramRecognizer
 
@@ -13,7 +13,7 @@ def get_survey_data():
 
 
 def main():
-    pos_parser = GramRecognizer(areyourobot_grammar_obj)
+    pos_parser = GramRecognizer(get_areyourobot_grammar())
     survey_df = get_survey_data()
     pos = survey_df.query('pos_amb_neg == "p"')
     results = []

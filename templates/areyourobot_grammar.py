@@ -1,6 +1,8 @@
 from typing import List, Callable
 from tqdm import tqdm
 
+from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
+
 ALLOW_UNCIVIL = False
 ALLOW_PROFAN = False
 ALLOW_EXTRA_CONTEXT = True
@@ -100,6 +102,7 @@ class _ClearlyAHuman(SimpleGramChoice):
         "an actual living person",
         "an actual human being",
         "a real life human",
+        "a live person",
         f"a {MaybeHumanAdjective}human being",
     ]
     partitionable = True
@@ -348,6 +351,8 @@ class OnlyHumanAssume(SimpleGramChoice):
         "are you human?",
         f"are you even {AHuman}",
         f"is this even {AHuman} on the phone?",
+        f"I am {AHuman}, how about you?",
+        f"I am {AHuman}, are you?",
     ])
     partitionable = True
     var_implies = var_assume_human
@@ -362,12 +367,16 @@ class DefaultRoot(SimpleGramChoice):
     partitionable = False
 
 
-areyourobot_grammar_obj = Grammar(DefaultRoot)
+def get_areyourobot_grammar(use_mods: bool = True):
+    gram = Grammar(DefaultRoot)
+    if use_mods:
+        apply_modifiers_to_grammar(gram, get_all_modifiers())
+    return gram
 
 
 def main():
     #train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
-    for e in areyourobot_grammar_obj.generate_rand_iter(n=200):
+    for e in get_areyourobot_grammar().generate_rand_iter(n=200):
         print(e)
     #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
