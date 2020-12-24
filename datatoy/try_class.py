@@ -5,8 +5,10 @@ from typing import *
 from pathlib import Path
 from datatoy.alldata import preproc
 from templates import areyourobot_grammar
-from templates.gramdef import partition_grammar, Grammar, SimpleGramChoice
+from templates.gramdef import partition_grammar
 from sklearn.model_selection import train_test_split
+
+from util.util import flatten_list
 
 cur_file = Path(__file__).parent.absolute()
 
@@ -41,10 +43,6 @@ def train_val_test_split_exact(examples, split_per_kind: Sequence[int], seed=42)
     assert len(test_ex) >= split_per_kind[2]
     test_ex = test_ex[:split_per_kind[2]]
     return train_ex, val_ex, test_ex
-
-
-def flatten_list(t):
-    return [item for sublist in t for item in sublist]
 
 
 def main():

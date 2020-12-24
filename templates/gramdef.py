@@ -1,4 +1,5 @@
 from typing import List, Union, Tuple, Iterable, Sequence, Type, Optional
+import re
 from pprint import pprint
 import random
 from util.sampling import DeterministicSplitter, id_generator
@@ -12,11 +13,17 @@ class SimpleVar:
 _global_name_cache = {}
 
 
+def clear_global_name_cache():
+    # This is bad design and should be refactored...
+    global _global_name_cache
+    _global_name_cache = {}
+
+
 class Grammar:
     def __init__(
         self,
         root: Type['SimpleGramChoice'],
-        rules: Iterable['SimpleGramChoice'] = None  # None actually means everything
+        rules: Iterable[Type['SimpleGramChoice']] = None  # None actually means everything
     ):
         self._rules = set()
         self._root = root
@@ -74,12 +81,18 @@ class Grammar:
 #    _default_grammar = new_default
 
 
+_escaper_re = re.compile(r'\W+', re.ASCII)
+
+
+def escape_match_name(match_name: str) -> str:
+    return str(_escaper_re.sub('', match_name))
+
 
 
 class _SimpleGramChoiceMeta(type):
     def __new__(cls, clsname, superclasses, attributedict):
         #cls.my_clsname = clsname
-        match_name = attributedict['__qualname__']
+        match_name = escape_match_name(attributedict['__qualname__'])
         attributedict['_match_name'] = match_name
         do_not_log = attributedict.get('_do_not_log', False)
         new_val = type.__new__(cls, clsname, superclasses, attributedict)
@@ -119,6 +132,9 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
             cls._weights.append(weight)
             cls._choices_items.append(choice)
 
+    def __init__(self):
+        raise NotImplemented("Not actually intended to be instatiated. Just has a class")
+
     #@classmethod
     #def add_to_grammar(cls, gram: Grammar):
     #    gram.add_rule(cls)
@@ -149,12 +165,6 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
     @classmethod
     def num_choices(cls) -> int:
         return len(cls._choices_items)
-
-    def __str__(self):
-        return f"[[{self.uniq_name()}]]"
-
-    def __repr__(self):
-        return str(self)
 
     @classmethod
     def get_choices_items(cls):

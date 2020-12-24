@@ -3,6 +3,7 @@ import lark
 from typing import *
 from nltk.tokenize import sent_tokenize
 from templates.gramdef import SimpleGramChoice, Grammar
+from util.util import flatten_list
 
 
 def escape_bnf_string(s: str) -> str:
@@ -14,6 +15,8 @@ match_str_regex = re.compile(r"\[\[([^\d\W]\w*)\]\]")
 
 def pull_out_sub_cmds(string: Union[str, Type[SimpleGramChoice]]) -> str:
     string = str(string)
+    if string == "":
+        return '""'
     return " ".join(
         escape_bnf_string(choice_text) if i % 2 == 0 else choice_text.lower()
         for i, choice_text in enumerate(match_str_regex.split(string))
@@ -21,17 +24,31 @@ def pull_out_sub_cmds(string: Union[str, Type[SimpleGramChoice]]) -> str:
     )
 
 
-def rule_to_lark_ebnf(rule: Type[SimpleGramChoice]) -> str:
+def rule_to_lark_ebnf(
+    rule: Type[SimpleGramChoice]
+) -> List[str]:  # might require multiple rules to express
     choice_strs = [pull_out_sub_cmds(c) for c in rule.get_choices_items()]
-    return f"{rule.get_match_name().lower()}: {' | '.join(choice_strs)}"
+    empty_str = '""'
+    if empty_str in choice_strs:
+        # Lark get's unhappy about a "zero width regex". So add a helper rule using the "?" modifier
+        #   https://github.com/lark-parser/lark/issues/80
+        inner_name = f"inner_{rule.get_match_name().lower()}"
+        return [
+            f"{inner_name}: {' | '.join(c for c in choice_strs if c != empty_str)}",
+            f"{rule.get_match_name().lower()}: {inner_name}?"
+        ]
+    else:
+        return [f"{rule.get_match_name().lower()}: {' | '.join(choice_strs)}"]
 
 
 def gram_to_lark_ebnf(gram: Grammar, case_sensitive: bool = True):
     def maybe_lower(s):
         return s if case_sensitive else s.lower()
     return "\n".join(
-        maybe_lower(rule_to_lark_ebnf(rule))
-        for rule in gram
+        maybe_lower(text) for text in flatten_list([
+            rule_to_lark_ebnf(rule)
+            for rule in gram
+        ])
     )
 
 

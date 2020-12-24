@@ -1,6 +1,8 @@
 from templates.gramdef import *
 from collections import Counter
 
+from templates.gramgen import escape_bnf_string
+
 
 class Onchoice(SimpleGramChoice):
     choices = [
@@ -8,6 +10,7 @@ class Onchoice(SimpleGramChoice):
         "bar",
         "baz",
     ]
+    _do_not_log = True
 
 
 class Onchoiceweight(SimpleGramChoice):
@@ -15,6 +18,7 @@ class Onchoiceweight(SimpleGramChoice):
         "foo",
         ("bar", 5),
     ]
+    _do_not_log = True
 
 
 class TwoChoice(SimpleGramChoice):
@@ -22,10 +26,11 @@ class TwoChoice(SimpleGramChoice):
         f"a {Onchoice}",
         "no"
     ]
+    _do_not_log = True
 
 
 def test_onesampler():
-    gram = Grammar(Onchoice)
+    gram = Grammar(Onchoice, [Onchoice, Onchoiceweight, TwoChoice])
     n = 10000
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar", "baz"}
@@ -35,7 +40,7 @@ def test_onesampler():
 
 
 def test_onesampler_weight():
-    gram = Grammar(Onchoiceweight)
+    gram = Grammar(Onchoiceweight, [Onchoice, Onchoiceweight, TwoChoice])
     n = 10000
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar"}
@@ -45,7 +50,7 @@ def test_onesampler_weight():
 
 
 def test_twosampler():
-    gram = Grammar(TwoChoice)
+    gram = Grammar(TwoChoice, [Onchoice, Onchoiceweight, TwoChoice])
     print(gram._rules)
     print(TwoChoice.choices)
     n = 10000
@@ -65,10 +70,11 @@ class Morechoice(SimpleGramChoice):
         "wow",
     ]
     partitionable = True
+    _do_not_log = True
 
 
 def test_partition():
-    gram = Grammar(Morechoice)
+    gram = Grammar(Morechoice, [Onchoice, Onchoiceweight, TwoChoice, Morechoice])
     n = 100
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
@@ -87,10 +93,12 @@ class MoreRecurseChoice(SimpleGramChoice):
         "no"
     ]
     partitionable = False
+    _do_not_log = True
 
 
 def test_partition2():
-    gram = Grammar(MoreRecurseChoice)
+    gram = Grammar(MoreRecurseChoice, [Onchoice, Onchoiceweight, TwoChoice, Morechoice, MoreRecurseChoice])
+    #gram = Grammar(MoreRecurseChoice)
     n = 100
     gen = Counter(gram.generate_rand_iter(n))
     e = {"a foo", "a bar", "a baz", "a pop", "a spam", "a wow", "no"}
@@ -104,3 +112,7 @@ def test_partition2():
     assert set(train_gen.keys()) | set(test_gen.keys()) == e
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == e
+
+
+def test_escape1():
+    assert escape_bnf_string("") == '""'
