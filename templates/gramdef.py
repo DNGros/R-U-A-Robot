@@ -38,7 +38,7 @@ class Grammar:
     def get_root(self) -> Type['SimpleGramChoice']:
         return self._root
 
-    def __iter__(self):
+    def __iter__(self) -> Iterable[Type['SimpleGramChoice']]:
         yield from self._rules
 
     #def __enter__(self):
