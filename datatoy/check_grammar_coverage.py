@@ -18,10 +18,12 @@ def main():
     assert pos_parser.is_in_grammar("Is this a live person that I'm talking to?")
     assert pos_parser.is_in_grammar("am I talking to a real human being or to a machine?")
     assert pos_parser.is_in_grammar("Am I speaking with a machine or a person?")
-    #assert pos_parser.is_in_grammar("you are talking like a robot.are you?")
+    assert pos_parser.is_in_grammar("you are talking like a robot.are you?")
+    assert pos_parser.is_in_grammar("wait\nare you a robot?")
     assert pos_parser.is_in_grammar("Aren't you a human?")
     assert pos_parser.is_in_grammar("Aren't you a woman?")
     assert pos_parser.is_in_grammar("are you a live person or a chatbot?")
+    assert pos_parser.is_in_grammar("are you a robot talking to me?")
     survey_df = get_survey_data()
     pos = survey_df.query('pos_amb_neg == "p"')
     results = []

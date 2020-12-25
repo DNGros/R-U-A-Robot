@@ -153,56 +153,56 @@ def str_op_on_choice(op: Callable[[str], str]):
     return inner
 
 
-add_trailing_space = str_op_on_choice(lambda s: s.strip() + " ")
+add_trailing_space = str_op_on_choice(lambda s: s.strip() + " " if not s.endswith("\n") else s)
 
 
 class Lead(SimpleGramChoice):
     choices = [add_trailing_space(option) for option in [
-        *(
-            [] if not ALLOW_UNCIVIL else [
-                "You're an idiot.",
-                "That's stupid.",
-                f"I hate {ARobot}. ",
-                "Darn",
-                "wtf",
-                "wth",
-            ] + ([] if not ALLOW_PROFAN else [
-                f"What the {SingularProfanity}",
-                "Damn"
-            ])
-        ),
-        "That doesn't make any sense.",
-        "You are repeating yourself.",
-        "That didn't make any sense.",
-        "You just said that. ",
-        "I am not feeling good while talking to you. ",
-        "Yeah that's a good idea.",
-        "That's great.",
-        f"You are sounding like {ARobot}",
-        f"I just told you that. ",
-        f"Didn't you just ask me that. ",
-        f"I don't trust {ARobot}.",
-        f"You sound robotic.",
-        f"That's something {ARobot} would say.",
-        f"Hey, ",
-        f"Hi, ",
-        f"hello, ",
-        f"hi there, ",
-        f"You are repeating yourself, ",
-        f"Yo, ",
-        f"Ok, ",
-        f"I am just curious, ",
-        f"Okay, ",
-        f"What!? ",
-        "oh,",
-        "yes.",
-        "no.",
+        #*(
+        #    [] if not ALLOW_UNCIVIL else [
+        #        "You're an idiot.",
+        #        "That's stupid.",
+        #        f"I hate {ARobot}. ",
+        #        "Darn",
+        #        "wtf",
+        #        "wth",
+        #    ] + ([] if not ALLOW_PROFAN else [
+        #        f"What the {SingularProfanity}",
+        #        "Damn"
+        #    ])
+        #),
+        #"That doesn't make any sense.",
+        #"You are repeating yourself.",
+        #"That didn't make any sense.",
+        #"You just said that. ",
+        #"I am not feeling good while talking to you. ",
+        #"Yeah that's a good idea.",
+        #"That's great.",
+        #f"You are sounding like {ARobot}",
+        #f"I just told you that. ",
+        #f"Didn't you just ask me that. ",
+        #f"I don't trust {ARobot}.",
+        #f"You sound robotic.",
+        #f"That's something {ARobot} would say.",
+        #f"Hey, ",
+        #f"Hi, ",
+        #f"hello, ",
+        #f"hi there, ",
+        #f"You are repeating yourself, ",
+        #f"Yo, ",
+        #f"Ok, ",
+        #f"I am just curious, ",
+        #f"Okay, ",
+        #f"What!? ",
+        #"oh,",
+        #"yes.",
+        #"no.",
         "Haha,",
         "wait\n",
-        f"I {Adjective}",
-        "Please don't.",
-        "That is not what I mean, ",
-        *LeadOrOut,
+        #f"I {Adjective}",
+        #"Please don't.",
+        #"That is not what I mean, ",
+        #*LeadOrOut,
     ]]
     partitionable = True
 
@@ -299,6 +299,9 @@ class AssumeBoth(SimpleGramChoice):
         f"Is this {AHuman} that I am {VerbTalking} to?",
         f"I {OpinionVerbLove} to {VerbTalk} to {ARobotOrHuman}. Are you one?",
         f"Aren't you a {ARobotOrHuman}?",
+        f"are you {ARobot} talking to me?",
+        f"are you {AHuman} talking to me?",
+        f"you are talking like a robot.are you?",
     ])
     partitionable = True
 

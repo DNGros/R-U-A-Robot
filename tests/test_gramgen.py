@@ -101,6 +101,16 @@ def test_new_line():
             "foo"
         ]
     gram = Grammar(NewLine, [NewLine])
+    text = gram_to_lark_ebnf(gram)
+    print(text)
     parser = GramRecognizer(gram)
     assert parser.is_in_grammar("foo\nbar")
+    assert not parser.is_in_grammar("foobar")
     assert parser.is_in_grammar("foo")
+
+
+#def test_new_line_in_lead():
+#    from templates.areyourobot_grammar import Lead
+#    text = get_only_element(rule_to_lark_ebnf(Lead))
+#    print(text)
+#    assert r"\n" in text
