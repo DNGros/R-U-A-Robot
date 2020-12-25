@@ -1,6 +1,7 @@
 import re
 
-from datatoy.modifiers import modify_grammar, Modifier, apply_modifiers_to_grammar, get_all_modifiers
+from datatoy.modifiers import modify_grammar, Modifier, apply_modifiers_to_grammar, get_all_modifiers, \
+    make_modifier_word_synonym
 from templates.gramdef import SimpleGramChoice, Grammar, clear_global_name_cache
 from templates.gramgen import GramRecognizer, gram_to_lark_ebnf
 
@@ -117,5 +118,33 @@ def test_all_mods2():
     assert parser.is_in_grammar("you know I'm a person")
 
 
+def test_dropped_word():
+    #clear_global_name_cache()
+    from templates.areyourobot_grammar import ARobot
+    class _AnAExample(SimpleGramChoice):
+        choices = [
+            "You are a good boy",
+            "You are an apple",
+            "a good boy",
+            "bad boy a",
+        ]
+    grammar = Grammar(_AnAExample, [_AnAExample])
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("You are a good boy")
+    assert not parser.is_in_grammar("You are an good boy")
+    grammar = apply_modifiers_to_grammar(grammar, make_modifier_word_synonym(
+        "toy_a_modifier", ["a", "an"], delete_word_weight=1.0
+    ))
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("You are an good boy")
+    assert parser.is_in_grammar("You are a good boy")
+    assert parser.is_in_grammar("You are good boy")
+    assert parser.is_in_grammar("You are apple")
+    assert not parser.is_in_grammar("You are an pple")
+    assert parser.is_in_grammar("a good boy")
+    assert parser.is_in_grammar("good boy")
+    assert parser.is_in_grammar("bad boy a")
+    assert parser.is_in_grammar("bad boy")
 
 

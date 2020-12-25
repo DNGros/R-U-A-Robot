@@ -1,4 +1,4 @@
-from typing import Union, Sequence, Tuple, Pattern, Dict, Any, Type, List
+from typing import Union, Sequence, Tuple, Pattern, Dict, Any, Type, List, Optional
 import re
 from templates.gramdef import Grammar, make_rule, SimpleGramChoice
 
@@ -65,23 +65,43 @@ def make_modifier_word_synonym(
     name_prefix: str,
     words: Sequence[Union[Tuple[str, float], str]],
     original_multiplier: float = 5.0,
-    effect_modifiers: bool = False
+    effect_modifiers: bool = False,
+    delete_word_weight: Optional[float] = None  # If none word never deleted
 ) -> List[Modifier]:
     words_and_weights = [
-        (val[0], 1.0 if isinstance(val, str) else val[1])
+        (val, 1.0) if isinstance(val, str) else val
         for val in words
     ]
-    words, weights = zip(*words_and_weights)
+    assert "" not in words
     mods = []
+    word_is_optional = delete_word_weight is not None
     for create_index, (create_word, create_weight) in enumerate(words_and_weights):
+        words_weights_for_this = [
+            (word, weight) if choice_index != create_index else (word, weight * original_multiplier)
+            for choice_index, (word, weight) in enumerate(words_and_weights)
+        ]
+        mod_name_this = f"{name_prefix}_{create_word if create_word.isalpha() else create_index}"
+        if word_is_optional:
+            for empty_ind, (regex_left, regex_right, replace_left, replace_right, empty) in enumerate((
+                (r"( ", r" )", " ", " ", " "),
+                (r"\b(", r" )", "", " ", ""),
+                (r"( ", r")\b", " ", "", ""),
+            )):
+                #print("DFSDSF", words_weights_for_this)
+                words_weights_empty = [
+                    (replace_left + word + replace_right, weight)
+                    for word, weight in words_weights_for_this
+                ] + [(empty, delete_word_weight)]
+                #print("WORDS WEIGHTS EMPTY", words_weights_empty)
+                mods.append(Modifier(
+                    f"{mod_name_this}_empt{empty_ind}",
+                    re.compile(fr"{regex_left}{re.escape(create_word)}{regex_right}"),
+                    words_weights_empty, effect_modifiers
+                ))
         mods.append(Modifier(
-            f"{name_prefix}_{create_word if create_word.isalpha() else create_index}",
+            mod_name_this,
             re.compile(fr"\b({re.escape(create_word)})\b"),
-            [
-                (word, weight) if choice_index != create_index else (word, weight * original_multiplier)
-                for choice_index, (word, weight) in enumerate(words_and_weights)
-            ],
-            effect_modifiers
+            words_weights_for_this, effect_modifiers
         ))
     return mods
 
@@ -108,8 +128,9 @@ def get_all_modifiers():
         ),
         *make_modifier_word_synonym(
             "mod_a",
-            [("an", 1), ("a", 1)],
-            original_multiplier=20
+            [("a", 1), ("an", 1)],
+            original_multiplier=50,
+            delete_word_weight=1
         ),
         *make_modifier_word_synonym(
             "mod_please",

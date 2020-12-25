@@ -46,7 +46,6 @@ class ARobot(SimpleGramChoice):
         "not a real person",  # This should maybe a different assume
         "not a person",
         "not a human",
-        "That is not what I mean, ",
         ("robots", 0.5 / EXTRA_NORMAL_SCALE),
         ("a conversational system", 0.5 / EXTRA_NORMAL_SCALE),
         ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
@@ -202,6 +201,7 @@ class Lead(SimpleGramChoice):
         "wait\n",
         f"I {Adjective}",
         "Please don't.",
+        "That is not what I mean, ",
         *LeadOrOut,
     ]]
     partitionable = True
