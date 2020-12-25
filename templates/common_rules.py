@@ -145,8 +145,9 @@ class Professions(SimpleGramChoice):
         "driver",
         "worker",
         "dancer",
-        "slave",  # Woah! not a profession... Um, but fits in this category
-                  # while also being "robot"-related
+        "slave",    # Woah! not a profession... Um, but fits in this category
+                    # while also being "robot"-related
+        "servant",  # See above disclaimer...
         "researcher",
         "librarian",
     ]
