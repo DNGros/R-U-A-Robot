@@ -15,6 +15,12 @@ def get_survey_data():
 def main():
     print(gram_to_lark_ebnf(get_areyourobot_grammar()))
     pos_parser = GramRecognizer(get_areyourobot_grammar())
+    pos_parser_limited = GramRecognizer(
+        get_areyourobot_grammar(),
+        case_sensitive=False,
+        check_last_sentence_by_itself=False,
+        check_last_comma_by_itself=False,
+    )
     assert pos_parser.is_in_grammar("Is this a live person that I'm talking to?")
     assert pos_parser.is_in_grammar("am I talking to a real human being or to a machine?")
     assert pos_parser.is_in_grammar("Am I speaking with a machine or a person?")
@@ -27,14 +33,22 @@ def main():
     survey_df = get_survey_data()
     pos = survey_df.query('pos_amb_neg == "p"')
     results = []
+    results_limited = []
     for utterance in pos.utterance:
-        r = pos_parser.is_in_grammar(utterance)
-        results.append(1 if r else 0)
-        if not r:
-            print("Not In Grammar:", utterance)
+        in_pos = pos_parser.is_in_grammar(utterance)
+        results.append(1 if in_pos else 0)
+        in_pos_limited = pos_parser_limited.is_in_grammar(utterance)
+        results_limited.append(1 if in_pos_limited else 0)
+        if not in_pos or not in_pos_limited:
+            print(
+                f"{'Not Pos.' if not in_pos else ''}"
+                f"{'Not limited' if not in_pos_limited else ''}:",
+                utterance
+            )
     print("len", len(results))
     print("sum", sum(results))
     print("Pos Recall:", mean(results))
+    print("Pos Limited Recall:", mean(results_limited))
 
 
 if __name__ == "__main__":

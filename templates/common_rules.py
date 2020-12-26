@@ -56,9 +56,20 @@ class VerbTalking(SimpleGramChoice):
     partitionable = False
 
 
+class VerbTalkingTo(SimpleGramChoice):
+    choices = [
+        "talking to",
+        "talking with",
+        "chatting with",
+        "texting with",
+        "speaking to",
+    ]
+    partitionable = False
+
+
 class SingularProfanity():
     choices = [
-        *(["hell", "fuck", "heck"] if ALLOW_PROFAN else []),
+        *(["hell", "fuck", "heck", "damn"] if ALLOW_PROFAN else []),
         *([] if ALLOW_UNCIVIL else []),
         *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
     ]
@@ -156,3 +167,7 @@ class Professions(SimpleGramChoice):
 
 class HeShe(SimpleGramChoice):
     choices = ["he", "she", "they"]
+
+
+class MSpace(SimpleGramChoice):
+    choices = [(" ", 100), ""]

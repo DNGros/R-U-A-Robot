@@ -3,7 +3,7 @@ from typing import List, Callable
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
-    EXTRA_NORMAL_SCALE, VerbTalking
+    EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
     Grammar
@@ -153,7 +153,7 @@ def str_op_on_choice(op: Callable[[str], str]):
     return inner
 
 
-add_trailing_space = str_op_on_choice(lambda s: s.strip() + " " if not s.endswith("\n") else s)
+add_trailing_space = str_op_on_choice(lambda s: s.strip() + str(MSpace) if not s.endswith("\n") else s)
 
 
 class Lead(SimpleGramChoice):
@@ -168,7 +168,7 @@ class Lead(SimpleGramChoice):
                 "wth",
             ] + ([] if not ALLOW_PROFAN else [
                 f"What the {SingularProfanity}",
-                "Damn"
+                *SingularProfanity.choices,
             ])
         ),
         "That doesn't make any sense.",
@@ -177,6 +177,8 @@ class Lead(SimpleGramChoice):
         "You just said that. ",
         "I am not feeling good while talking to you. ",
         "Yeah that's a good idea.",
+        "Your sentences are not coherent.",
+        "hello",
         "That's great.",
         f"You are sounding like {ARobot}",
         f"I just told you that. ",
@@ -203,6 +205,21 @@ class Lead(SimpleGramChoice):
         "Please don't.",
         "That is not what I mean, ",
         *LeadOrOut,
+        f"I have some issues I don't think {ARobot} will help with.",
+        f"I think that you are not understanding me.",
+        f"i am not feeling good while {VerbTalkingTo} you,",
+        f"I did not ask that,",
+        f"I need help with some difficult things.",
+        f"You're not responding in any way to the context.",
+        f"I was just wondering, ",
+        f"Hi there, I noticed that you said something, that didn't seem to mean anything,",
+        f"I don't feel like you are listening to me.",
+        f"only robots talk like this.",
+        f"That is not what I meant,",
+        f"Ok, now you're just confusing me.",
+        f"Why do I get the feeling that you are not being true to me,",
+        f"That was completely unrelated to what I just asked,",
+        f"No that's not what I asked,",
     ]]
     partitionable = True
 
