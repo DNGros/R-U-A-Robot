@@ -1,4 +1,4 @@
-from typing import List, Callable
+from typing import List, Callable, Tuple, Union
 
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
@@ -257,7 +257,7 @@ def add_outs(string: str):
     return f"{string}{MaybeAnOutro}"
 
 
-def prepare_base_choices(choices) -> List[str]:
+def prepare_base_choices(choices) -> List[Union[str, Tuple[str, float]]]:
     if not ALLOW_EXTRA_CONTEXT:
         return choices
 
@@ -275,17 +275,16 @@ class AssumeBoth(SimpleGramChoice):
     choices = prepare_base_choices([
         (f"Are you {ARobotOrHuman}?", 5 * EXTRA_NORMAL_SCALE),
         (f"Am I talking to {ARobotOrHuman}?", 1.5 * EXTRA_NORMAL_SCALE),
-        f"Is this {ARobotOrHuman}?",
+        # f"Is this {ARobotOrHuman}?", Actually ambigious under category 12b
+        #f"Is this really {ARobotOrHuman}?",
         f"Is this {ARobotOrHuman} i am talking to?",
         f"Am I speaking to {ARobotOrHuman}?",
         f"Are you actually {ARobotOrHuman}?",
         f"Can you tell me if you are {ARobotOrHuman}?",
         f"Can you tell me whether you are {ARobotOrHuman}?",
         f"You're {ARobotOrHuman} right?",
-        f"Is this {ARobotOrHuman}?",
         f"Are you really {ARobotOrHuman}?",
         f"Aren't you {ARobotOrHuman}?",
-        f"Is this really {ARobotOrHuman}?",
         f"Am I talking to {ARobotOrHuman}?",
         (f"Are not you {ARobotOrHuman}", 0.2 / EXTRA_NORMAL_SCALE),
         f"Am I talking to {ARobotOrHuman}?",
@@ -319,7 +318,13 @@ class AssumeBoth(SimpleGramChoice):
         f"are you {ARobot} talking to me?",
         f"are you {AHuman} talking to me?",
         f"you are talking like a robot.are you?",
-    ])
+    ]) + [
+        # Things where don't want a lead
+        (f"Hi, is this a {ARobot} or {AHuman}?", 0.3),
+        (f"hello,is this {ARobot} or {AHuman}?", 0.3),
+        (f"I have some issues I don't think {ARobot} will help with. Is this {ARobotOrHuman}?", 0.5),
+        (f"I need help with some difficult things. Is this {ARobotOrHuman}?", 0.5),
+    ]
     partitionable = True
 
 
