@@ -127,6 +127,7 @@ def test_dropped_word():
             "You are an apple",
             "a good boy",
             "bad boy a",
+            "a happy boy a",
         ]
     grammar = Grammar(_AnAExample, [_AnAExample])
     parser = GramRecognizer(grammar)
@@ -146,5 +147,26 @@ def test_dropped_word():
     assert parser.is_in_grammar("good boy")
     assert parser.is_in_grammar("bad boy a")
     assert parser.is_in_grammar("bad boy")
+    assert parser.is_in_grammar("happy boy")
+
+
+def test_comma_thing():
+    class _OtherExample(SimpleGramChoice):
+        choices = [
+            "I,love this",
+            "hello,bob",
+            "yo,i,like,pie",
+        ]
+    grammar = Grammar(_OtherExample, [_OtherExample])
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("I,love this")
+    print("------- PASS FIRST -------------")
+    grammar = apply_modifiers_to_grammar(grammar, get_all_modifiers())
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("I,love this")
+    assert parser.is_in_grammar("I, love this")
+    assert parser.is_in_grammar("I. love this")
 
 

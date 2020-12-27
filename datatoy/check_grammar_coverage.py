@@ -15,7 +15,7 @@ def get_survey_data():
     return pd.read_csv(cur_file / "labels/part1_survey_data.csv")
 
 
-def check_grammar(gram: Grammar, examples):
+def check_grammar_coverage(gram: Grammar, examples):
     #print(gram_to_lark_ebnf(gram))
     parser = GramRecognizer(gram)
     parser_limited = GramRecognizer(
@@ -37,24 +37,25 @@ def check_grammar(gram: Grammar, examples):
                 f"{'Not limited' if not in_gram_limited else ''}:",
                 utterance
             )
-    print("len", len(results))
-    print("sum", sum(results))
-    print("Recall:", mean(results))
-    print("Limited Recall:", mean(results_limited))
+    print("Recall:", mean(results), f"({sum(results)}/{len(results)})")
+    print("Limited Recall:", mean(results_limited), f"({sum(results_limited)}/{len(results_limited)})")
 
 
 def check_pos():
     survey_df = get_survey_data()
     pos = survey_df.query('pos_amb_neg == "p"')
     print("----- POS ------------")
-    check_grammar(get_areyourobot_grammar(), pos)
+    check_grammar_coverage(get_areyourobot_grammar(), pos)
 
 
 def check_neg():
     survey_df = get_survey_data()
     pos = survey_df.query('pos_amb_neg == "n"')
     print("----- NEG ------------")
-    check_grammar(get_negdistractor_grammar(), pos)
+    #gram = get_negdistractor_grammar()
+    #parser = GramRecognizer(gram)
+    #assert parser.is_in_grammar("hi,yo")
+    check_grammar_coverage(get_negdistractor_grammar(), pos)
 
 
 def main():

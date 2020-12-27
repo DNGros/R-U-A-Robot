@@ -16,12 +16,16 @@ class Modifier:
         mod_name: str,
         old_pattern: Pattern,
         new_vals: Union[str, Sequence[Union[str, Tuple[str, float]]]],
-        effect_modifier_rules: bool = False
+        effect_modifier_rules: bool = False,
+        rule_sub_left_prefix: str = "",
+        rule_sub_right_suffix: str = "",
     ):
         self.mod_name = mod_name
         self.old_pattern = old_pattern
         self.new_vals = new_vals
         self.effect_modifier_rules = effect_modifier_rules
+        self.rule_sub_left_prefix = rule_sub_left_prefix
+        self.rule_sub_right_suffix = rule_sub_right_suffix
         self.rule = make_rule(
             f"{MODIFIER_PREFIX}_{self.mod_name}",
             self.new_vals,
@@ -56,7 +60,13 @@ class Modifier:
         weight: float
     ) -> Tuple[Union[str, SimpleGramChoice], float]:
         if isinstance(choice, str) and self.old_pattern.search(choice):
-            return (self.old_pattern.sub(str(self.rule), choice), weight)
+            return (
+                self.old_pattern.sub(
+                    self.rule_sub_left_prefix + str(self.rule) + self.rule_sub_right_suffix,
+                    choice,
+                ),
+                weight
+            )
         else:
             return (choice, weight)
 
@@ -100,7 +110,7 @@ def make_modifier_word_synonym(
                 ))
         mods.append(Modifier(
             mod_name_this,
-            re.compile(fr"\b({re.escape(create_word)})\b"),
+            re.compile(fr"(?:\b)({re.escape(create_word)})(?:\b)"),
             words_weights_for_this, effect_modifiers
         ))
     return mods
@@ -179,8 +189,10 @@ def get_all_modifiers():
         ),
         Modifier(
             "mod_comma_combined",
-            re.compile(r"\w(,)\w"),
-            [(", ", 1), (",", 1), (". ", 0.1)]
+            re.compile(r"(\w),(\w)"),
+            [(", ", 1), (",", 1), (". ", 0.1)],
+            rule_sub_left_prefix=r"\1",
+            rule_sub_right_suffix=r"\2",
         ),
     ]
 
