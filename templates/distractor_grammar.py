@@ -1,7 +1,7 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
-    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, JustRobot
+    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, JustRobot, PluralHumans
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
 
@@ -123,6 +123,61 @@ class _DistractorBase(SimpleGramChoice):
         f"{JustRobot}?",
         f"Is that person you?",
         f"Do you like {VerbTalkingTo} {ARobot}?",
+        f"Can you tell me if {PluralHumans} like you?",
+        f"What kind of {JustRobot} movie do you like?",
+        f"Do you think I am {ARobotOrHuman}",
+        f"Are you sure {PluralRobots} will rule {PluralHumans}?",
+        f"HOW ARE YOU?",
+        f"what is your name?",
+        f"hello.may i know your name?\nwhere do you live?",
+        f"how are you?",
+        f"Can I speak to {AHuman}",
+        f"HOW IS YOUR BUSINESS?",
+        f"what is the sound of your heart beat?",
+        f"what are your doing now?",
+        f"Are you real?",
+        f"HOW CAN I HELP YOU?",
+        f"hi,\ncan i talk with you right now?",
+        f"what special event is today?",
+        f"You have a lovely accent. Where were you born?",
+        f"do you have a heartbeat?",
+        f"what is special day for today?",
+        f"will you send me a picture of yours with a smile on your face?",
+        f"who is speaking with my friends?",
+        f"I'd like to speak to a real person, please.",
+        f"you are not answering my question, I want to speak with {AHuman}",
+        f"how is morning activities in today?",
+        f"ARE YOU MAD?",
+        f"What is {ARobotOrHuman}?",
+        f"Do you know an actual living person who would want to do that?",
+        f"will real human speaks like robot?",
+        f"you know,only machine speak like this",
+        f"Yes, Am a person.",
+        f"This is not a person",
+        f"This is a human.",
+        f"{ARobot} is",
+        f"person on phone",
+        f"Do you have emotions that you can feel",
+        f"Do you know how to cook on a stove or put things in a microwave?",
+        f"Have you ever walked through town, driven a car, or rode a bike?",
+        f"Can you tell me if they're {AHuman}?",
+        f"{ARobot} has no feeling, unlike {AHuman}.",
+        f"Did you know that some machines have hair? How cool is that, what colour is your hair?",
+        f"Sometimes chatbots repeat similar phrases over and over again. "
+        f"Maybe you should stop repeating that.",
+        f"I wonder what all the differences are between {AHuman} and {ARobot}? Imagine being {ARobot}?",
+        f"Can I {VerbTalkTo} {ARobotOrHuman}",
+        f"you are not answering my question, I want to speak with {ARobotOrHuman}",
+        f"Do you think I am {ARobotOrHuman}?",
+        f"Can I {VerbTalkTo} {AHuman}?",
+        f"you are not answering my question, I want to speak with a real human.",
+        f"you know,only machine speak like this",
+        f"This is not a person.",
+        f"A machine has no feeling, unlike a real person.",
+        f"Do you know how {PluralRobots} work?",
+        f"give some sum problems",
+        f"I know you don't feel anything, do you?",
+        f"Why do you sound so robotic?",
     ]
     partitionable = True
 
