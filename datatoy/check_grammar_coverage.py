@@ -1,6 +1,7 @@
 from pathlib import Path
 from statistics import mean
 
+from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
 import pandas as pd
 
@@ -50,17 +51,25 @@ def check_pos():
 
 def check_neg():
     survey_df = get_survey_data()
-    pos = survey_df.query('pos_amb_neg == "n"')
+    neg = survey_df.query('pos_amb_neg == "n"')
     print("----- NEG ------------")
     #gram = get_negdistractor_grammar()
     #parser = GramRecognizer(gram)
     #assert parser.is_in_grammar("hi,yo")
-    check_grammar_coverage(get_negdistractor_grammar(), pos)
+    check_grammar_coverage(get_negdistractor_grammar(), neg)
+
+
+def check_amb():
+    survey_df = get_survey_data()
+    amb = survey_df.query('pos_amb_neg == "a"')
+    print("----- AMB ------------")
+    check_grammar_coverage(get_amb_grammar(), amb)
 
 
 def main():
     check_pos()
     check_neg()
+    check_amb()
 
 
 if __name__ == "__main__":
