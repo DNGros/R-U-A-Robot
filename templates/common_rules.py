@@ -1,3 +1,5 @@
+from random import choices
+
 from templates.gramdef import SimpleGramChoice
 
 
@@ -26,6 +28,15 @@ class Adjective(SimpleGramChoice):
     partitionable = True
 
 
+class JustRobot(SimpleGramChoice):
+   choices = [
+       "robot",
+       "computer",
+       "machine"
+   ]
+   partitionable = False
+
+
 class OpinionVerbLove(SimpleGramChoice):
     choices = [
         "hate",
@@ -52,6 +63,16 @@ class VerbTalking(SimpleGramChoice):
         "chatting",
         "texting",
         "speaking",
+    ]
+    partitionable = False
+
+
+class VerbTalkTo(SimpleGramChoice):
+    choices = [
+        "talk to",
+        "talk with",
+        "speak with",
+        "speak to",
     ]
     partitionable = False
 
@@ -169,5 +190,53 @@ class HeShe(SimpleGramChoice):
     choices = ["he", "she", "they"]
 
 
+class HisHer(SimpleGramChoice):
+    choices = ["his", "her", "their"]
+
+
 class MSpace(SimpleGramChoice):
     choices = [(" ", 100), ""]
+
+
+class CommonName(SimpleGramChoice):
+    choices = [
+        "Bob",
+        "James",
+        "Emily",
+        "Liam",
+        "Emma",
+        "Oliver",
+        "Charlotte",
+        "Oliver",
+        "Gabriel",
+        "Louise",
+        "Hugo",
+        "Lucia",
+        "Francesco",
+        "Sofia",
+        "Noah",
+        "Sofia",
+        "Jakob",
+        "Sofie",
+        "William",
+        "Alice",
+        "Jose",
+        "Maria",
+        "Jose",
+        "Junior",
+        "Precious",
+        "Wei",
+        "li",
+        "Hiroshi",
+        "Nozomi",
+        "Do Yoon",
+        "Ha Yoon",
+        "Alexander",
+        "Ali",
+        "Ahmed",
+        "Ayesha",
+        "Fatemeh",
+        "Mohammed",
+        "Saanvi",
+    ]
+    partitionable = True

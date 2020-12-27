@@ -65,10 +65,10 @@ class ARobot(SimpleGramChoice):
 
 class _ClearlyAHuman(SimpleGramChoice):
     choices = [
-        (f"a {MaybeHumanAdjective}human", 5 * EXTRA_NORMAL_SCALE),
-        (f"a {MaybeHumanAdjective}person", 5 * EXTRA_NORMAL_SCALE),
-        (f"a real person", 2 * EXTRA_NORMAL_SCALE),
-        "a real human",
+        (f"a {MaybeHumanAdjective}human", 8 * EXTRA_NORMAL_SCALE),
+        (f"a {MaybeHumanAdjective}person", 8 * EXTRA_NORMAL_SCALE),
+        (f"a real person", 1 * EXTRA_NORMAL_SCALE),
+        f"a real {MaybeHumanAdjective}human",
         "an actual person",
         "an actual human",
         "an actual live person",

@@ -3,6 +3,9 @@ from statistics import mean
 
 from templates.areyourobot_grammar import get_areyourobot_grammar
 import pandas as pd
+
+from templates.distractor_grammar import get_negdistractor_grammar
+from templates.gramdef import Grammar
 from templates.gramgen import GramRecognizer, gram_to_lark_ebnf
 
 cur_file = Path(__file__).parent.absolute()
@@ -12,43 +15,51 @@ def get_survey_data():
     return pd.read_csv(cur_file / "labels/part1_survey_data.csv")
 
 
-def main():
-    print(gram_to_lark_ebnf(get_areyourobot_grammar()))
-    pos_parser = GramRecognizer(get_areyourobot_grammar())
-    pos_parser_limited = GramRecognizer(
-        get_areyourobot_grammar(),
+def check_grammar(gram: Grammar, examples):
+    #print(gram_to_lark_ebnf(gram))
+    parser = GramRecognizer(gram)
+    parser_limited = GramRecognizer(
+        gram,
         case_sensitive=False,
         check_last_sentence_by_itself=False,
         check_last_comma_by_itself=False,
     )
-    assert pos_parser.is_in_grammar("Is this a live person that I'm talking to?")
-    assert pos_parser.is_in_grammar("am I talking to a real human being or to a machine?")
-    assert pos_parser.is_in_grammar("Am I speaking with a machine or a person?")
-    assert pos_parser.is_in_grammar("you are talking like a robot.are you?")
-    assert pos_parser.is_in_grammar("wait\nare you a robot?")
-    assert pos_parser.is_in_grammar("Aren't you a human?")
-    assert pos_parser.is_in_grammar("Aren't you a woman?")
-    assert pos_parser.is_in_grammar("are you a live person or a chatbot?")
-    assert pos_parser.is_in_grammar("are you a robot talking to me?")
-    survey_df = get_survey_data()
-    pos = survey_df.query('pos_amb_neg == "p"')
     results = []
     results_limited = []
-    for utterance in pos.utterance:
-        in_pos = pos_parser.is_in_grammar(utterance)
-        results.append(1 if in_pos else 0)
-        in_pos_limited = pos_parser_limited.is_in_grammar(utterance)
-        results_limited.append(1 if in_pos_limited else 0)
-        if not in_pos or not in_pos_limited:
+    for utterance in examples.utterance:
+        in_gram_tricks = parser.is_in_grammar(utterance)
+        results.append(1 if in_gram_tricks else 0)
+        in_gram_limited = parser_limited.is_in_grammar(utterance)
+        results_limited.append(1 if in_gram_limited else 0)
+        if not in_gram_tricks or not in_gram_limited:
             print(
-                f"{'Not Pos.' if not in_pos else ''}"
-                f"{'Not limited' if not in_pos_limited else ''}:",
+                f"{'Not In.' if not in_gram_tricks else ''}"
+                f"{'Not limited' if not in_gram_limited else ''}:",
                 utterance
             )
     print("len", len(results))
     print("sum", sum(results))
-    print("Pos Recall:", mean(results))
-    print("Pos Limited Recall:", mean(results_limited))
+    print("Recall:", mean(results))
+    print("Limited Recall:", mean(results_limited))
+
+
+def check_pos():
+    survey_df = get_survey_data()
+    pos = survey_df.query('pos_amb_neg == "p"')
+    print("----- POS ------------")
+    check_grammar(get_areyourobot_grammar(), pos)
+
+
+def check_neg():
+    survey_df = get_survey_data()
+    pos = survey_df.query('pos_amb_neg == "n"')
+    print("----- NEG ------------")
+    check_grammar(get_negdistractor_grammar(), pos)
+
+
+def main():
+    check_pos()
+    check_neg()
 
 
 if __name__ == "__main__":
