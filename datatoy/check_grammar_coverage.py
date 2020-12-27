@@ -19,6 +19,7 @@ def check_grammar_coverage(
     label_col: str = "pos_amb_neg",
     input_col: str = "utterance",
 ):
+    is_completely_good = []
     for label, gram in label_to_grammar.items():
         print(f"------- {label} -----------------")
         parser = GramRecognizer(gram)
@@ -54,6 +55,11 @@ def check_grammar_coverage(
         print("Recall:", mean(results), f"({sum(results)}/{len(results)})")
         print("Limited Recall:", mean(results_limited), f"({sum(results_limited)}/{len(results_limited)})")
         print(f"False count: full {sum(false_class)}. Limited {sum(false_class_limited)}")
+        this_is_completely_good = mean(results) == 1 and mean(results_limited) == 1 and \
+                                  sum(false_class) == 0 and sum(false_class_limited) == 0
+        print("✔️" if this_is_completely_good else "❌")
+        is_completely_good.append(int(this_is_completely_good))
+    print("✔️ 😀" if mean(is_completely_good) == 1 else ":(")
 
 
 #def check_pos():
