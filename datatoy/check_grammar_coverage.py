@@ -1,19 +1,14 @@
 from pathlib import Path
 from statistics import mean
 
+from datatoy.survey_data import get_survey_data
 from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
-import pandas as pd
 
 from templates.distractor_grammar import get_negdistractor_grammar
 from templates.gramdef import Grammar
-from templates.gramgen import GramRecognizer, gram_to_lark_ebnf
+from templates.gramgen import GramRecognizer
 
-cur_file = Path(__file__).parent.absolute()
-
-
-def get_survey_data():
-    return pd.read_csv(cur_file / "labels/part1_survey_data.csv")
 
 
 def check_grammar_coverage(gram: Grammar, examples):
