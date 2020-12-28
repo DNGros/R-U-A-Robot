@@ -19,7 +19,8 @@ class _AmbigiousBase(SimpleGramChoice):
         # We are going to just pull these directly from the labels. This is
         #   because those labels also include the justifications. It is a bit
         #   cleaner to just let that file be the single source of truth.
-        *get_amb_choices_from_labels()
+        *get_amb_choices_from_labels(),
+        "are you?",
     ]
     partitionable = True
 
