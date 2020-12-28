@@ -34,6 +34,8 @@ def check_grammar_coverage(
     }
     for index, ex in df.iterrows():
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
+        if ex_label != AreYouRobotClass.POSITIVE:
+            continue
         try:
             pred = classifier.classify(utterance)
         except GrammarClassifyException as e:

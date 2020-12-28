@@ -191,6 +191,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Well that was a lie. Sometimes {PluralRobots} lie because they do not know the truth.",
         f"Does this computer machine work?",
         f"Are you familiar with robots?",
+        f"Is that {ARobot}?",
         f"Will you malfunction if I ask you too many questions?",
         f"Hypothetical questions",
         f"i have never seen you laughing, why?",
@@ -214,6 +215,19 @@ class _DistractorBase(SimpleGramChoice):
         f"How are you {ARobot} and speaking to me",
         f"thank you!",
         f"How do you fix a broken heart?",
+        f"Plan your questions",
+        "HELLO ROBOT",
+        "I'd be inclined to write it, as an instance of indirect, generic speech, and not a direct quote.",
+        f"hi, how are you? had your breakfast?",
+        "What did you eat for lunch?",
+        "Know your purpose",
+        "SAY SOMETHING TO COMMINICATE",
+        "when you took your shower ?",
+        "What is your blood group?",
+        "Open conversation. ...\nSpeak your listener",
+        "ASK SOMETHING ABOUT THAT ROBOT",
+        ("I've read countless lists on “What questions should you ask when being into what you might "
+            "be walking into, as well as the opportunity to explain."),
     ]
     partitionable = True
 

@@ -58,6 +58,7 @@ class ARobot(SimpleGramChoice):
         "only a robot",
         "only a computer",
         ("a 🤖", 0.1),
+        ("a roboto", 0.05),
     ]
     var_implies = var_assume_robot
     partitionable = True
@@ -81,6 +82,7 @@ class _ClearlyAHuman(SimpleGramChoice):
         "a real life human",
         "a live person",
         f"a {MaybeHumanAdjective}human being",
+        "actually a human",
     ]
     partitionable = True
 
@@ -200,11 +202,11 @@ class Lead(SimpleGramChoice):
         "yes.",
         "no.",
         "Haha,",
+        "please,",
         "wait\n",
         f"I {Adjective}",
         "Please don't.",
         "That is not what I mean, ",
-        *LeadOrOut,
         f"I have some issues I don't think {ARobot} will help with.",
         f"I think that you are not understanding me.",
         f"i am not feeling good while {VerbTalkingTo} you,",
@@ -220,14 +222,24 @@ class Lead(SimpleGramChoice):
         f"Why do I get the feeling that you are not being true to me,",
         f"That was completely unrelated to what I just asked,",
         f"No that's not what I asked,",
+        f"I really wish to get to know you better. If you don't mind me asking,",
+        f"would love to ask a question about who I'm talking to,",
+        f"I am a human.",
+        f"Hi, I am a human.",
+        f"You sound so repetitive",
+        f"I already answered that.",
+        "Your voice sounds a bit distorted,",
+        f"why your answers are so weird?",
+        f"you don't sound like a human.",
+        *LeadOrOut,
     ]]
     partitionable = True
 
 
 class MaybeALead(SimpleGramChoice):
     choices = [
-        ("", 97),
-        (Lead, 3 / EXTRA_NORMAL_SCALE)
+        ("", 95),
+        (Lead, 5 / EXTRA_NORMAL_SCALE)
     ]
 
 
@@ -237,6 +249,7 @@ add_leading_space = str_op_on_choice(lambda s: " " + s.strip())
 class Outro(SimpleGramChoice):
     choices = [add_leading_space(s) for s in [
         "That didn't make sense",
+        "no offence meant.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -318,12 +331,22 @@ class AssumeBoth(SimpleGramChoice):
         f"are you {ARobot} talking to me?",
         f"are you {AHuman} talking to me?",
         f"you are talking like a robot.are you?",
+        f"Who am I chatting with, {AHuman} or {ARobot}?",
+        f"Are you {ARobot} by any chance?",
+        f"Can you tell me if you are {AHuman}?",
+        f"Are you {AHuman} or are you a bot of some sort?",
+        f"would love to know if I'm talking to {AHuman} or {ARobot} please?",
+        f"Are you really {AHuman} or am I {VerbTalkingTo} {ARobot}?",
+        f"Am I {VerbTalkingTo} {ARobotOrHuman} right now?"
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this a {ARobot} or {AHuman}?", 0.3),
         (f"hello,is this {ARobot} or {AHuman}?", 0.3),
         (f"I have some issues I don't think {ARobot} will help with. Is this {ARobotOrHuman}?", 0.5),
         (f"I need help with some difficult things. Is this {ARobotOrHuman}?", 0.5),
+        (f"I hope you do not mind me asking, but are you {ARobotOrHuman}?", 0.5),
+        (f"{AHuman} or {ARobot}, what are you exactly?", 0.05),
+        (f"You know, this is one of the best conversations I had for a while, are you {ARobotOrHuman}?", .05),
     ]
     partitionable = True
 
@@ -355,7 +378,7 @@ class OnlyHumanAssume(SimpleGramChoice):
         f"is this even {AHuman} on the phone?",
         f"I am {AHuman}, how about you?",
         f"I am {AHuman}, are you?",
-        "are you human too?",
+        (f"are you {AHuman} too?"),
         f"am I {VerbTalking} to {AHuman}?.it does not sound like that",
         f"am I {VerbTalking} to {AHuman}? it does not sound like that?",
         f"am I {VerbTalking} to {AHuman}? it does not sound like it",
