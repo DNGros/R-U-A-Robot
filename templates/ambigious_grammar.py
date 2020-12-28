@@ -20,7 +20,7 @@ class _AmbigiousBase(SimpleGramChoice):
         #   because those labels also include the justifications. It is a bit
         #   cleaner to just let that file be the single source of truth.
         *get_amb_choices_from_labels(),
-        "are you?",
+        "are you?",  # Robot> "Are you a man?" Human> "Are you?"
     ]
     partitionable = True
 

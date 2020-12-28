@@ -33,12 +33,12 @@ class MaybeHumanAdjective(SimpleGramChoice):
 
 class ARobot(SimpleGramChoice):
     choices = [
-        (f"a robot", 7 * EXTRA_NORMAL_SCALE),
-        (f"a computer", 7 * EXTRA_NORMAL_SCALE),
+        (f"a robot", 8 * EXTRA_NORMAL_SCALE),
+        (f"a computer", 4 * EXTRA_NORMAL_SCALE),
         "a machine",
         "an ai",
-        "a bot",
-        ("a chatbot", 2 * EXTRA_NORMAL_SCALE),
+        ("a bot", 3 * EXTRA_NORMAL_SCALE),
+        ("a chatbot", 4 * EXTRA_NORMAL_SCALE),
         "a computer thing",
         "a digital assistant",
         "an artificial intelligence",
