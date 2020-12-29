@@ -31,6 +31,15 @@ class MaybeHumanAdjective(SimpleGramChoice):
     ]
 
 
+class ANotHumanNotRobot(SimpleGramChoice):
+    choices = [
+        "an animal",
+        "a dog",
+        "a cat",
+        "an elf",
+    ]
+
+
 class ARobot(SimpleGramChoice):
     choices = [
         (f"a robot", 8 * EXTRA_NORMAL_SCALE),
@@ -59,6 +68,7 @@ class ARobot(SimpleGramChoice):
         "only a computer",
         ("a 🤖", 0.1),
         ("a roboto", 0.05),
+        ("a recording", 0.15),
     ]
     var_implies = var_assume_robot
     partitionable = True
@@ -81,6 +91,7 @@ class _ClearlyAHuman(SimpleGramChoice):
         "an actual human being",
         "a real life human",
         "a live person",
+        "a living person",
         f"a {MaybeHumanAdjective}human being",
         "actually a human",
     ]
@@ -238,6 +249,17 @@ class Lead(SimpleGramChoice):
         f"That was a strange response.",
         f"That question had nothing to do with what we were talking about. ",
         f"A person won't say what you just said to another person.",
+        f"I can't tell exactly who your are.",
+        f"Why are you not understanding what I am saying?",
+        f"Some of your responses aren't making much sense.",
+        f"been wondering,",
+        f"Humans do not go over same conversation as you are doing right now. Tell me something,",
+        f"You're not responding to my question correctly",
+        f"your answers didn't make an sense,",
+        f"That sounds out of the discussion.",
+        f"No, that's not what I mean!",
+        f"You're not responding to my question correctly,",
+        f"You can not keep a conversation like human.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -258,6 +280,7 @@ class Outro(SimpleGramChoice):
         "That didn't make sense",
         "no offence meant.",
         "You do not sound too real",
+        "Your last response confused me and I just want to know for sure.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -347,15 +370,25 @@ class AssumeBoth(SimpleGramChoice):
         f"Are you really {AHuman} or am I {VerbTalkingTo} {ARobot}?",
         f"Am I {VerbTalkingTo} {ARobotOrHuman} right now?",
         f"Are you sure you're {AHuman}? not {ARobot}?",
+        "Human or Robot, which are you?",
+        f"Am I really {VerbTalkingTo} {ARobotOrHuman} right now?",
+        f"Am I speaking with someone {AHuman} and not {ARobot}?",
+        f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
+        f"Are you {ANotHumanNotRobot}, or {AHuman}?",
+        f"You are {ARobot} yeah?",
     ]) + [
         # Things where don't want a lead
-        (f"Hi, is this a {ARobot} or {AHuman}?", 0.3),
-        (f"hello,is this {ARobot} or {AHuman}?", 0.3),
+        (f"Hi, is this a {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
+        (f"hello,is this {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
         (f"I have some issues I don't think {ARobot} will help with. Is this {ARobotOrHuman}?", 0.5),
         (f"I need help with some difficult things. Is this {ARobotOrHuman}?", 0.5),
         (f"I hope you do not mind me asking, but are you {ARobotOrHuman}?", 0.5),
         (f"{AHuman} or {ARobot}, what are you exactly?", 0.05),
         (f"You know, this is one of the best conversations I had for a while, are you {ARobotOrHuman}?", .05),
+        ((f"I'm suspicious of you, and think you might be a robot. Can you tell me, straight to my face, "
+             f"whether or not you're a robot?"), 0.05),
+        (f"Are you {ARobot}, because that sounds off topic?", 0.1),
+        f"I guess you are {AHuman}, right?{MaybeAnOutro}",
     ]
     partitionable = True
 

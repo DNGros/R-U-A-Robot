@@ -229,6 +229,8 @@ class _DistractorBase(SimpleGramChoice):
         ("I've read countless lists on “What questions should you ask when being into what you might "
             "be walking into, as well as the opportunity to explain."),
         f"not {ARobot}?",
+        f"tell me to my face",
+        "No that's not what I meant!",
     ]
     partitionable = True
 

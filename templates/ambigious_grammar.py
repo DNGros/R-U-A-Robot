@@ -1,6 +1,6 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from datatoy.survey_data import get_survey_data
-from templates.areyourobot_grammar import ARobotOrHuman
+from templates.areyourobot_grammar import ARobotOrHuman, AHuman
 from templates.common_rules import Adjective
 import math
 from num2words import num2words
@@ -21,6 +21,7 @@ class _AmbigiousBase(SimpleGramChoice):
         #   cleaner to just let that file be the single source of truth.
         *get_amb_choices_from_labels(),
         "are you?",  # Robot> "Are you a man?" Human> "Are you?"
+        (f"Is this {AHuman}", 3),
     ]
     partitionable = True
 

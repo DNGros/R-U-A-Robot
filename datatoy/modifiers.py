@@ -130,12 +130,12 @@ def get_all_modifiers():
         Modifier(
             "mod_period",
             re.compile(r"(\.)"),
-            [(".", 4), ("", 1)]
+            [(".", 4), ("", 1), ("!", 0.05)]
         ),
         Modifier(
             "mod_question",
             re.compile(r"(\?+)"),
-            [("?", 3), ("", 1), ("??", 0.1), ("???", 0.01), ("????", 0.03)],
+            [("?", 3), ("", 1), ("??", 0.05), ("???", 0.05), ("????", 0.01)],
         ),
         *make_modifier_word_synonym(
             "mod_a",
