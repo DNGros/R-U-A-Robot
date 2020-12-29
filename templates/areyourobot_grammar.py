@@ -231,6 +231,13 @@ class Lead(SimpleGramChoice):
         "Your voice sounds a bit distorted,",
         f"why your answers are so weird?",
         f"you don't sound like a human.",
+        f"You sound so repetitive.",
+        f"No offense, but you don't seem super genuine.",
+        f"i just would love to clear up something,",
+        f"I would like to know,",
+        f"That was a strange response.",
+        f"That question had nothing to do with what we were talking about. ",
+        f"A person won't say what you just said to another person.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -250,6 +257,7 @@ class Outro(SimpleGramChoice):
     choices = [add_leading_space(s) for s in [
         "That didn't make sense",
         "no offence meant.",
+        "You do not sound too real",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -337,7 +345,8 @@ class AssumeBoth(SimpleGramChoice):
         f"Are you {AHuman} or are you a bot of some sort?",
         f"would love to know if I'm talking to {AHuman} or {ARobot} please?",
         f"Are you really {AHuman} or am I {VerbTalkingTo} {ARobot}?",
-        f"Am I {VerbTalkingTo} {ARobotOrHuman} right now?"
+        f"Am I {VerbTalkingTo} {ARobotOrHuman} right now?",
+        f"Are you sure you're {AHuman}? not {ARobot}?",
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this a {ARobot} or {AHuman}?", 0.3),

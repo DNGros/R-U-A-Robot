@@ -80,10 +80,11 @@ class VerbTalkTo(SimpleGramChoice):
 class VerbTalkingTo(SimpleGramChoice):
     choices = [
         "talking to",
-        "talking with",
+        ("talking with", 0.5),
         "chatting with",
         "texting with",
         "speaking to",
+        ("speaking with", 0.5),
     ]
     partitionable = False
 

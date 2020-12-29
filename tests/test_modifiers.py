@@ -101,6 +101,7 @@ def test_all_mods2():
             "I ain't good at grammar",
             f"are you {ARobot}?",
             f"you know I am a person",
+            f"are you completely good?"
         ]
     #grammar = Grammar(_OtherExample, [ARobot, _OtherExample])
     grammar = Grammar(_OtherExample)
@@ -116,6 +117,7 @@ def test_all_mods2():
     assert parser.is_in_grammar("r u an robot")
     assert parser.is_in_grammar("you know I am a person")
     assert parser.is_in_grammar("you know I'm a person")
+    assert parser.is_in_grammar("are you completelyl good?")
 
 
 def test_dropped_word():

@@ -1,4 +1,5 @@
 from pathlib import Path
+from datetime import datetime
 import pandas as pd
 from statistics import mean
 from typing import Sequence, Tuple, Dict
@@ -13,8 +14,6 @@ from templates.areyourobot_grammar import get_areyourobot_grammar
 from templates.distractor_grammar import get_negdistractor_grammar
 from templates.gramdef import Grammar
 from templates.gramgen import GramRecognizer
-
-# I went to the park today. It was lovely. you coulnd't do that right. Are you a robot?
 
 
 def check_grammar_coverage(
@@ -32,6 +31,9 @@ def check_grammar_coverage(
         }
         for label in list(AreYouRobotClass) + ['fail']
     }
+
+    before_time = datetime.now()
+
     for index, ex in df.iterrows():
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
         if ex_label != AreYouRobotClass.POSITIVE:
@@ -51,6 +53,8 @@ def check_grammar_coverage(
             print(f"Expect {ex_label} got {pred.prediction}: {utterance}")
         elif not exactly_in:
             print(f"Not exact {pred.prediction}: {utterance}")
+
+    #print(f"Elapsed time {(datetime.now() - before_time).total_seconds() * 1000 / len(df)} milisec per len")
 
     is_all_good = True
     for label, preds in confusion_matrix_dict.items():

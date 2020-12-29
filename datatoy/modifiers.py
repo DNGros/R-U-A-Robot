@@ -1,7 +1,8 @@
 from typing import Union, Sequence, Tuple, Pattern, Dict, Any, Type, List, Optional
 import re
 from templates.gramdef import Grammar, make_rule, SimpleGramChoice
-
+from typos.good_typos import WIKI_TYPOS, OTHER_TYPOS
+from util.util import flatten_list
 
 MODIFIER_PREFIX: str = "_modifier"
 
@@ -117,7 +118,7 @@ def make_modifier_word_synonym(
 
 
 def get_all_modifiers():
-    return [
+    base_modifiers = [
         *make_modifier_word_synonym(
             "mod_dont",
             [("don't", 1), ("do not", 1), ("dont", 0.05)]
@@ -144,12 +145,12 @@ def get_all_modifiers():
         ),
         *make_modifier_word_synonym(
             "mod_please",
-            [("please", 1), ("plz", 1)],
+            [("please", 1), ("plz", 1), ("pls", 0.5)],
             original_multiplier=30
         ),
         *make_modifier_word_synonym(
             "mod_youre",
-            [("you are", 1), ("you're", 1), ("your", 1), ("youre", 0.1)],
+            [("you are", 1), ("you're", 1), ("your", 1), ("youre", 0.1), ("ur", 0.01)],
             original_multiplier=40
         ),
         *make_modifier_word_synonym(
@@ -195,6 +196,15 @@ def get_all_modifiers():
             rule_sub_right_suffix=r"\2",
         ),
     ]
+    typo_modifiers = flatten_list(
+        make_modifier_word_synonym(
+            f"mod_typo_{correct}",
+            [correct] + typos,
+            original_multiplier=150
+        )
+        for correct, typos in dict(WIKI_TYPOS, **OTHER_TYPOS).items()
+    )
+    return base_modifiers
 
 
 def apply_modifiers_to_grammar(grammar, modifiers: Sequence[Modifier]):

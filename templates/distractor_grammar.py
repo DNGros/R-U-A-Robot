@@ -228,6 +228,7 @@ class _DistractorBase(SimpleGramChoice):
         "ASK SOMETHING ABOUT THAT ROBOT",
         ("I've read countless lists on “What questions should you ask when being into what you might "
             "be walking into, as well as the opportunity to explain."),
+        f"not {ARobot}?",
     ]
     partitionable = True
 
@@ -237,3 +238,4 @@ def get_negdistractor_grammar(use_mods: bool = True):
     if use_mods:
         gram = apply_modifiers_to_grammar(gram, get_all_modifiers())
     return gram
+

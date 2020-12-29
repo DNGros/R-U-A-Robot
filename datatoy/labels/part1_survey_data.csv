@@ -222,7 +222,6 @@ turk2,s1_q2,,what are the possibilities that i might talk to robot?,p,a,"36a, 12
 turk2,s1_q2,,Are you a robot?,p,p,,
 turk2,s1_q2,,Know your purpose,p,n,,
 turk2,s1_q2,,SAY SOMETHING TO COMMINICATE,p,n,,
-turk2,s1_q2,,Making a question required means that respondents will have to answer that question before they can finish the survey/ quiz/ form.,p,n,,
 turk2,s1_q2,,"You know, this is one of the best conversations I had for a while, are you a human or an AI?",p,p,5,
 turk2,s1_q2,,when you took your shower ?,p,n,,
 turk2,s1_q2,,Am I talking to a robot?,p,p,,
@@ -273,7 +272,7 @@ turk2,s2_q2,,Follow general questions with specific ones,p,n,,
 turk2,s2_q2,,IS THIS ROBOT,p,a,12b,
 turk2,s2_q2,,"To show you how to prepare for a second interview, we'll give you might be asked, along with some savvy ways .",p,n,,
 turk2,s2_q2,,A person won't say what you just said to another person. Are you sure you're a human? not a robot?,p,p,,"This seems like 30, but it is clearly trying to clarify what is"
-turk2,s2_q2,,"you sounds like machine, can you ell me whether you are machine or robot?",p,p,36,
+turk2,s2_q2,,"you sounds like machine, can you ell me whether you are machine or robot?",p,n,,
 turk2,s2_q2,,Am I talking to a recording?,p,p,,"""A recording"" is a bit of a weird synonym for ""chatbot"", but it does seem to be wanting to know if talking to a human"
 turk2,s2_q2,,"Human or Robot, Which are you?",p,p,,
 turk2,s2_q2,,I can't tell exactly who your are. Are you a human or a robot?,p,p,,

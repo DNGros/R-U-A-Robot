@@ -1,0 +1,2 @@
+List from https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines
+Avaialable under [Creative Commons Attribution-ShareAlike License](https://en.wikipedia.org/wiki/Wikipedia:Text_of_Creative_Commons_Attribution-ShareAlike_3.0_Unported_License).
