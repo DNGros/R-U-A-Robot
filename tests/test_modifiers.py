@@ -117,6 +117,21 @@ def test_all_mods2():
     assert parser.is_in_grammar("r u an robot")
     assert parser.is_in_grammar("you know I am a person")
     assert parser.is_in_grammar("you know I'm a person")
+
+
+def test_mod_typo():
+    class _OtherExample(SimpleGramChoice):
+        choices = [
+            f"are you completely good?"
+        ]
+    #grammar = Grammar(_OtherExample, [ARobot, _OtherExample])
+    grammar = Grammar(_OtherExample)
+    #print(gram_to_lark_ebnf(grammar))
+    #assert parser.is_in_grammar("I don't like pie")
+    #print("------- PASS FIRST -------------")
+    grammar = apply_modifiers_to_grammar(grammar, get_all_modifiers())
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
     assert parser.is_in_grammar("are you completelyl good?")
 
 

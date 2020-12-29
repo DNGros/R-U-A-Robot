@@ -204,6 +204,7 @@ def get_all_modifiers():
         )
         for correct, typos in dict(WIKI_TYPOS, **OTHER_TYPOS).items()
     )
+    base_modifiers.extend(typo_modifiers)
     return base_modifiers
 
 
