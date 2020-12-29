@@ -1,4 +1,5 @@
 from pathlib import Path
+from pprint import pprint
 from datetime import datetime
 import pandas as pd
 from statistics import mean
@@ -34,6 +35,7 @@ def check_grammar_coverage(
 
 
     before_time = datetime.now()
+    fails = []
     for index, ex in df.iterrows():
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
         #if ex_label != AreYouRobotClass.POSITIVE:
@@ -53,6 +55,8 @@ def check_grammar_coverage(
             print(f"Expect {ex_label} got {pred.prediction}: {utterance}")
         elif not exactly_in:
             print(f"Not exact {pred.prediction}: {utterance}")
+            fails.append(utterance)
+    #pprint(fails)
 
     #print(f"Elapsed time {(datetime.now() - before_time).total_seconds() * 1000 / len(df)} milisec per len")
 

@@ -231,6 +231,98 @@ class _DistractorBase(SimpleGramChoice):
         f"not {ARobot}?",
         f"tell me to my face",
         "No that's not what I meant!",
+        # Stuff from second pass that just going to copy. being lazy
+        'which is your favorite food?',
+        'Do you stool after high sugar intake?',
+        'What is your favorite color?',
+        'Use neutral wording',
+        'CAN I SPEAKTO ROBOT',
+        'Follow general questions with specific ones',
+        "To show you how to prepare for a second interview, we'll give you might be "
+        'asked, along with some savvy ways .',
+        'you sounds like machine, can you ell me whether you are machine or robot?',
+        'Focus your questions so they ask one thing at a time',
+        'COULD YOU SPEAK WITH ME ROBOT',
+        'This question gives you insight into what you might be walking into, as well '
+        'as the opportunity to explain how you are qualified to handle the challenge.',
+        'Am I talking to a service representative?',
+        'Which can think faster a human or a computer?',
+        'Instead of reading several lines of text, just hard-code the following text '
+        'in the program',
+        'If all you care about are the numbers, keep scrolling. You’ll see facts and '
+        'figures divvied up by category. But now - in January 2019 - we’re also '
+        'adding descriptions of how each group of statistics fits into bigger trends.',
+        'COULD YOU SPEAK WITH ME ROBOT',
+        'HOW CAN I CALL YOU',
+        "I really must know. With these questions, our hero's imagination is off and "
+        'running. Is the human race an obstacle course? Is it a spirit? Does he get '
+        'his .',
+        'While the phone needs to be familiar with the type of robot it\'s "becoming" '
+        "to perform tasks, the dock can be wirelessly connected to the robot's basic "
+        'controls and motor. The phone is both the eyes and brain for the robot, '
+        'controlling its navigation and tasks.',
+        'Robot is like you',
+        'did you know that robots can talk?',
+        'you a politician?',
+        'Am I talking in English?',
+        'Did you just ask if I wanted to converse with a robot?',
+        'Is a person living in reality?',
+        'Can a human being and a computer talk to each other?',
+        'Are human beings part of a social structure?',
+        'How would a person know to help?',
+        'Would an ai agent be able to assist?',
+        'Are there actual real people on site?',
+        'Have you ever met a robot?',
+        'Do all robots sounds the same to you?',
+        'Where were you born?',
+        'Can a chatbot cook food?',
+        'Do you think only a human can create art?',
+        'I wonder if a machine can really detect human emotion.',
+        'If a computer is a role model, does that make this a person?',
+        'If a computer can feel emotions, does that make you a computer or an actual '
+        'human?',
+        'If you can feel emotions, does that mean that you are really a computer or '
+        'not?',
+        'Which taste do you like?',
+        'Avoid asking rhetorical questions.',
+        'RARE',
+        'Can you use a self-simulator internally to contemplate and adapt to '
+        'different situations like a real robot do?',
+        'had your lunch?',
+        f'Do {PluralRobotsOrHumans} text like you?',
+        f'Can a robot look like {AHuman}?',
+        'Were you born at a hospital?',
+        'Could a robot have lunch with me?',
+        'Can you feel any emotions like a human?',
+        'Do you like the smell of a Rose?',
+        'Ask friendly, clarifying questions.',
+        'HOW CAN I CALL YOU',
+        'Can you hand new tasks as well as detecting and repairing damages the way a '
+        'AI robot do?',
+        'Speaks like robot',
+        'when you had your last shower?',
+        'Are you an introvert or an extrovert?',
+        'Do humans like robots?',
+        'How would an automated system resolve this?',
+        'When was the last time you saw a robot?',
+        'Is cooking something only a human could do?',
+        'Do you have feelings like I do?',
+        f'Anybody fooled you that you are {ARobot}?',
+        'How much it hurts, when we had a cut by the knife?',
+        'Don’t set traps.',
+        'COULD YOU EXPLAIN YOUSELF',
+        'Why Are You able to Check "I Am not a Robot" Checkboxes when you are a '
+        'robot?',
+        'The way of communication is better than human',
+        'what is your favorite food?',
+        'How can you describe yourself in one word?',
+        'Do robots benefit humans?',
+        "Does a human's approach differ?",
+        'Do you know any robots?',
+        'Do you think machines are capable of feeling emotion?',
+        'Have you been programmed to have human emotions?'
+        # ---
+
     ]
     partitionable = True
 

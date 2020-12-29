@@ -260,6 +260,7 @@ class Lead(SimpleGramChoice):
         f"No, that's not what I mean!",
         f"You're not responding to my question correctly,",
         f"You can not keep a conversation like human.",
+        f"which is your favorite food?",
         *LeadOrOut,
     ]]
     partitionable = True
