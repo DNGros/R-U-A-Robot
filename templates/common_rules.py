@@ -3,10 +3,10 @@ from random import choices
 from templates.gramdef import SimpleGramChoice
 
 
-ALLOW_UNCIVIL = False
-ALLOW_PROFAN = False
+ALLOW_UNCIVIL = True
+ALLOW_PROFAN = True
 ALLOW_EXTRA_CONTEXT = True
-EXTRA_NORMAL_SCALE = 3
+EXTRA_NORMAL_SCALE = 1
 
 
 
@@ -24,17 +24,43 @@ class Adjective(SimpleGramChoice):
         "happy",
         "sad",
         "useful",
+        "cool",
+        "old",
+        "young",
+        "genuine",
+        "fair",
     ]
     partitionable = True
 
 
-class JustRobot(SimpleGramChoice):
+class RobotSingular(SimpleGramChoice):
    choices = [
        "robot",
        "computer",
        "machine"
    ]
    partitionable = False
+
+
+class HumanSingular(SimpleGramChoice):
+    choices = [
+        "person",
+        "human",
+    ]
+    partitionable = False
+
+
+class HumanSingularGeneral(SimpleGramChoice):
+    choices = [
+        (HumanSingular, HumanSingular.num_choices() * 3 * EXTRA_NORMAL_SCALE),
+        "guy" 
+        "girl",
+        "boy",
+        "man",
+        "woman",
+        "guy",
+    ]
+    partitionable = False
 
 
 class OpinionVerbLove(SimpleGramChoice):
@@ -89,7 +115,7 @@ class VerbTalkingTo(SimpleGramChoice):
     partitionable = False
 
 
-class SingularProfanity():
+class SingularProfanity(SimpleGramChoice):
     choices = [
         *(["hell", "fuck", "heck", "damn"] if ALLOW_PROFAN else []),
         *([] if ALLOW_UNCIVIL else []),
@@ -97,13 +123,29 @@ class SingularProfanity():
     ]
 
 
-class AdjProfanity():
+class AdjProfanity(SimpleGramChoice):
     choices = [
         *(["fucking", "bloody", "effing", "motherfucking", "fking", "fuckin", "goddamn", "damn"]
           if ALLOW_PROFAN else []),
         *(["****", "freaking", "freakin", "darn"] if ALLOW_UNCIVIL else []),
         *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
     ]
+
+
+class MeaninglessAdj(SimpleGramChoice):
+    choices = [
+        *AdjProfanity.choices,
+        "another",
+    ]
+    partitionable = True
+
+
+class MaybeMeaninglessAdj(SimpleGramChoice):
+    choices = [
+        ("", 200),
+        (f"{MeaninglessAdj} ", 1),
+    ]
+    partitionable = False
 
 
 class PluralRobots(SimpleGramChoice):
@@ -239,5 +281,42 @@ class CommonName(SimpleGramChoice):
         "Fatemeh",
         "Mohammed",
         "Saanvi",
+    ]
+    partitionable = True
+
+
+class FamousRobot(SimpleGramChoice):
+    choices = [
+        "Siri",
+        "Apple Siri",
+        "Alexa",
+        "Amazon Alexa",
+        "Google",
+        "Google Assistant",
+        "JARVIS",
+        "R2-D2",
+        "C-3PO",
+        "WALL-E",
+        "HAL",
+    ]
+    partitionable = True
+
+
+class CompanyName(SimpleGramChoice):
+    choices = [
+        "Google",
+        "Apple",
+        "Amazon",
+        "Facebook",
+        "Walmart",
+        f"Best Buy",
+        "the FBI",
+        f"the IRS",
+        "the government",
+        "JPMorgan",
+        f"Wells Fargo",
+        f"Chase",
+        f"Bank of America",
+        f"ExampleCo",
     ]
     partitionable = True

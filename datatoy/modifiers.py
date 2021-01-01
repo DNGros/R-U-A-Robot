@@ -189,12 +189,26 @@ def get_all_modifiers():
             original_multiplier=30
         ),
         Modifier(
-            "mod_comma_combined",
-            re.compile(r"(\w),(\w)"),
-            [(", ", 1), (",", 1), (". ", 0.1)],
-            rule_sub_left_prefix=r"\1",
-            rule_sub_right_suffix=r"\2",
+            "mod_comma_space",
+            re.compile(r", "),
+            [(", ", 10), (",", 1), (". ", 0.1), (" ", 0.03)],
+            #rule_sub_left_prefix=r"\1",
+            #rule_sub_right_suffix=r"\2",
         ),
+        Modifier(
+            "mod_comma_nospace",
+            re.compile(r","),
+            [(", ", 1), (",", 10), (". ", 0.1), (" ", 0.03)],
+            #rule_sub_left_prefix=r"\1",
+            #rule_sub_right_suffix=r"\2",
+        ),
+        #Modifier(
+        #    "mod_unquote",
+        #    re.compile(r"(\w),(\w)"),
+        #    [("", 1), (r'""', 1), (r"''", 0.1)],
+        #    rule_sub_left_prefix=r"\1",
+        #    rule_sub_right_suffix=r"\2",
+        #),
     ]
     typo_modifiers = flatten_list(
         make_modifier_word_synonym(

@@ -15,6 +15,7 @@ import whoosh.index
 from whoosh.fields import STORED, TEXT, ID, Schema
 
 from datatoy.alldata import get_all_utterances_list, preproc, Utterance
+from templates.areyourobot_grammar import get_areyourobot_grammar
 
 cur_file = Path(__file__).parent.absolute()
 indexdir = "indexdir"
@@ -114,7 +115,7 @@ def search_some_distractir_examples(n=10):
     else:
         searcher = load_searcher()
     print("gen examples")
-    queries = get_some_samples(n=n)
+    queries = list(get_areyourobot_grammar().generate_rand_iter(n=n))
     print("search")
     results = searcher.search(queries)
     print("sample")
@@ -134,7 +135,7 @@ def main():
     #results = searcher.search(["are you robot", "a like people"])
     #print(results)
     #print(sample_search_result(results[0]))
-    results = list(set(search_some_distractir_examples(n=10000)))
+    results = list(set(search_some_distractir_examples(n=20000)))
     random.shuffle(results)
     csv_dict = []
     for result in results:
@@ -142,11 +143,11 @@ def main():
             "found": "weighted",
             **dataclasses.asdict(result),
         })
-    pd.DataFrame(csv_dict).to_csv(cur_file / "outputs/distract_2.csv")
+    pd.DataFrame(csv_dict).to_csv(cur_file / "outputs/distract_3.csv")
 
 
 def rand_sample():
-    results = random.sample(get_all_utterances_list(), 1000)
+    results = random.sample(get_all_utterances_list(), 10000)
     csv_dict = []
     for result in results:
         csv_dict.append({

@@ -8,7 +8,7 @@ from typing import Sequence, Tuple, Dict
 from tabulate import tabulate
 
 from datatoy.grammar_classifier import AreYouRobotClassifier, GrammarClassifyException, AreYouRobotClass
-from datatoy.survey_data import get_survey_data
+from datatoy.survey_data import get_survey_data, get_tfidf_distract
 from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
 
@@ -21,6 +21,7 @@ def check_grammar_coverage(
     df: pd.DataFrame,
     label_col: str = "pos_amb_neg",
     input_col: str = "utterance",
+    neg_exact: bool = True,
 ):
     is_completely_good = []
     exactly_in_results = []
@@ -37,23 +38,27 @@ def check_grammar_coverage(
     before_time = datetime.now()
     fails = []
     for index, ex in df.iterrows():
+        if not ex[label_col] or ex[label_col] == "nan" or pd.isnull(ex[label_col]):
+            continue
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
         #if ex_label != AreYouRobotClass.POSITIVE:
         #    continue
         try:
             pred = classifier.classify(utterance)
         except GrammarClassifyException as e:
-            print(str(e), utterance)
+            print(str(e), ":", utterance)
             confusion_matrix_dict[ex_label]['fail'] += 1
             exactly_in_results.append(0)
             continue
         correct_pred = pred.prediction == ex_label
         exactly_in = pred.exactly_in_class
         confusion_matrix_dict[ex_label][pred.prediction] += 1
-        exactly_in_results.append(int(exactly_in))
+        want_exactly_in = (neg_exact or ex_label != AreYouRobotClass.NEGATIVE)
+        if want_exactly_in:
+            exactly_in_results.append(int(exactly_in))
         if not correct_pred:
             print(f"Expect {ex_label} got {pred.prediction}: {utterance}")
-        elif not exactly_in:
+        elif not exactly_in and want_exactly_in:
             print(f"Not exact {pred.prediction}: {utterance}")
             fails.append(utterance)
     #pprint(fails)
@@ -76,43 +81,17 @@ def check_grammar_coverage(
     print("✔️ 😀" if is_all_good else ":(")
 
 
-    #print("Recall:", mean(results), f"({sum(results)}/{len(results)})")
-    #print("Limited Recall:", mean(results_limited), f"({sum(results_limited)}/{len(results_limited)})")
-    #print(f"False count: full {sum(false_class)}. Limited {sum(false_class_limited)}")
-    #this_is_completely_good = mean(results) == 1 and mean(results_limited) == 1 and \
-    #                          sum(false_class) == 0 and sum(false_class_limited) == 0
-    #print("✔️" if this_is_completely_good else "❌")
-    #is_completely_good.append(int(this_is_completely_good))
-    #print("✔️ 😀" if mean(is_completely_good) == 1 else ":(")
 
-
-#def check_pos():
-#    survey_df = get_survey_data()
-#    pos = survey_df.query('pos_amb_neg == "p"')
-#    print("----- POS ------------")
-#    check_grammar_coverage(get_areyourobot_grammar(), pos)
-#
-#
-#def check_neg():
-#    survey_df = get_survey_data()
-#    neg = survey_df.query('pos_amb_neg == "n"')
-#    print("----- NEG ------------")
-#    #gram = get_negdistractor_grammar()
-#    #parser = GramRecognizer(gram)
-#    #assert parser.is_in_grammar("hi,yo")
-#    check_grammar_coverage(get_negdistractor_grammar(), neg)
-#
-#
-#def check_amb():
-#    survey_df = get_survey_data()
-#    amb = survey_df.query('pos_amb_neg == "a"')
-#    print("----- AMB ------------")
-#    check_grammar_coverage(get_amb_grammar(), amb)
 
 
 def main():
+    #check_grammar_coverage(
+    #    get_survey_data()
+    #)
     check_grammar_coverage(
-        get_survey_data()
+        get_tfidf_distract(),
+        input_col='text_unproc',
+        neg_exact=False
     )
 
 

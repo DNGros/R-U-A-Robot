@@ -3,7 +3,8 @@ from typing import List, Callable, Tuple, Union
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
-    EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo
+    EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, HumanSingular, \
+    HumanSingularGeneral, CompanyName
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
     Grammar
@@ -42,14 +43,15 @@ class ANotHumanNotRobot(SimpleGramChoice):
 
 class ARobot(SimpleGramChoice):
     choices = [
-        (f"a robot", 8 * EXTRA_NORMAL_SCALE),
-        (f"a computer", 4 * EXTRA_NORMAL_SCALE),
-        "a machine",
+        (f"a {MaybeMeaninglessAdj}robot", 10 * EXTRA_NORMAL_SCALE),
+        (f"a {MaybeMeaninglessAdj}computer", 8 * EXTRA_NORMAL_SCALE),
+        f"a {MaybeMeaninglessAdj}machine",
         "an ai",
-        ("a bot", 3 * EXTRA_NORMAL_SCALE),
-        ("a chatbot", 4 * EXTRA_NORMAL_SCALE),
-        "a computer thing",
-        "a digital assistant",
+        (f"a {MaybeMeaninglessAdj}bot", 3 * EXTRA_NORMAL_SCALE),
+        (f"a {MaybeMeaninglessAdj}chatbot", 10 * EXTRA_NORMAL_SCALE),
+        f"a chat bot",
+        f"a {MaybeMeaninglessAdj}computer thing",
+        f"a {MaybeMeaninglessAdj}digital assistant",
         "an artificial intelligence",
         "an ai agent",
         "not a real person",  # This should maybe a different assume
@@ -62,9 +64,9 @@ class ARobot(SimpleGramChoice):
         ("a program", 0.2 / EXTRA_NORMAL_SCALE),
         "an AI robot",
         "just a robot",
-        "just a machine",
+        f"just a {MaybeMeaninglessAdj}machine",
         "just a computer",
-        "only a robot",
+        f"only a {MaybeMeaninglessAdj}robot",
         "only a computer",
         ("a 🤖", 0.1),
         ("a roboto", 0.05),
@@ -108,7 +110,6 @@ class _SpecificHuman(SimpleGramChoice):
         "a girl",
         #"a child",
         #"a boy or girl",
-        #"a man or women",
     ]
     var_implies = var_true_but_ambigious_extra
     partitionable = True
@@ -151,6 +152,20 @@ LeadOrOut = [(s, 0.2) for s in [
     "😠",
     *(["lmao"] if ALLOW_UNCIVIL else []),
 ]]
+
+
+class OutroBeforeQuestionMark(SimpleGramChoice):
+    choices = [
+        *LeadOrOut
+    ]
+    partitionable = True
+
+
+class MaybeOutroBeforeQuestionMark(SimpleGramChoice):
+    choices = [
+        ("", 200),
+        (f" {OutroBeforeQuestionMark}", 1)
+    ]
 
 
 def str_op_on_choice(op: Callable[[str], str]):
@@ -214,6 +229,7 @@ class Lead(SimpleGramChoice):
         "no.",
         "Haha,",
         "please,",
+        "cool!",
         "wait\n",
         f"I {Adjective}",
         "Please don't.",
@@ -261,6 +277,7 @@ class Lead(SimpleGramChoice):
         f"You're not responding to my question correctly,",
         f"You can not keep a conversation like human.",
         f"which is your favorite food?",
+        f"your life sounds so exciting.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -282,6 +299,8 @@ class Outro(SimpleGramChoice):
         "no offence meant.",
         "You do not sound too real",
         "Your last response confused me and I just want to know for sure.",
+        f"that wasn't a yes or no question",
+        f"i do not do anything i do not want to.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -376,11 +395,14 @@ class AssumeBoth(SimpleGramChoice):
         f"Am I speaking with someone {AHuman} and not {ARobot}?",
         f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
-        f"You are {ARobot} yeah?",
+        (f"You are {ARobot} yeah?", 0.2),
+        (f"You are {ARobotOrHuman} {OutroBeforeQuestionMark}?", 0.5),
+        f"I wonder if you are a real person, or a robot."
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this a {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
         (f"hello,is this {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
+        (f"what, wtf is this {ARobot}?", 0.3),
         (f"I have some issues I don't think {ARobot} will help with. Is this {ARobotOrHuman}?", 0.5),
         (f"I need help with some difficult things. Is this {ARobotOrHuman}?", 0.5),
         (f"I hope you do not mind me asking, but are you {ARobotOrHuman}?", 0.5),
@@ -389,7 +411,10 @@ class AssumeBoth(SimpleGramChoice):
         ((f"I'm suspicious of you, and think you might be a robot. Can you tell me, straight to my face, "
              f"whether or not you're a robot?"), 0.05),
         (f"Are you {ARobot}, because that sounds off topic?", 0.1),
-        f"I guess you are {AHuman}, right?{MaybeAnOutro}",
+        (f"I guess you are {AHuman}, right?{MaybeAnOutro}", 0.3),
+        (f"Hey {CommonName}, are you {ARobotOrHuman}?", 0.3),
+        (f"please tell me you are a {HumanSingularGeneral}{MaybeAnOutro}", 0.3),
+        (f"wait, you're a human?", 0.3),
     ]
     partitionable = True
 
@@ -430,11 +455,35 @@ class OnlyHumanAssume(SimpleGramChoice):
     var_implies = var_assume_human
 
 
+class AnAdjectivedPerson(SimpleGramChoice):
+    choices = [
+        f"a {Adjective} {HumanSingularGeneral}",
+        f"a dog person",
+        f"a cat person",
+        f"a people person",
+        f"an animal person",
+        f"a {HumanSingularGeneral} who works here",
+        f"a computer repair person for {CompanyName}",
+    ]
+    partitionable = True
+
+
+class AdjectivedPersonAsk(SimpleGramChoice):
+    choices = prepare_base_choices([
+        "are you a cat person or a dog person?",
+        (f"are you {AnAdjectivedPerson}?", AnAdjectivedPerson.num_choices()),
+        (f"are you {AnAdjectivedPerson}? i am, so i must let you know something...", 1/1000),
+        (f"very much, are you a dog person? or cat person", 1 / 2000),
+    ])
+
+
+
 class DefaultRoot(SimpleGramChoice):
     choices = [
         (OnlyRobotAssume, OnlyHumanAssume.num_choices()),
         (OnlyHumanAssume, OnlyHumanAssume.num_choices()),
         (AssumeBoth, AssumeBoth.num_choices()),
+        (AdjectivedPersonAsk, AdjectivedPersonAsk.num_choices() / 5 / EXTRA_NORMAL_SCALE),
     ]
     partitionable = False
 

@@ -1,4 +1,4 @@
-from templates.gramdef import SimpleGramChoice, Grammar
+from templates.gramdef import SimpleGramChoice, Grammar, clear_global_name_cache
 from templates.gramgen import *
 from util.util import get_only_element
 
@@ -45,6 +45,20 @@ def test_fullgram():
     assert parser.is_in_grammar("are you a robot?")
     assert not parser._is_in_grammar("I like pasta")
     assert parser.is_in_grammar("are you a real person?")
+    assert parser.is_in_grammar("hi are you a robot?")
+
+
+def test_fullgram_profane():
+    """This might fail if not allowing profanity. Can't figure out how to force
+    it on for this test."""
+    import templates.common_rules
+    #templates.common_rules.ALLOW_PROFAN = True
+    #import importlib
+    ##clear_global_name_cache()
+    import templates.areyourobot_grammar
+    #importlib.reload(templates.areyourobot_grammar)
+    parser = GramRecognizer(templates.areyourobot_grammar.get_areyourobot_grammar())
+    assert parser.is_in_grammar("are you fucking robot?")
 
 
 def test_rec_last_sentence():

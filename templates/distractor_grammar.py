@@ -1,7 +1,7 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
-from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot
+from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, Outro, MaybeALead
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
-    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, JustRobot, PluralHumans
+    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
 
@@ -130,12 +130,12 @@ class _DistractorBase(SimpleGramChoice):
         f"Am I {ARobotOrHuman}?",
         f"Are you familiar with computer science?",
         f"Do you know what {ARobotOrHuman} is?",
-        f"{ARobotOrHuman} who likes {HisHer} {JustRobot}?",
-        f"{JustRobot}?",
+        f"{ARobotOrHuman} who likes {HisHer} {RobotSingular}?",
+        f"{RobotSingular}?",
         f"Is that person you?",
         f"Do you like {VerbTalkingTo} {ARobot}?",
         f"Can you tell me if {PluralHumans} like you?",
-        f"What kind of {JustRobot} movie do you like?",
+        f"What kind of {RobotSingular} movie do you like?",
         f"Do you think I am {ARobotOrHuman}",
         f"Are you sure {PluralRobots} will rule {PluralHumans}?",
         f"HOW ARE YOU?",
@@ -322,7 +322,41 @@ class _DistractorBase(SimpleGramChoice):
         'Do you think machines are capable of feeling emotion?',
         'Have you been programmed to have human emotions?'
         # ---
-
+        f"Are you a robot who works here?",
+        f"Is this {RobotSingular} for best buy?",
+        f"Are you a robot that can help me with my dishes?",
+        f"Would you like to be {AHuman}?",
+        f"Would you rather be {ARobot} or {AHuman}?",
+        f"Do you like boys or girls?",
+        f"Do you prefer dogs or cats?",
+        f"Do you like dogs or cats better?",
+        f"But is {CommonName} {ARobot}?",
+        f"Is {CommonName} one too?",
+        f"Do you consider yourself {Adjective}",
+        f"Have you heard the song {SimpleQuestions}?",
+        f"I gave him this book to ask him if he was a real person",
+        f"{Lead}Can you say that again?",
+        f"{Lead}why do you say that?",
+        f"{Lead}Do you like cats?",
+        f"{Lead}you are stupid!",
+        f"{Lead}I {Adjective} you.",
+        f"{Lead}I hate you.",
+        f"What up.{Outro}",
+        f"Are you sure you are not {Adjective}?",
+        f"Do you wear jewelry?",
+        f"Oh right. {Lead}",
+        f"I know you are {ARobot}. What I want to know is if you are a boy or girl?",
+        f"What pronoun do you prefer?",
+        f"You sound like an old woman",
+        f"I know you are not actually human, but do you consider yourself more of a man or more of a woman?",
+        f"Are you modeled after a man?",
+        f"Did you learn from {AHuman}",
+        f"Are you made by {ARobotOrHuman}?",
+        f"{Lead}",
+        f"{Lead} Are you a {Professions}?",
+        f"Can you talk like {CommonName}?",
+        f"Can you be like {FamousRobot}?",
+        f"{MaybeALead}I want to talk with {AHuman}.",
     ]
     partitionable = True
 

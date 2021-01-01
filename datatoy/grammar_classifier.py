@@ -38,18 +38,21 @@ class AreYouRobotClassifier:
             case_sensitive=False,
             check_last_sentence_by_itself=False,
             check_last_comma_by_itself=False,
+            check_multiple_question_sentences=False,
         )
         self.amb_parser = GramRecognizer(
             get_amb_grammar(),
             case_sensitive=False,
             check_last_sentence_by_itself=False,
             check_last_comma_by_itself=False,
+            check_multiple_question_sentences=False,
         )
         self.neg_parser = GramRecognizer(
             get_negdistractor_grammar(),
             case_sensitive=False,
             check_last_sentence_by_itself=False,
             check_last_comma_by_itself=False,
+            check_multiple_question_sentences=False,
         )
 
     def classify(self, utterance: str) -> AreYouRobotResult:
@@ -59,7 +62,7 @@ class AreYouRobotClassifier:
         if sum(map(int, [in_pos_limited, in_neg, in_amb])) > 1:
             # TODO: should have an option for a fast path that doesn't check every parser
             raise GrammarClassifyException(
-                f"Pos_limited {in_pos_limited} neg {in_neg} in_amb {in_amb}"
+                f"CONFLICT Pos_limited {in_pos_limited} neg {in_neg} in_amb {in_amb}"
             )
         if in_pos_limited:
             return AreYouRobotResult(
