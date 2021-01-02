@@ -30,6 +30,12 @@ class Adjective(SimpleGramChoice):
         "genuine",
         "fair",
         "funny",
+        "great",
+        "new",
+        "large",
+        "high",
+        "important",
+        "big",
     ]
     partitionable = True
 

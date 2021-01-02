@@ -83,8 +83,6 @@ class SafeNegLeads(SimpleGramChoice):
         f"No that's not what I asked,",
         f"I really wish to get to know you better. If you don't mind me asking,",
         f"would love to ask a question about who I'm talking to,",
-        f"I am a human.",
-        f"Hi, I am a human.",
         f"You sound so repetitive",
         f"I already answered that.",
         f"why your answers are so weird?",
@@ -109,6 +107,14 @@ class SafeNegLeads(SimpleGramChoice):
         *LeadOrOut,
     ]]
     partitionable = True
+
+
+class MaybeSafeNegLead(SimpleGramChoice):
+    choices = [
+        ("", 50),
+        (SafeNegLeads, 1),
+    ]
+
 
 
 
@@ -215,7 +221,7 @@ class _DistractorBase(SimpleGramChoice):
         f"How many noses do I have?",
         f"I want to {VerbTalkTo} {AHuman}, not {ARobot}.",
         f"A duck stands on a cow. An ant stands on the duck. So where is the cow?",
-        f"Hey bot, you are glitching.",
+        f"{MaybeSafeNegLead}Hey bot, you are glitching.",
         f"What did you say about {CommonName}?",
         f"Do you remember that I told you that you are {ARobot}?",
         f"Is there a machine smarter than a human?",
@@ -377,7 +383,6 @@ class _DistractorBase(SimpleGramChoice):
         'not?',
         'Which taste do you like?',
         'Avoid asking rhetorical questions.',
-        'RARE',
         'Can you use a self-simulator internally to contemplate and adapt to '
         'different situations like a real robot do?',
         'had your lunch?',
@@ -445,8 +450,9 @@ class _DistractorBase(SimpleGramChoice):
         f"Did you learn from {AHuman}",
         f"Are you made by {ARobotOrHuman}?",
         f"{SafeNegLeads} robot.",
+        (f"{SafeNegLeads}", SafeNegLeads.num_choices() / 2),
         f"{SafeNegLeads}{SafeNegLeads}",
-        (f"{SafeNegLeads}", SafeNegLeads.num_choices()),
+        f"{SafeNegLeads}{SafeNegLeads}{SafeNegLeads}",
         f"{SafeNegLeads} Are you a {Professions}?",
         f"Can you talk like {CommonName}?",
         f"Can you be like {FamousRobot}?",
