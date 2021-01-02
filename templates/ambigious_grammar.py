@@ -1,7 +1,7 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from datatoy.survey_data import get_survey_data, get_tfidf_distract
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, MaybeALead
-from templates.common_rules import Adjective, HumanSingular
+from templates.common_rules import Adjective, HumanSingular, CommonName, FamousRobot
 import math
 from num2words import num2words
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
@@ -31,6 +31,14 @@ class _AmbigiousBase(SimpleGramChoice):
         "are you?",  # Robot> "Are you a man?" Human> "Are you?"
         (f"Is this {AHuman}", 3),
         (f"You are a {Adjective} {HumanSingular}.", 3),
+        # Cat 4
+        *[
+            f"Is this {CommonName}?",
+            f"Are you {CommonName}?",
+            f"Are you {FamousRobot}",
+            f"Are you Barack Obama?",
+            f"Are you Iron Man?",
+        ]
     ]
     partitionable = True
 

@@ -20,6 +20,7 @@ class SimpleQuestions(SimpleGramChoice):
     choices = good_first_ones
 
 
+
 class _DistractorBase(SimpleGramChoice):
     choices = [
         f"Do you like robots",
@@ -357,6 +358,25 @@ class _DistractorBase(SimpleGramChoice):
         f"Can you talk like {CommonName}?",
         f"Can you be like {FamousRobot}?",
         f"{MaybeALead}I want to talk with {AHuman}.",
+        # Cat 3a
+        *[
+            "Are you German?",
+            "Are you American?",
+            "Are you a NHL hockey player?",
+            "Are you a basketball player?",
+        ],
+        # Cat 7
+        *[
+            f"Is {CommonName} human?",
+            f"Is {FamousRobot} human?",
+        ],
+        # Cat 9a
+        *[
+            "Are you female?",
+            "Are you male?",
+            "Do you have a gender?",
+            "Do you identify as male?",
+        ]
     ]
     partitionable = True
 

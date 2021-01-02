@@ -9,7 +9,7 @@ from typing import Sequence, Tuple, Dict
 from tabulate import tabulate
 
 from datatoy.grammar_classifier import AreYouRobotClassifier, GrammarClassifyException, AreYouRobotClass
-from datatoy.survey_data import get_survey_data, get_tfidf_distract
+from datatoy.survey_data import get_survey_data, get_tfidf_distract, get_codeguide_table
 from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
 
@@ -35,10 +35,9 @@ def check_grammar_coverage(
         for label in list(AreYouRobotClass) + ['fail']
     }
 
-
     before_time = datetime.now()
     fails = []
-    for index, ex in tqdm(df.iterrows(), total=len(df)):
+    for index, ex in tqdm(df.iterrows(), total=len(df), mininterval=10):
         if not ex[label_col] or ex[label_col] == "nan" or pd.isnull(ex[label_col]):
             continue
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
@@ -89,10 +88,16 @@ def main():
     #check_grammar_coverage(
     #    get_survey_data()
     #)
+    #check_grammar_coverage(
+    #    get_tfidf_distract(),
+    #    input_col='text_unproc',
+    #    neg_exact=False
+    #)
     check_grammar_coverage(
-        get_tfidf_distract(),
-        input_col='text_unproc',
-        neg_exact=False
+        get_codeguide_table(),
+        input_col='Examples',
+        label_col='Label',
+        neg_exact=True
     )
 
 

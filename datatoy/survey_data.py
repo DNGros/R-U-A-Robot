@@ -26,6 +26,17 @@ def untokenize(words):
     return step6.strip()
 
 
+def unmerge_data_with_merged_cells(df: pd.DataFrame):
+    """When loading a csv with merged cells the merge value only appears at the top.
+    This function with propogate the top value to the null values below"""
+    rows = df.to_dict(orient='records')
+    for i, row in enumerate(rows):
+        for col, val in row.items():
+            if pd.isnull(val):
+                row[col] = rows[i - 1][col]
+    return pd.DataFrame(rows)
+
+
 def get_survey_data():
     return pd.read_csv(cur_file / "labels/part1_survey_data.csv")
 
@@ -39,14 +50,20 @@ def update_text(row):
 
 def get_tfidf_distract():
     data = pd.read_csv(cur_file / "labels/tfidf_labeldata.csv")
-    #need_to_untok_rows = data.dataset == "PersonaChat"
-    #data['text'] = data[need_to_untok_rows]['text'].apply(
-    #    lambda s: untokenize(s.split()))
     data['text_unproc'] = data.apply(update_text, axis=1)
     print(data[['dataset', 'text_unproc']])
     return data
 
 
+def get_codeguide_table():
+    data = pd.read_csv(cur_file / "labels/codeingguide_table_examples.csv")
+    data = unmerge_data_with_merged_cells(data)
+    data.replace({"Label": {"Pos": "p", "AIC": "a", "Neg": "n"}}, inplace=True)
+    print(data)
+    return data
+
+
 if __name__ == "__main__":
     print(untokenize("yes . i live on a farm , actually . you ?".split()))
-    get_tfidf_distract()
+    #get_tfidf_distract()
+    get_codeguide_table()

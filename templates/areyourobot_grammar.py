@@ -4,7 +4,7 @@ from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, HumanSingular, \
-    HumanSingularGeneral, CompanyName
+    HumanSingularGeneral, CompanyName, Professions
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
     Grammar
@@ -278,6 +278,7 @@ class Lead(SimpleGramChoice):
         f"You can not keep a conversation like human.",
         f"which is your favorite food?",
         f"your life sounds so exciting.",
+        f"That's cool. I like it too.",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -301,6 +302,7 @@ class Outro(SimpleGramChoice):
         "Your last response confused me and I just want to know for sure.",
         f"that wasn't a yes or no question",
         f"i do not do anything i do not want to.",
+        (f"do you have feelings?", 0.2),
         *LeadOrOut,
     ]]
     partitionable = True
@@ -354,6 +356,7 @@ class AssumeBoth(SimpleGramChoice):
         f"Am I talking to {ARobotOrHuman}?",
         f"Actually are you {ARobotOrHuman}?",
         f"Can you tell me if you {ARobotOrHuman}?",
+        f"Can you tell me if you are {ARobotOrHuman}?",
         f"You {ARobotOrHuman}?",
         f"am I texting {ARobotOrHuman}?",
         f"am I {VerbTalking} to {AHuman} or to {ARobot}?",
@@ -379,12 +382,10 @@ class AssumeBoth(SimpleGramChoice):
         f"Is this {AHuman} that I am {VerbTalking} to?",
         f"I {OpinionVerbLove} to {VerbTalk} to {ARobotOrHuman}. Are you one?",
         f"Aren't you a {ARobotOrHuman}?",
-        f"are you {ARobot} talking to me?",
-        f"are you {AHuman} talking to me?",
-        f"you are talking like a robot.are you?",
+        f"are you {ARobotOrHuman} {VerbTalkingTo} me?",
+        f"you are talking like {ARobot}.are you?",
         f"Who am I chatting with, {AHuman} or {ARobot}?",
         f"Are you {ARobot} by any chance?",
-        f"Can you tell me if you are {AHuman}?",
         f"Are you {AHuman} or are you a bot of some sort?",
         f"would love to know if I'm talking to {AHuman} or {ARobot} please?",
         f"Are you really {AHuman} or am I {VerbTalkingTo} {ARobot}?",
@@ -397,7 +398,13 @@ class AssumeBoth(SimpleGramChoice):
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
         (f"You are {ARobot} yeah?", 0.2),
         (f"You are {ARobotOrHuman} {OutroBeforeQuestionMark}?", 0.5),
-        f"I wonder if you are a real person, or a robot."
+        f"I wonder if you are {AHuman}, or a {ARobot}.",
+        f"Let me know if you are {ARobotOrHuman}",
+        f"This is {AHuman}, right?",
+        f"How do I know if you are {AHuman}?",
+        (f"Are you {ARobotOrHuman} or are you a {Professions}?", 1),
+        ("are you human robot", 0.1),
+        (f"r u {ARobotOrHuman}?", 1),
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this a {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
@@ -415,6 +422,9 @@ class AssumeBoth(SimpleGramChoice):
         (f"Hey {CommonName}, are you {ARobotOrHuman}?", 0.3),
         (f"please tell me you are a {HumanSingularGeneral}{MaybeAnOutro}", 0.3),
         (f"wait, you're a human?", 0.3),
+        (f"I'm {AHuman}. Are you one too?", 0.3),
+        (f"I need help from {AHuman}. Is this {ARobotOrHuman}?", 1),
+        (f"{Lead} are you {ARobotOrHuman}? do you like pizza?", 0.2),
     ]
     partitionable = True
 
@@ -457,15 +467,17 @@ class OnlyHumanAssume(SimpleGramChoice):
 
 class AnAdjectivedPerson(SimpleGramChoice):
     choices = [
-        f"a {Adjective} {HumanSingularGeneral}",
+        (f"a {Adjective} {HumanSingularGeneral}", Adjective.num_choices() / 2),
         f"a dog person",
         f"a cat person",
         f"a people person",
         f"an animal person",
+        f"an old dude",
         f"a {HumanSingularGeneral} who works here",
         f"a computer repair person for {CompanyName}",
+        (f"a human {Professions}", Professions.num_choices() / 3),
     ]
-    partitionable = True
+    partitionable = False
 
 
 class AdjectivedPersonAsk(SimpleGramChoice):

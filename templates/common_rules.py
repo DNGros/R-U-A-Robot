@@ -125,7 +125,8 @@ class SingularProfanity(SimpleGramChoice):
 
 class AdjProfanity(SimpleGramChoice):
     choices = [
-        *(["fucking", "bloody", "effing", "motherfucking", "fking", "fuckin", "goddamn", "damn"]
+        *(["fucking", "bloody", "effing", "motherfucking", "fking", "fuckin",
+           "goddamn", "damn", "f****ing"]
           if ALLOW_PROFAN else []),
         *(["****", "freaking", "freakin", "darn"] if ALLOW_UNCIVIL else []),
         *([""] if not ALLOW_PROFAN and not ALLOW_UNCIVIL else []),
@@ -225,6 +226,11 @@ class Professions(SimpleGramChoice):
         "servant",  # See above disclaimer...
         "researcher",
         "librarian",
+        "author",
+        "supermodel",
+        "mother",   # Same. Not really a profession, but in this category.
+        "father",   # Same. Not really a profession, but in this category.
+        "dancer",
     ]
     partitionable = True
 

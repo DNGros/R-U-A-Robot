@@ -77,5 +77,6 @@ WIKI_TYPOS = {'about': ['abbout', 'abotu', 'baout', 'boaut'],
  'yourself': ['youself']}
 
 OTHER_TYPOS = {
-    "tell": ["ell"]
+    "tell": ["ell"],
+    "woman": ["women"]
 }
