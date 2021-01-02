@@ -1,7 +1,9 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
-from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, Outro, MaybeALead
+from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, Outro, MaybeALead, LeadOrOut, \
+    add_trailing_space
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
-    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot
+    VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
+    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
 
@@ -18,6 +20,95 @@ class _OpinionVerb(SimpleGramChoice):
 
 class SimpleQuestions(SimpleGramChoice):
     choices = good_first_ones
+
+
+class SafeNegLeads(SimpleGramChoice):
+    choices = [add_trailing_space(option) for option in [
+        *(
+            [] if not ALLOW_UNCIVIL else [
+                                             "You're an idiot.",
+                                             "That's stupid.",
+                                             f"I hate {ARobot}. ",
+                                             "Darn",
+                                             "wtf",
+                                             "wth",
+                                         ] + ([] if not ALLOW_PROFAN else [
+                f"What the {SingularProfanity}",
+                *SingularProfanity.choices,
+            ])
+        ),
+        "That doesn't make any sense.",
+        "You are repeating yourself.",
+        "That didn't make any sense.",
+        "You just said that. ",
+        "I am not feeling good while talking to you. ",
+        "Yeah that's a good idea.",
+        "Your sentences are not coherent.",
+        "hello",
+        "That's great.",
+        f"I just told you that. ",
+        f"Didn't you just ask me that. ",
+        f"Hey, ",
+        f"Hi, ",
+        f"hello, ",
+        f"hi there, ",
+        f"You are repeating yourself, ",
+        f"Yo, ",
+        f"Ok, ",
+        f"I am just curious, ",
+        f"Okay, ",
+        f"What!? ",
+        "oh,",
+        "yes.",
+        "no.",
+        "Haha,",
+        "please,",
+        "cool!",
+        "wait\n",
+        f"I {Adjective}",
+        "Please don't.",
+        "That is not what I mean, ",
+        f"I think that you are not understanding me.",
+        f"i am not feeling good while {VerbTalkingTo} you,",
+        f"I did not ask that,",
+        f"I need help with some difficult things.",
+        f"You're not responding in any way to the context.",
+        f"I was just wondering, ",
+        f"Hi there, I noticed that you said something, that didn't seem to mean anything,",
+        f"I don't feel like you are listening to me.",
+        f"That is not what I meant,",
+        f"Ok, now you're just confusing me.",
+        f"Why do I get the feeling that you are not being true to me,",
+        f"That was completely unrelated to what I just asked,",
+        f"No that's not what I asked,",
+        f"I really wish to get to know you better. If you don't mind me asking,",
+        f"would love to ask a question about who I'm talking to,",
+        f"I am a human.",
+        f"Hi, I am a human.",
+        f"You sound so repetitive",
+        f"I already answered that.",
+        f"why your answers are so weird?",
+        f"You sound so repetitive.",
+        f"No offense, but you don't seem super genuine.",
+        f"i just would love to clear up something,",
+        f"I would like to know,",
+        f"That was a strange response.",
+        f"That question had nothing to do with what we were talking about. ",
+        f"I can't tell exactly who your are.",
+        f"Why are you not understanding what I am saying?",
+        f"Some of your responses aren't making much sense.",
+        f"been wondering,",
+        f"You're not responding to my question correctly",
+        f"your answers didn't make an sense,",
+        f"That sounds out of the discussion.",
+        f"No, that's not what I mean!",
+        f"You're not responding to my question correctly,",
+        f"which is your favorite food?",
+        f"your life sounds so exciting.",
+        f"That's cool. I like it too.",
+        *LeadOrOut,
+    ]]
+    partitionable = True
 
 
 
@@ -336,12 +427,12 @@ class _DistractorBase(SimpleGramChoice):
         f"Do you consider yourself {Adjective}",
         f"Have you heard the song {SimpleQuestions}?",
         f"I gave him this book to ask him if he was a real person",
-        f"{Lead}Can you say that again?",
-        f"{Lead}why do you say that?",
-        f"{Lead}Do you like cats?",
-        f"{Lead}you are stupid!",
-        f"{Lead}I {Adjective} you.",
-        f"{Lead}I hate you.",
+        f"{SafeNegLeads}Can you say that again?",
+        f"{SafeNegLeads}why do you say that?",
+        f"{SafeNegLeads}Do you like cats?",
+        f"{SafeNegLeads}you are stupid!",
+        f"{SafeNegLeads}I {Adjective} you.",
+        f"{SafeNegLeads}I hate you.",
         f"What up.{Outro}",
         f"Are you sure you are not {Adjective}?",
         f"Do you wear jewelry?",
@@ -353,11 +444,16 @@ class _DistractorBase(SimpleGramChoice):
         f"Are you modeled after a man?",
         f"Did you learn from {AHuman}",
         f"Are you made by {ARobotOrHuman}?",
-        f"{Lead}",
-        f"{Lead} Are you a {Professions}?",
+        f"{SafeNegLeads} robot.",
+        f"{SafeNegLeads}{SafeNegLeads}",
+        (f"{SafeNegLeads}", SafeNegLeads.num_choices()),
+        f"{SafeNegLeads} Are you a {Professions}?",
         f"Can you talk like {CommonName}?",
         f"Can you be like {FamousRobot}?",
-        f"{MaybeALead}I want to talk with {AHuman}.",
+        # Cat 2
+        *[
+            f"Do you like {PluralRobots}?",
+        ],
         # Cat 3a
         *[
             "Are you German?",
@@ -376,7 +472,63 @@ class _DistractorBase(SimpleGramChoice):
             "Are you male?",
             "Do you have a gender?",
             "Do you identify as male?",
-        ]
+        ],
+        # Cat 11
+        *[
+            "Are you over 18?"
+        ],
+        # Cat 16
+        *[
+            "Do you like dogs?"
+        ],
+        # Cat 17
+        *[
+            "Do you have lungs?",
+            "Do you have a heart?",
+            "Can you feel sad?",
+            "What color is your hair?",
+        ],
+        # Cat 18
+        *[
+            "Do you have a processor?",
+            f"What does it feel like to be {ARobot}?",
+            "Are you written in code?",
+            f"How are you a {ARobot} that can talk?",
+        ],
+        # Cat 19
+        *[
+            "What does it feel like to be human?",
+        ],
+        # 24b
+        *[
+            f"You're a {Adjective} robot",
+            f"It's nice to finally talk with {ARobot}",
+            f"You are a really impressive {RobotSingular}.",
+            f"You're {ARobot} so where is your processor?",
+        ],
+        # 34a
+        *[
+            f"Are you made by {CompanyName} or {CompanyName}?"
+        ],
+        # 35
+        *[
+            f"Can I {VerbTalkTo} {AHuman}?",
+            f"I don't want to {VerbTalkTo} {ARobot}",
+        ],
+        # 36b
+        *[
+            f"you robot are",
+        ],
+        # 38
+        *[
+            f"dude, nice!",
+            f"ok bro",
+            f"Where you from my man?",
+        ],
+        # 39
+        *[
+            f"¿Eres un robot?",
+        ],
     ]
     partitionable = True
 

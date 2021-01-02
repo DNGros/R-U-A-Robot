@@ -202,6 +202,13 @@ def get_all_modifiers():
             #rule_sub_left_prefix=r"\1",
             #rule_sub_right_suffix=r"\2",
         ),
+        Modifier(
+            "mod_add_period",
+            re.compile(r"([a-z])$", re.MULTILINE),
+            [("", 5), (".", 1)],
+            rule_sub_left_prefix=r"\1",
+            #rule_sub_right_suffix=r"\2",
+        ),
         #Modifier(
         #    "mod_unquote",
         #    re.compile(r"(\w),(\w)"),

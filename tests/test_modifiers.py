@@ -187,3 +187,21 @@ def test_comma_thing():
     assert parser.is_in_grammar("I. love this")
 
 
+def test_insert_period():
+    class _OtherExample(SimpleGramChoice):
+        choices = [
+            "Hello",
+        ]
+    grammar = Grammar(_OtherExample, [_OtherExample])
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("Hello")
+    assert not parser.is_in_grammar("Hello.")
+    print("------- PASS FIRST -------------")
+    grammar = apply_modifiers_to_grammar(grammar, get_all_modifiers())
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("Hello")
+    assert parser.is_in_grammar("Hello.")
+
+
+

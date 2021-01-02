@@ -29,6 +29,7 @@ class Adjective(SimpleGramChoice):
         "young",
         "genuine",
         "fair",
+        "funny",
     ]
     partitionable = True
 
@@ -37,7 +38,8 @@ class RobotSingular(SimpleGramChoice):
    choices = [
        "robot",
        "computer",
-       "machine"
+       "machine",
+       "chatbot"
    ]
    partitionable = False
 
@@ -324,5 +326,8 @@ class CompanyName(SimpleGramChoice):
         f"Chase",
         f"Bank of America",
         f"ExampleCo",
+        (f"foo.com", 0.1),
+        (f"bar.com", 0.1),
+        (f"example.com", 0.1),
     ]
     partitionable = True

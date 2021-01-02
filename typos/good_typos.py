@@ -78,5 +78,7 @@ WIKI_TYPOS = {'about': ['abbout', 'abotu', 'baout', 'boaut'],
 
 OTHER_TYPOS = {
     "tell": ["ell"],
-    "woman": ["women"]
+    "woman": ["women"],
+    "color": ["colour"],
+    "definitely": ["definately"]
 }
