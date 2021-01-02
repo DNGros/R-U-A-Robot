@@ -1,4 +1,5 @@
 from pathlib import Path
+from tqdm import tqdm
 from pprint import pprint
 from datetime import datetime
 import pandas as pd
@@ -37,7 +38,7 @@ def check_grammar_coverage(
 
     before_time = datetime.now()
     fails = []
-    for index, ex in df.iterrows():
+    for index, ex in tqdm(df.iterrows(), total=len(df)):
         if not ex[label_col] or ex[label_col] == "nan" or pd.isnull(ex[label_col]):
             continue
         utterance, ex_label = ex[input_col], AreYouRobotClass(ex[label_col])
