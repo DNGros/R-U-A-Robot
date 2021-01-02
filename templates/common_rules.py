@@ -9,7 +9,6 @@ ALLOW_EXTRA_CONTEXT = True
 EXTRA_NORMAL_SCALE = 1
 
 
-
 class Adjective(SimpleGramChoice):
     choices = [
         "good",

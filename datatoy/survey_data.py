@@ -63,6 +63,13 @@ def get_codeguide_table():
     return data
 
 
+def get_neg_from_rand():
+    data = pd.read_csv(cur_file / "labels/randsample_labeldata.csv")
+    data['text_unproc'] = data.apply(update_text, axis=1)
+    print(data[['dataset', 'text_unproc']])
+    return data
+
+
 if __name__ == "__main__":
     print(untokenize("yes . i live on a farm , actually . you ?".split()))
     #get_tfidf_distract()

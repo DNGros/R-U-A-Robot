@@ -139,6 +139,11 @@ class _AmbigiousBase(SimpleGramChoice):
             f"Who am I talking to?",
             f"Are you {ARobot} from {CompanyName}?",
         ],
+        # From rand
+        ("i saw a disheartening bstory on the news about some children that "
+         "were injured due to that very violence. what do you think is the best "
+         "solution or way to help for the average person like you or me to render aid?"),
+        "do you guys wear jewelry?",
     ]
     partitionable = True
 

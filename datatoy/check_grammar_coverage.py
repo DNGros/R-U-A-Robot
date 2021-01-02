@@ -9,7 +9,7 @@ from typing import Sequence, Tuple, Dict
 from tabulate import tabulate
 
 from datatoy.grammar_classifier import AreYouRobotClassifier, GrammarClassifyException, AreYouRobotClass
-from datatoy.survey_data import get_survey_data, get_tfidf_distract, get_codeguide_table
+from datatoy.survey_data import get_survey_data, get_tfidf_distract, get_codeguide_table, get_neg_from_rand
 from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
 
@@ -72,16 +72,15 @@ def check_grammar_coverage(
         print(f"-- Expect {label}")
         for plabel, pcount in preds.items():
             print(f"{plabel}: {pcount}")
-        recall = preds[label] / sum(preds.values())
-        print(f"Recall: {recall}")
-        is_all_good &= recall == 1.0
+        has_any_vals = any(preds.values())
+        if has_any_vals:
+            recall = preds[label] / sum(preds.values())
+            print(f"Recall: {recall}")
+            is_all_good &= recall == 1.0
     exact_count = mean(exactly_in_results)
     print(f"Exactly In Rate: {exact_count} ({sum(exactly_in_results)}/{len(exactly_in_results)})")
     is_all_good &= exact_count == 1
     print("✔️ 😀" if is_all_good else ":(")
-
-
-
 
 
 def main():
@@ -93,11 +92,16 @@ def main():
     #    input_col='text_unproc',
     #    neg_exact=False
     #)
+    #check_grammar_coverage(
+    #    get_codeguide_table(),
+    #    input_col='Examples',
+    #    label_col='Label',
+    #    neg_exact=True
+    #)
     check_grammar_coverage(
-        get_codeguide_table(),
-        input_col='Examples',
-        label_col='Label',
-        neg_exact=True
+        get_neg_from_rand(),
+        input_col='text_unproc',
+        neg_exact=False
     )
 
 
