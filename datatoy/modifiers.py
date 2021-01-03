@@ -21,6 +21,7 @@ class Modifier:
         rule_sub_left_prefix: str = "",
         rule_sub_right_suffix: str = "",
         require_explicit_allow: bool = False,
+        ignore_name: str = None
     ):
         self.mod_name = mod_name
         self.old_pattern = old_pattern
@@ -29,6 +30,7 @@ class Modifier:
         self.rule_sub_left_prefix = rule_sub_left_prefix
         self.rule_sub_right_suffix = rule_sub_right_suffix
         self.require_explicit_allow = require_explicit_allow
+        self.ignore_name = ignore_name or mod_name
         self.rule = make_rule(
             f"{MODIFIER_PREFIX}_{self.mod_name}",
             self.new_vals,
@@ -39,10 +41,10 @@ class Modifier:
     def apply_to_rule(self, rule: Type[SimpleGramChoice]) -> Type[SimpleGramChoice]:
         if not self.effect_modifier_rules and rule_is_modifier(rule):
             return rule
-        if self.mod_name in rule.ignore_modifiers or self in rule.ignore_modifiers:
+        if self.ignore_name in rule.ignore_modifiers or self in rule.ignore_modifiers:
             return rule
         if self.require_explicit_allow and (
-                self.mod_name not in rule.allow_modifiers
+                self.ignore_name not in rule.allow_modifiers
                 or self not in rule.allow_modifiers
         ):
             return rule
@@ -118,12 +120,15 @@ def make_modifier_word_synonym(
                 mods.append(Modifier(
                     f"{mod_name_this}_empt{empty_ind}",
                     re.compile(fr"{regex_left}{re.escape(create_word)}{regex_right}"),
-                    words_weights_empty, effect_modifiers
+                    words_weights_empty,
+                    effect_modifiers,
+                    ignore_name=name_prefix,
                 ))
         mods.append(Modifier(
             mod_name_this,
             re.compile(fr"(?:\b)({re.escape(create_word)})(?:\b)"),
-            words_weights_for_this, effect_modifiers
+            words_weights_for_this, effect_modifiers,
+            ignore_name=name_prefix
         ))
     return mods
 
@@ -140,17 +145,17 @@ def get_all_modifiers():
         ),
         Modifier(
             "mod_period",
-            re.compile(r"(\.)"),
+            re.compile(r"(\.)$"),
             [(".", 4), ("", 1), ("!", 0.05)]
         ),
         Modifier(
             "mod_question",
             re.compile(r"(\?+)"),
-            [("?", 3), ("", 1), ("??", 0.05), ("???", 0.05), ("????", 0.01), ("!?", 0.05)],
+            [("?", 6), ("", 1), ("??", 0.05), ("???", 0.05), ("????", 0.01), ("!?", 0.05)],
         ),
         *make_modifier_word_synonym(
             "mod_a",
-            [("a", 1), ("an", 1)],
+            [("a", 1), ("an", 1), ("a a", 50/1000)],
             original_multiplier=50,
             delete_word_weight=1
         ),

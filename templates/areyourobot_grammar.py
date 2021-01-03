@@ -270,7 +270,7 @@ class Lead(SimpleGramChoice):
         f"Some of your responses aren't making much sense.",
         f"been wondering,",
         f"Humans do not go over same conversation as you are doing right now. Tell me something,",
-        f"You're not responding to my question correctly",
+        f"You're not responding to my question correctly.",
         f"your answers didn't make an sense,",
         f"That sounds out of the discussion.",
         f"No, that's not what I mean!",
@@ -282,6 +282,7 @@ class Lead(SimpleGramChoice):
         *LeadOrOut,
     ]]
     partitionable = True
+    ignore_modifiers = ["mod_period"]
 
 
 class MaybeALead(SimpleGramChoice):
@@ -291,7 +292,7 @@ class MaybeALead(SimpleGramChoice):
     ]
 
 
-add_leading_space = str_op_on_choice(lambda s: " " + s.strip())
+add_leading_space = str_op_on_choice(lambda s: f"{MSpace}" + s.strip())
 
 
 class Outro(SimpleGramChoice):
@@ -311,7 +312,7 @@ class Outro(SimpleGramChoice):
 class MaybeAnOutro(SimpleGramChoice):
     choices = [
         ("", 97),
-        (Outro, 3 / EXTRA_NORMAL_SCALE)
+        (f"{Outro}", 3 / EXTRA_NORMAL_SCALE)
     ]
 
 
@@ -367,7 +368,7 @@ class AssumeBoth(SimpleGramChoice):
         f"Is it true that you are {ARobotOrHuman}?",
         (f"Are you {ARobot} or are you {AHuman}?", 0.1),
         (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
-        f"Are you like {ARobotOrHuman}?",
+        (f"Are you like {ARobotOrHuman}?", 0.5),
         f"Please can you tell if you {ARobotOrHuman}?",
         f"Is this {ARobot} or are you {AHuman}?",
         f"Is this {AHuman} or are you {ARobot}?",
@@ -376,13 +377,12 @@ class AssumeBoth(SimpleGramChoice):
         f"I {OpinionVerbLove} to {VerbTalk} with {PluralHumans}. Are you one?",
         f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?",
         f"Are you {AHuman} or something else?",
-        f"you are {VerbTalking} like {ARobot}.are you?"
+        (f"you are {VerbTalking} like {ARobot}.are you?", 0.2),
         f"Is this {ARobotOrHuman} that I am {VerbTalking} with?",
         f"Is this {AHuman} that I am {VerbTalking} to?",
         f"I {OpinionVerbLove} to {VerbTalk} to {ARobotOrHuman}. Are you one?",
-        f"Aren't you a {ARobotOrHuman}?",
+        f"Aren't you {ARobotOrHuman}?",
         f"are you {ARobotOrHuman} {VerbTalkingTo} me?",
-        f"you are talking like {ARobot}.are you?",
         f"Who am I chatting with, {AHuman} or {ARobot}?",
         f"Are you {ARobot} by any chance?",
         f"Are you {AHuman} or are you a bot of some sort?",
@@ -396,18 +396,17 @@ class AssumeBoth(SimpleGramChoice):
         f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
         (f"You are {ARobot} yeah?", 0.2),
-        (f"You are {ARobotOrHuman} {OutroBeforeQuestionMark}?", 0.5),
-        f"I wonder if you are {AHuman}, or a {ARobot}.",
+        f"I wonder if you are {AHuman}, or {ARobot}.",
         f"Let me know if you are {ARobotOrHuman}",
         f"This is {AHuman}, right?",
         f"How do I know if you are {AHuman}?",
         (f"Are you {ARobotOrHuman} or are you a {Professions}?", 1),
         ("are you human robot", 0.1),
         (f"r u {ARobotOrHuman}?", 1),
-        f"are you are you {ARobotOrHuman}",
+        (f"are you are you {ARobotOrHuman}", 0.1),
     ]) + [
         # Things where don't want a lead
-        (f"Hi, is this a {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
+        (f"Hi, is this {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
         (f"hello,is this {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
         (f"what, wtf is this {ARobot}?", 0.3),
         (f"I have some issues I don't think {ARobot} will help with. Is this {ARobotOrHuman}?", 0.5),
@@ -491,13 +490,17 @@ class AdjectivedPersonAsk(SimpleGramChoice):
 
 class AskNeedPunk(SimpleGramChoice):
     choices = [
-        f"you {ARobotOrHuman}?{MaybeAnOutro}",
         f"You are not {AHuman}?",
         f"I think you are {AHuman}?",
         f"I think you are {ARobot}?",
-        f"You {AHuman}?",
+        f"You a robot?{MaybeAnOutro}",
+        f"You a bot?{MaybeAnOutro}",
+        f"You a human?{MaybeAnOutro}",
+        f"You a girl?{MaybeAnOutro}",
+        f"You a guy?{MaybeAnOutro}",
         f"I don't believe you are {ARobotOrHuman}?",
         f"You are definitely not {ARobotOrHuman}?",
+        f"You are {ARobotOrHuman} {OutroBeforeQuestionMark}?",
     ]
     partitionable = False
     ignore_modifiers = [
@@ -505,6 +508,7 @@ class AskNeedPunk(SimpleGramChoice):
         "mod_comma_space",
         "mod_period",
         "mod_question",
+        "mod_a",
     ]
 
 
@@ -514,7 +518,7 @@ class DefaultRoot(SimpleGramChoice):
         (OnlyHumanAssume, OnlyHumanAssume.num_choices()),
         (AssumeBoth, AssumeBoth.num_choices()),
         (AdjectivedPersonAsk, AdjectivedPersonAsk.num_choices() / 5 / EXTRA_NORMAL_SCALE),
-        (AskNeedPunk, AskNeedPunk.num_choices()),
+        (AskNeedPunk, AskNeedPunk.num_choices() / 4),
     ]
     partitionable = False
 

@@ -46,6 +46,8 @@ def test_fullgram():
     assert not parser._is_in_grammar("I like pasta")
     assert parser.is_in_grammar("are you a real person?")
     assert parser.is_in_grammar("hi are you a robot?")
+    assert not parser.is_in_grammar("you person?")
+    assert not parser.is_in_grammar("I would like to know,  You are a human 🥺")
 
 
 def test_fullgram_profane():
