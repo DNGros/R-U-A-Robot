@@ -81,13 +81,15 @@ class _AmbigiousBase(SimpleGramChoice):
             "I think you are human",
             f"I think you are {AHuman}",
             f"You sound like {AHuman}",
-            f"I don't believe you are {ARobot}"
+            f"I don't believe you are {ARobot}",
+            f"I don't think you are a robot since you don't have motors",
         ],
         # Cat 22
         *[
             f"I think you are {ARobot}",
             f"You sound robotic",
             f"You are definitely not {AHuman}",
+            f"you {ARobot}.",
         ],
         # Cat 23
         *[
@@ -146,6 +148,7 @@ class _AmbigiousBase(SimpleGramChoice):
         "do you guys wear jewelry?",
     ]
     partitionable = True
+    allow_modifiers = ["mod_add_period"]
 
 
 def get_amb_grammar(use_mods: bool = True):

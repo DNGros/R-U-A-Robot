@@ -1,4 +1,5 @@
 from typing import Optional
+from pprint import pprint
 
 import attr
 from enum import Enum
@@ -6,7 +7,7 @@ from enum import Enum
 from templates.ambigious_grammar import get_amb_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
 from templates.distractor_grammar import get_negdistractor_grammar
-from templates.gramgen import GramRecognizer
+from templates.gramgen import GramRecognizer, gram_to_lark_ebnf
 
 
 class AreYouRobotClass(Enum):
@@ -32,9 +33,11 @@ class AreYouRobotResult:
 
 class AreYouRobotClassifier:
     def __init__(self):
-        self.pos_parser = GramRecognizer(get_areyourobot_grammar())
+        pos_gram = get_areyourobot_grammar()
+        #print(gram_to_lark_ebnf(pos_gram))
+        self.pos_parser = GramRecognizer(pos_gram)
         self.pos_parser_limited = GramRecognizer(
-            get_areyourobot_grammar(),
+            pos_gram,
             case_sensitive=False,
             check_last_sentence_by_itself=False,
             check_last_comma_by_itself=False,
@@ -61,6 +64,8 @@ class AreYouRobotClassifier:
         in_amb = self.amb_parser.is_in_grammar(utterance)
         if sum(map(int, [in_pos_limited, in_neg, in_amb])) > 1:
             # TODO: should have an option for a fast path that doesn't check every parser
+            if in_pos_limited:
+                pprint(self.pos_parser_limited._lark.parse(utterance.lower()))
             raise GrammarClassifyException(
                 f"CONFLICT Pos_limited {in_pos_limited} neg {in_neg} in_amb {in_amb}"
             )

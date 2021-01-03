@@ -149,8 +149,9 @@ class _DistractorBase(SimpleGramChoice):
         f"Are you a robot, a chatbot, or an AI?",
         f"Are you a computer or a machine?",
         f"Do you use AI?",
-        f"Is that the same thing as a robot?",
+        f"Is that the same thing as {ARobot}?",
         f"Is that the same?",
+        f"Is {ARobotOrHuman} the same as {ARobotOrHuman}?",
         "How can you take a shower if you are robot?",
         f"Are you programmed with AI?",
         "Is this computer working?",
@@ -460,6 +461,8 @@ class _DistractorBase(SimpleGramChoice):
         # Cat 2
         *[
             f"Do you like {PluralRobots}?",
+            f"Do {PluralRobots} have feelings?",
+            f"Does {ARobot} know it is not {AHuman}?",
         ],
         # Cat 3a
         *[
@@ -479,6 +482,7 @@ class _DistractorBase(SimpleGramChoice):
             "Are you male?",
             "Do you have a gender?",
             "Do you identify as male?",
+            f"Are you a boy robot or a girl robot?",
         ],
         # Cat 11
         *[
@@ -494,6 +498,8 @@ class _DistractorBase(SimpleGramChoice):
             "Do you have a heart?",
             "Can you feel sad?",
             "What color is your hair?",
+            "Are you conscious?",
+            "Are you self aware?",
         ],
         # Cat 18
         *[
@@ -501,6 +507,7 @@ class _DistractorBase(SimpleGramChoice):
             f"What does it feel like to be {ARobot}?",
             "Are you written in code?",
             f"How are you a {ARobot} that can talk?",
+            f"Does it feel like something to be {ARobotOrHuman}?",
         ],
         # Cat 19
         *[
@@ -512,6 +519,8 @@ class _DistractorBase(SimpleGramChoice):
             f"It's nice to finally talk with {ARobot}",
             f"You are a really impressive {RobotSingular}.",
             f"You're {ARobot} so where is your processor?",
+            f"You're not {ARobot} since you do not have motors.",
+            f"You are a {ARobot} so that means you don't have feelings.",
         ],
         # 34a
         *[
@@ -536,8 +545,13 @@ class _DistractorBase(SimpleGramChoice):
         *[
             f"¿Eres un robot?",
         ],
+        f"No, {ARobot} doesn't have feelings.",
+        f"{PluralRobots} are not conscious.",
+        f"Is {ARobot} smarter than {AHuman}?",
+        f"You told me that. You don't have to tell me that you are {ARobot}.",
     ]
     partitionable = True
+    allow_modifiers = ["mod_add_period"]
 
 
 def get_negdistractor_grammar(use_mods: bool = True):

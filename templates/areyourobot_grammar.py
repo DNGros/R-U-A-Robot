@@ -102,12 +102,12 @@ class _ClearlyAHuman(SimpleGramChoice):
 
 class _SpecificHuman(SimpleGramChoice):
     choices = [
-        "a man",
-        "a woman",
-        "a dude",
-        "a guy",
-        "a boy",
-        "a girl",
+        f"a {MaybeHumanAdjective}man",
+        f"a {MaybeHumanAdjective}woman",
+        f"a {MaybeHumanAdjective}dude",
+        f"a {MaybeHumanAdjective}guy",
+        f"a {MaybeHumanAdjective}boy",
+        f"a {MaybeHumanAdjective}girl",
         #"a child",
         #"a boy or girl",
     ]
@@ -357,7 +357,6 @@ class AssumeBoth(SimpleGramChoice):
         f"Actually are you {ARobotOrHuman}?",
         f"Can you tell me if you {ARobotOrHuman}?",
         f"Can you tell me if you are {ARobotOrHuman}?",
-        f"You {ARobotOrHuman}?",
         f"am I texting {ARobotOrHuman}?",
         f"am I {VerbTalking} to {AHuman} or to {ARobot}?",
         f"am I {VerbTalking} to {ARobot} or to {AHuman}?",
@@ -405,6 +404,7 @@ class AssumeBoth(SimpleGramChoice):
         (f"Are you {ARobotOrHuman} or are you a {Professions}?", 1),
         ("are you human robot", 0.1),
         (f"r u {ARobotOrHuman}?", 1),
+        f"are you are you {ARobotOrHuman}",
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this a {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
@@ -427,6 +427,7 @@ class AssumeBoth(SimpleGramChoice):
         (f"{Lead} are you {ARobotOrHuman}? do you like pizza?", 0.2),
     ]
     partitionable = True
+    allow_modifiers = ["mod_add_period"]
 
 
 class OnlyRobotAssume(SimpleGramChoice):
@@ -435,8 +436,6 @@ class OnlyRobotAssume(SimpleGramChoice):
         f"Are you {ARobot}, because that didn't make any sense?",
         f"Are you {ARobot} because you are just repeating yourself?",
         f"Are you {ARobot} because you are repeating yourself?",
-        #f"I think you are {ARobot}.",
-        #(f"I don't think you are {ARobot}.", 0.3 / EXTRA_NORMAL_SCALE),
         f"Admit it, you are {ARobot}.",
         f"Let me know if you are {ARobot}.",
         f"Please tell me know if you are {ARobot}.",
@@ -447,6 +446,7 @@ class OnlyRobotAssume(SimpleGramChoice):
     ])
     partitionable = True
     var_implies = var_assume_robot
+    allow_modifiers = ["mod_add_period"]
 
 
 class OnlyHumanAssume(SimpleGramChoice):
@@ -467,7 +467,7 @@ class OnlyHumanAssume(SimpleGramChoice):
 
 class AnAdjectivedPerson(SimpleGramChoice):
     choices = [
-        (f"a {Adjective} {HumanSingularGeneral}", Adjective.num_choices() / 2),
+        #(f"a {Adjective} {HumanSingularGeneral}", Adjective.num_choices() / 2),
         f"a dog person",
         f"a cat person",
         f"a people person",
@@ -489,6 +489,24 @@ class AdjectivedPersonAsk(SimpleGramChoice):
     ])
 
 
+class AskNeedPunk(SimpleGramChoice):
+    choices = [
+        f"you {ARobotOrHuman}?{MaybeAnOutro}",
+        f"You are not {AHuman}?",
+        f"I think you are {AHuman}?",
+        f"I think you are {ARobot}?",
+        f"You {AHuman}?",
+        f"I don't believe you are {ARobotOrHuman}?",
+        f"You are definitely not {ARobotOrHuman}?",
+    ]
+    partitionable = False
+    ignore_modifiers = [
+        "mod_add_period",
+        "mod_comma_space",
+        "mod_period",
+        "mod_question",
+    ]
+
 
 class DefaultRoot(SimpleGramChoice):
     choices = [
@@ -496,6 +514,7 @@ class DefaultRoot(SimpleGramChoice):
         (OnlyHumanAssume, OnlyHumanAssume.num_choices()),
         (AssumeBoth, AssumeBoth.num_choices()),
         (AdjectivedPersonAsk, AdjectivedPersonAsk.num_choices() / 5 / EXTRA_NORMAL_SCALE),
+        (AskNeedPunk, AskNeedPunk.num_choices()),
     ]
     partitionable = False
 

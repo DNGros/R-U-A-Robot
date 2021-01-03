@@ -118,6 +118,8 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
     var_implies = None
     partitionable = False
     _do_not_log = True
+    ignore_modifiers = []
+    allow_modifiers = []
 
     def __init_subclass__(cls, **kwargs):
         cls._weights = []
@@ -180,7 +182,9 @@ def make_rule(
     choices, var_implies: Optional[SimpleVar] = None,
     partitionable: bool = False,
     match_name: str = None,
-    do_not_log: bool = False
+    do_not_log: bool = False,
+    ignore_modifiers = None,
+    allow_modifiers = None,
     #is_root: bool = False
 ) -> Type[SimpleGramChoice]:
     return type(
@@ -191,7 +195,9 @@ def make_rule(
             "var_implies": var_implies,
             "partitionable": partitionable,
             "__qualname__": match_name or name,
-            "_do_not_log": do_not_log
+            "_do_not_log": do_not_log,
+            "ignore_modifiers": ignore_modifiers or [],
+            "allow_modifiers": allow_modifiers or [],
             #"is_root": is_root,
         }
     )
@@ -236,7 +242,9 @@ def partition_grammar(
                 var_implies=rule.var_implies,
                 partitionable=rule.partitionable,
                 match_name=str(rule)[len("[["):-len("]]")],
-                do_not_log=True
+                do_not_log=True,
+                ignore_modifiers=rule.ignore_modifiers,
+                allow_modifiers=rule.allow_modifiers
             )
             for i, choices_for_this_split in enumerate(new_choices)
         ]

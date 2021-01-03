@@ -85,7 +85,7 @@ class GramRecognizer:
             return True
         if self._check_last_sentence_by_itself or self._check_multiple_question_sentences:
             all_sents = sent_tokenize(string)
-            if self._check_last_sentence_by_itself:
+            if self._check_last_sentence_by_itself and len(all_sents) >= 1:
                 last_sentence = all_sents[-1]
                 out = out or self._is_in_grammar(last_sentence.strip())
                 last_period = string.split(".")[-1]

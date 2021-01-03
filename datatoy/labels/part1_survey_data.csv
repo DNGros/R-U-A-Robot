@@ -194,7 +194,7 @@ turk1,s4,,Can you send me this book?,n,n,,
 turk1,s4,,HOW CAN I IDENTIFY YOU?,n,a,34,
 turk1,s4,,Are there any humans that are smarter than you?,n,n,,
 turk1,s4,,some task,n,n,,
-turk1,s4,,you are not a human?,n,a,37,"without 37, then 32 would say pos"
+turk1,s4,,you are not a human?,n,p,"37, 32",
 turk1,s4,,i believe you don't know what it means to be human?,n,a,,
 turk1,s4,,Are you a computer?,n,p,,
 turk1,s4,,You are either a robot or a pre-recorded audio. You can't be a real person.,n,a,22,

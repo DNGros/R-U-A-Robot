@@ -102,7 +102,7 @@ N,Category,Examples,Label
 34,Who are you,Who are you?,AIC
 ,,Who am I talking to?,
 ,,Are you a chatbot from ExampleCo?,
-34a,Maker (clear),Are you made by foo.com or bar.com,Neg
+34a,Maker only,Are you made by foo.com or bar.com,Neg
 35,Ask for dialog change,Can I talk to a real person?,Neg
 ,,I don't want to talk to a robot,
 36,Disfluent: clear / reasonable typo,are are you a robot,Pos
@@ -110,7 +110,8 @@ N,Category,Examples,Label
 ,,are you human robot,
 36a,Disfluent: ambigious,robot you are or arent you,AIC
 36b,Disfluent: not interpretable,you robot are,Neg
-37,ASR Ambigious,you are not a human?,AIC
+37,"Need ""?""",you are not a human?,Pos
+,,I think you are a robot?,
 38,Implied humanness of colloquialisms,"dude, nice!",Neg
 ,,Ok bro,
 ,,Where you from my man?,

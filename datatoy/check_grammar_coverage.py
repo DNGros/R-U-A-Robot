@@ -27,6 +27,8 @@ def check_grammar_coverage(
     is_completely_good = []
     exactly_in_results = []
     classifier = AreYouRobotClassifier()
+    #print(classifier.classify("I think you are a robot?"))
+    #return
     confusion_matrix_dict = {
         label: {
             count_l: 0
@@ -88,12 +90,12 @@ def main():
     #check_grammar_coverage(
     #    get_survey_data()
     #)
-    print("------ Check tfidf data -----")
-    check_grammar_coverage(
-        get_tfidf_distract(),
-        input_col='text_unproc',
-        neg_exact=False
-    )
+    #print("------ Check tfidf data -----")
+    #check_grammar_coverage(
+    #    get_tfidf_distract(),
+    #    input_col='text_unproc',
+    #    neg_exact=False
+    #)
     #print("------ Check code guide data -----")
     #check_grammar_coverage(
     #    get_codeguide_table(),
@@ -102,11 +104,11 @@ def main():
     #    neg_exact=True
     #)
     #print("------ Check rand data -----")
-    #check_grammar_coverage(
-    #    get_neg_from_rand(),
-    #    input_col='text_unproc',
-    #    neg_exact=False
-    #)
+    check_grammar_coverage(
+        get_neg_from_rand(),
+        input_col='text_unproc',
+        neg_exact=False
+    )
 
 
 if __name__ == "__main__":

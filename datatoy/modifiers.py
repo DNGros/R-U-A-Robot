@@ -20,6 +20,7 @@ class Modifier:
         effect_modifier_rules: bool = False,
         rule_sub_left_prefix: str = "",
         rule_sub_right_suffix: str = "",
+        require_explicit_allow: bool = False,
     ):
         self.mod_name = mod_name
         self.old_pattern = old_pattern
@@ -27,6 +28,7 @@ class Modifier:
         self.effect_modifier_rules = effect_modifier_rules
         self.rule_sub_left_prefix = rule_sub_left_prefix
         self.rule_sub_right_suffix = rule_sub_right_suffix
+        self.require_explicit_allow = require_explicit_allow
         self.rule = make_rule(
             f"{MODIFIER_PREFIX}_{self.mod_name}",
             self.new_vals,
@@ -36,6 +38,13 @@ class Modifier:
 
     def apply_to_rule(self, rule: Type[SimpleGramChoice]) -> Type[SimpleGramChoice]:
         if not self.effect_modifier_rules and rule_is_modifier(rule):
+            return rule
+        if self.mod_name in rule.ignore_modifiers or self in rule.ignore_modifiers:
+            return rule
+        if self.require_explicit_allow and (
+                self.mod_name not in rule.allow_modifiers
+                or self not in rule.allow_modifiers
+        ):
             return rule
         new_choices = []
         has_change = False
@@ -50,7 +59,9 @@ class Modifier:
                 new_choices,
                 rule.partitionable,
                 rule.var_implies,
-                do_not_log=True
+                do_not_log=True,
+                allow_modifiers=rule.allow_modifiers,
+                ignore_modifiers=rule.ignore_modifiers,
             )
         else:
             return rule
@@ -205,8 +216,9 @@ def get_all_modifiers():
         Modifier(
             "mod_add_period",
             re.compile(r"([a-z])$", re.MULTILINE),
-            [("", 5), (".", 1)],
+            [("", 10), (".", 1)],
             rule_sub_left_prefix=r"\1",
+            require_explicit_allow=True,
             #rule_sub_right_suffix=r"\2",
         ),
         #Modifier(

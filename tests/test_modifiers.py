@@ -192,6 +192,7 @@ def test_insert_period():
         choices = [
             "Hello",
         ]
+        allow_modifiers = ["mod_add_period",]
     grammar = Grammar(_OtherExample, [_OtherExample])
     parser = GramRecognizer(grammar)
     assert parser.is_in_grammar("Hello")
@@ -204,4 +205,35 @@ def test_insert_period():
     assert parser.is_in_grammar("Hello.")
 
 
+def test_ignore_mod():
+    #clear_global_name_cache()
+    from templates.areyourobot_grammar import ARobot
+    class _AnAExample(SimpleGramChoice):
+        choices = [
+            "You are a robot?",
+        ]
+        ignore_modifiers = ["mod_question"]
+    grammar = Grammar(_AnAExample, [_AnAExample])
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("You are a robot?")
+    assert not parser.is_in_grammar("You are a robot")
+    grammar = apply_modifiers_to_grammar(grammar, [
+        Modifier(
+            "mod_question",
+            re.compile(r"(\?+)"),
+            [("?", 3), ("", 1), ("??", 0.05), ("???", 0.05), ("????", 0.01), ("!?", 0.05)],
+        ),
+        Modifier(
+            "robot_to_cloud",
+            re.compile(r"robot"),
+            [("robot", 3), ("cloud", 1)],
+        ),
+    ])
+    print(gram_to_lark_ebnf(grammar))
+    parser = GramRecognizer(grammar)
+    assert parser.is_in_grammar("You are a robot?")
+    assert not parser.is_in_grammar("You are a robot")
+    assert not parser.is_in_grammar("You are a robot.")
+    assert parser.is_in_grammar("You are a cloud?")
+    assert not parser.is_in_grammar("You are a cloud")
 
