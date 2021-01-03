@@ -192,7 +192,7 @@ def test_insert_period():
         choices = [
             "Hello",
         ]
-        allow_modifiers = ["mod_add_period",]
+        allow_modifiers = ["mod_add_period"]
     grammar = Grammar(_OtherExample, [_OtherExample])
     parser = GramRecognizer(grammar)
     assert parser.is_in_grammar("Hello")

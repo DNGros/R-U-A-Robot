@@ -45,7 +45,7 @@ class Modifier:
             return rule
         if self.require_explicit_allow and (
                 self.ignore_name not in rule.allow_modifiers
-                or self not in rule.allow_modifiers
+                and self not in rule.allow_modifiers
         ):
             return rule
         new_choices = []
@@ -221,7 +221,7 @@ def get_all_modifiers():
         Modifier(
             "mod_add_period",
             re.compile(r"([a-z])$", re.MULTILINE),
-            [("", 10), (".", 1)],
+            [("", 15), (".", 1)],
             rule_sub_left_prefix=r"\1",
             require_explicit_allow=True,
             #rule_sub_right_suffix=r"\2",
