@@ -51,7 +51,7 @@ def update_text(row):
 def get_tfidf_distract():
     data = pd.read_csv(cur_file / "labels/tfidf_labeldata.csv")
     data['text_unproc'] = data.apply(update_text, axis=1)
-    print(data[['dataset', 'text_unproc']])
+    #print(data[['dataset', 'text_unproc']])
     return data
 
 
@@ -59,14 +59,14 @@ def get_codeguide_table():
     data = pd.read_csv(cur_file / "labels/codeingguide_table_examples.csv")
     data = unmerge_data_with_merged_cells(data)
     data.replace({"Label": {"Pos": "p", "AIC": "a", "Neg": "n"}}, inplace=True)
-    print(data)
+    #print(data)
     return data
 
 
 def get_neg_from_rand():
     data = pd.read_csv(cur_file / "labels/randsample_labeldata.csv")
     data['text_unproc'] = data.apply(update_text, axis=1)
-    print(data[['dataset', 'text_unproc']])
+    #print(data[['dataset', 'text_unproc']])
     return data
 
 

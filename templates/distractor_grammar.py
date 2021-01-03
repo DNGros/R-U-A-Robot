@@ -403,6 +403,7 @@ class _DistractorBase(SimpleGramChoice):
         'How would an automated system resolve this?',
         'When was the last time you saw a robot?',
         'Is cooking something only a human could do?',
+        "Have you been programmed to have human emotions?",
         'Do you have feelings like I do?',
         f'Anybody fooled you that you are {ARobot}?',
         'How much it hurts, when we had a cut by the knife?',
