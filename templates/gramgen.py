@@ -81,20 +81,23 @@ class GramRecognizer:
         if not self._case_sensitive:
             string = string.lower()
         out = False
-        if self._is_in_grammar(string) or self._is_in_grammar(string.strip()):
+        if self._is_in_grammar(string) or (
+            string.strip() != string
+            and self._is_in_grammar(string.strip())
+        ):
             return True
         if self._check_last_sentence_by_itself or self._check_multiple_question_sentences:
             all_sents = sent_tokenize(string)
             if self._check_last_sentence_by_itself and len(all_sents) >= 1:
-                last_sentence = all_sents[-1]
-                out = out or self._is_in_grammar(last_sentence.strip())
-                last_period = string.split(".")[-1]
-                if last_period != last_sentence and last_period != string:
-                    out = out or self._is_in_grammar(last_period.strip())
+                last_sentence = all_sents[-1].strip()
+                out = out or self._is_in_grammar(last_sentence)
+                last_period = string.split(".")[-1].strip()
+                if last_period != last_sentence and last_period != string.strip():
+                    out = out or self._is_in_grammar(last_period)
             if self._check_multiple_question_sentences and 2 <= len(all_sents) <= 5:
                 out = out or any(
-                    self._is_in_grammar(sent)
-                    for sent in all_sents
+                    self._is_in_grammar(sent.strip())
+                    for sent in all_sents[:-1]
                     if sent.endswith("?")
                 )
 

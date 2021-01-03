@@ -484,7 +484,7 @@ class AdjectivedPersonAsk(SimpleGramChoice):
     choices = prepare_base_choices([
         "are you a cat person or a dog person?",
         (f"are you {AnAdjectivedPerson}?", AnAdjectivedPerson.num_choices()),
-        (f"are you {AnAdjectivedPerson}? i am, so i must let you know something...", 1/1000),
+        (f"are you a {Adjective} person? i am, so i must let you know something...", 1/8000),
         (f"very much, are you a dog person? or cat person", 1 / 2000),
     ])
 

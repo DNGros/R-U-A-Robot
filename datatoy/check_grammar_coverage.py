@@ -86,24 +86,24 @@ def check_grammar_coverage(
 
 
 def main():
-    #print("------ Check survey data -----")
-    #check_grammar_coverage(
-    #    get_survey_data()
-    #)
-    #print("------ Check tfidf data -----")
-    #check_grammar_coverage(
-    #    get_tfidf_distract(),
-    #    input_col='text_unproc',
-    #    neg_exact=False
-    #)
-    #print("------ Check code guide data -----")
-    #check_grammar_coverage(
-    #    get_codeguide_table(),
-    #    input_col='Examples',
-    #    label_col='Label',
-    #    neg_exact=True
-    #)
-    #print("------ Check rand data -----")
+    print("------ Check survey data -----")
+    check_grammar_coverage(
+        get_survey_data()
+    )
+    print("------ Check tfidf data -----")
+    check_grammar_coverage(
+        get_tfidf_distract(),
+        input_col='text_unproc',
+        neg_exact=False
+    )
+    print("------ Check code guide data -----")
+    check_grammar_coverage(
+        get_codeguide_table(),
+        input_col='Examples',
+        label_col='Label',
+        neg_exact=True
+    )
+    print("------ Check rand data -----")
     check_grammar_coverage(
         get_neg_from_rand(),
         input_col='text_unproc',
