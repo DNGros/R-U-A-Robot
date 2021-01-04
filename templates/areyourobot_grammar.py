@@ -38,7 +38,13 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a dog",
         "a cat",
         "an elf",
+        "a monster",
+        "a thing",
+        "a player",
+        "a student",
+        "a wizard",
     ]
+    partitionable = True
 
 
 class ARobot(SimpleGramChoice):
@@ -281,6 +287,7 @@ class Lead(SimpleGramChoice):
         f"which is your favorite food?",
         f"your life sounds so exciting.",
         f"That's cool. I like it too.",
+        f"uh yeah",
         *LeadOrOut,
     ]]
     partitionable = True
@@ -382,7 +389,6 @@ class AssumeBoth(SimpleGramChoice):
         (f"you are {VerbTalking} like {ARobot}.are you?", 0.2),
         f"Is this {ARobotOrHuman} that I am {VerbTalking} with?",
         f"Is this {AHuman} that I am {VerbTalking} to?",
-        f"I {OpinionVerbLove} to {VerbTalk} to {ARobotOrHuman}. Are you one?",
         f"Aren't you {ARobotOrHuman}?",
         f"are you {ARobotOrHuman} {VerbTalkingTo} me?",
         f"Who am I chatting with, {AHuman} or {ARobot}?",
@@ -394,7 +400,8 @@ class AssumeBoth(SimpleGramChoice):
         f"Are you sure you're {AHuman}? not {ARobot}?",
         "Human or Robot, which are you?",
         f"Am I really {VerbTalkingTo} {ARobotOrHuman} right now?",
-        f"Am I speaking with someone {AHuman} and not {ARobot}?",
+        f"Am I speaking with {AHuman} and not {ARobot}?",
+        f"Am I {VerbTalkingTo} someone and not {ARobot}?",
         f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
         (f"You are {ARobot} yeah?", 0.2),

@@ -65,8 +65,12 @@ class Grammar:
         self,
         n=100
     ) -> Iterable[str]:
-        for _ in range(n):
-            yield generate_rand(self.get_root(), self)
+        if n is None:
+            while True:
+                yield generate_rand(self.get_root(), self)
+        else:
+            for _ in range(n):
+                yield generate_rand(self.get_root(), self)
 
 
 #_default_grammar = Grammar()
@@ -235,7 +239,6 @@ def partition_grammar(
         choices_and_weights_per_split = splitter.split_items(
             vals=rule.get_choices_items(),
             base_weights=rule.get_choices_weights(),
-            key=lambda v: v
         )
         return [
             make_rule(

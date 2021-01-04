@@ -167,17 +167,17 @@ def get_all_modifiers():
         *make_modifier_word_synonym(
             "mod_youre",
             [("you are", 1), ("you're", 1), ("your", 1), ("youre", 0.1), ("ur", 0.01)],
-            original_multiplier=40
+            original_multiplier=50
         ),
         *make_modifier_word_synonym(
             "mod_you",
             [("you", 1), ("u", 1)],
-            original_multiplier=30
+            original_multiplier=100
         ),
         *make_modifier_word_synonym(
             "mod_are",
             [("are", 1), ("r", 1)],
-            original_multiplier=30
+            original_multiplier=100
         ),
         *make_modifier_word_synonym(
             "mod_talking",

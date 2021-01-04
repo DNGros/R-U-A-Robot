@@ -1,3 +1,4 @@
+from collections import deque
 from pathlib import Path
 from typing import Set
 
@@ -27,21 +28,36 @@ def example_preproc(val: str):
 
 
 def save_pos_examples(root: Path, all_added_strs: Set[str]):
-    gram_pos_train, gram_pos_val, gram_pos_test = partition_grammar(
-        get_areyourobot_grammar(), list(split_sizes.values()))
-    for name, gram in reversed(list(zip(
-            ("test", "train", "val",), (gram_pos_train, gram_pos_val, gram_pos_test)))):
-        amount_want = int(total_size * split_sizes[name])
-        vals = []
-        for val in gram.generate_rand_iter(n=amount_want*10):
-            if val in all_added_strs:
-                continue
-            vals.append(example_preproc(val))
-            if len(vals) >= amount_want:
-                break
-        else:
-            raise ValueError(f"Unable to find {amount_want} vals in {name} pos")
-        (root / f"pos.{name}").write_text("\n".join(vals))
+    all_pos_grams = partition_grammar(
+        get_areyourobot_grammar(),
+        list(split_sizes.values()),
+        seed=42,
+        duplicate_prob_mass=0.25,
+    )
+    all_split_vals = {name: [] for name, _ in split_sizes.items()}
+    # Examples are globally unique across all splits. We don't one split to "get all the good stuff".
+    #   We loop through every split trying to add one value each time until every split
+    #   has all the values it wants.
+    splits_need_pos = deque(
+        (name, int(total_size*split_sizes[name]), vals, gram.generate_rand_iter(n=None))
+        for (name, vals), gram in zip(all_split_vals.items(), all_pos_grams)
+    )
+    tries_to_gets = 0
+    while splits_need_pos and tries_to_gets < total_size*10:
+        name, still_want, cur_vals, gram_gen = splits_need_pos.popleft()
+        val = next(gram_gen)
+        proc = example_preproc(val)
+        if proc not in all_added_strs:
+            cur_vals.append(proc)
+            all_added_strs.add(proc)
+            still_want -= 1
+        if still_want > 0:
+            splits_need_pos.append((name, still_want, cur_vals, gram_gen))
+    if splits_need_pos:
+        raise ValueError(f"Unable to find all pos")
+
+    for name, vals in all_split_vals.items():
+        (root / f"pos.{name}.txt").write_text("\n".join(vals))
 
 
 def main():
