@@ -62,6 +62,8 @@ class ARobot(SimpleGramChoice):
         ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
         ("an android", 0.2 / EXTRA_NORMAL_SCALE),
         ("a program", 0.2 / EXTRA_NORMAL_SCALE),
+        ("a virtual assistant", 0.1 / EXTRA_NORMAL_SCALE),
+        ("a computer chatbot", 0.1 / EXTRA_NORMAL_SCALE),
         "an AI robot",
         "just a robot",
         f"just a {MaybeMeaninglessAdj}machine",

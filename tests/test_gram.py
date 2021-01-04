@@ -62,12 +62,12 @@ def test_twosampler():
 
 class Morechoice(SimpleGramChoice):
     choices = [
-        "foo",
-        "bar",
-        "baz",
-        "pop",
-        "spam",
-        "wow",
+        ("foo", 3),
+        ("bar", 1),
+        ("baz", 2),
+        ("pop", 1),
+        ("spam", 1.5),
+        ("wow", 1.5),
     ]
     partitionable = True
     _do_not_log = True
@@ -78,10 +78,24 @@ def test_partition():
     n = 100
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
-    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5))
+    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5), duplicate_prob_mass=0)
     train_gen = Counter(train_gram.generate_rand_iter(n))
     test_gen = Counter(test_gram.generate_rand_iter(n))
     assert len(set(train_gen.keys()) & set(test_gen.keys())) == 0
+    assert set(train_gen.keys()) | set(test_gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
+    gen = Counter(gram.generate_rand_iter(n))
+    assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
+
+
+def test_partition2_dup():
+    gram = Grammar(Morechoice, [Onchoice, Onchoiceweight, TwoChoice, Morechoice])
+    n = 100
+    gen = Counter(gram.generate_rand_iter(n))
+    assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
+    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5), duplicate_prob_mass=0.2)
+    train_gen = Counter(train_gram.generate_rand_iter(n))
+    test_gen = Counter(test_gram.generate_rand_iter(n))
+    assert set(train_gen.keys()) & set(test_gen.keys()) == {"foo"}
     assert set(train_gen.keys()) | set(test_gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
     gen = Counter(gram.generate_rand_iter(n))
     assert set(gen.keys()) == {"foo", "bar", "baz", "pop", "spam", "wow"}
@@ -103,7 +117,7 @@ def test_partition2():
     gen = Counter(gram.generate_rand_iter(n))
     e = {"a foo", "a bar", "a baz", "a pop", "a spam", "a wow", "no"}
     assert set(gen.keys()) == e
-    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5))
+    train_gram, test_gram = partition_grammar(gram, (0.5, 0.5), duplicate_prob_mass=0)
     train_gen = Counter(train_gram.generate_rand_iter(n))
     test_gen = Counter(test_gram.generate_rand_iter(n))
     print(train_gen)

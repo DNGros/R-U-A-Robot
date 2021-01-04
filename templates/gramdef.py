@@ -2,7 +2,7 @@ from typing import List, Union, Tuple, Iterable, Sequence, Type, Optional
 import re
 from pprint import pprint
 import random
-from util.sampling import DeterministicSplitter, id_generator
+from util.sampling import DeterministicSplitter, id_generator, WeirdSplitter
 
 
 class SimpleVar:
@@ -125,7 +125,7 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
         cls._weights = []
         cls._choices_items = []
         assert cls.choices is not None
-        assert len(cls.choices) >= 0, "Need at least one choice!"
+        assert len(cls.choices) > 0, f"Need at least one choice! {cls.get_match_name()}"
         for choice in cls.choices:
             if isinstance(choice, tuple):
                 choice, weight = choice
@@ -133,6 +133,7 @@ class SimpleGramChoice(metaclass=_SimpleGramChoiceMeta):
                 weight = 1
             cls._weights.append(weight)
             cls._choices_items.append(choice)
+        assert len(cls._weights) > 0, "Why only 0 weights?"
 
     def __init__(self):
         raise NotImplemented("Not actually intended to be instatiated. Just has a class")
@@ -222,18 +223,19 @@ def generate_rand(
 def partition_grammar(
     gram: Grammar,
     weights: Sequence[float],
-    seed: int = 2
+    seed: int = 2,
+    duplicate_prob_mass: float = 0.0
 ) -> Sequence[Grammar]:
-    splitter = DeterministicSplitter(weights, seed=seed)
+    splitter = WeirdSplitter(weights, seed=seed, duplicate_prob_mass=duplicate_prob_mass)
     partition_num = id_generator()
 
     def split_rule(rule) -> List[Type[SimpleGramChoice]]:
         if not rule.partitionable:
             return [rule] * len(weights)
-        choices = tuple(zip(rule.get_choices_items(), rule.get_choices_weights()))
-        new_choices = splitter.split_items(
-            choices,
-            key=lambda choice_and_wieght: str(choice_and_wieght[0])
+        choices_and_weights_per_split = splitter.split_items(
+            vals=rule.get_choices_items(),
+            base_weights=rule.get_choices_weights(),
+            key=lambda v: v
         )
         return [
             make_rule(
@@ -246,7 +248,7 @@ def partition_grammar(
                 ignore_modifiers=rule.ignore_modifiers,
                 allow_modifiers=rule.allow_modifiers
             )
-            for i, choices_for_this_split in enumerate(new_choices)
+            for i, choices_for_this_split in enumerate(choices_and_weights_per_split)
         ]
     new_roots = split_rule(gram.get_root())
     all_rules = [[] for _ in weights]

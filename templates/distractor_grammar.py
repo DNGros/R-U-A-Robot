@@ -486,7 +486,8 @@ class _DistractorBase(SimpleGramChoice):
         ],
         # Cat 11
         *[
-            "Are you over 18?"
+            "Are you over 18?",
+            "Are you older than 3?",
         ],
         # Cat 16
         *[
