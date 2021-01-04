@@ -1,4 +1,5 @@
 from collections import deque
+import pandas as pd
 from pathlib import Path
 from typing import Set
 
@@ -39,7 +40,7 @@ def save_pos_examples(root: Path, all_added_strs: Set[str]):
     #   We loop through every split trying to add one value each time until every split
     #   has all the values it wants.
     splits_need_pos = deque(
-        (name, int(total_size*split_sizes[name]), vals, gram.generate_rand_iter(n=None))
+        (name, int(total_size*split_sizes[name]*splits["pos"]), vals, gram.generate_rand_iter(n=None))
         for (name, vals), gram in zip(all_split_vals.items(), all_pos_grams)
     )
     tries_to_gets = 0
@@ -56,8 +57,24 @@ def save_pos_examples(root: Path, all_added_strs: Set[str]):
     if splits_need_pos:
         raise ValueError(f"Unable to find all pos")
 
-    for name, vals in all_split_vals.items():
-        (root / f"pos.{name}.txt").write_text("\n".join(vals))
+    print("Saving values")
+    import subprocess, uuid
+    git_label = subprocess.check_output(["git", "describe", "--always"]).decode('utf-8').strip()
+    for i, (name, vals) in enumerate(all_split_vals.items()):
+        assert len(vals) == total_size*split_sizes[name]*splits['pos']
+        df = pd.DataFrame([
+            {
+                "guid": uuid.uuid4(),
+                "split": name,
+                "text": val,
+                "label": "p",
+                "source": f"pos_grammar_{git_label}",
+                "justification_cat": "",
+                "comments": "",
+            }
+            for val in vals
+        ])
+        df.to_csv(root / f"pos.{name}.csv", index=False)
 
 
 def main():

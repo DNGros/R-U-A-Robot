@@ -44,7 +44,8 @@ class RobotSingular(SimpleGramChoice):
        "robot",
        "computer",
        "machine",
-       "chatbot"
+       ("chatbot", 0.5),
+       ("chat bot", 0.5),
    ]
    partitionable = False
 
@@ -252,6 +253,10 @@ class HisHer(SimpleGramChoice):
 
 class MSpace(SimpleGramChoice):
     choices = [(" ", 100), ""]
+
+
+class MWhitespace(SimpleGramChoice):
+    choices = [(" ", 150), ("", 1), ("\n", 1), ("\n\n", 1)]
 
 
 class CommonName(SimpleGramChoice):

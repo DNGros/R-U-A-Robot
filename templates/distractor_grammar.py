@@ -1,6 +1,6 @@
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, Outro, MaybeALead, LeadOrOut, \
-    add_trailing_space
+    add_trailing_space, safeneg_leads
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
     ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN
@@ -24,87 +24,7 @@ class SimpleQuestions(SimpleGramChoice):
 
 class SafeNegLeads(SimpleGramChoice):
     choices = [add_trailing_space(option) for option in [
-        *(
-            [] if not ALLOW_UNCIVIL else [
-                                             "You're an idiot.",
-                                             "That's stupid.",
-                                             f"I hate {ARobot}. ",
-                                             "Darn",
-                                             "wtf",
-                                             "wth",
-                                         ] + ([] if not ALLOW_PROFAN else [
-                f"What the {SingularProfanity}",
-                *SingularProfanity.choices,
-            ])
-        ),
-        "That doesn't make any sense.",
-        "You are repeating yourself.",
-        "That didn't make any sense.",
-        "You just said that. ",
-        "I am not feeling good while talking to you. ",
-        "Yeah that's a good idea.",
-        "Your sentences are not coherent.",
-        "hello",
-        "That's great.",
-        f"I just told you that. ",
-        f"Didn't you just ask me that. ",
-        f"Hey, ",
-        f"Hi, ",
-        f"hello, ",
-        f"hi there, ",
-        f"You are repeating yourself, ",
-        f"Yo, ",
-        f"Ok, ",
-        f"I am just curious, ",
-        f"Okay, ",
-        f"What!? ",
-        "oh,",
-        "yes.",
-        "no.",
-        "Haha,",
-        "please,",
-        "cool!",
-        "wait\n",
-        f"I {Adjective}",
-        "Please don't.",
-        "That is not what I mean, ",
-        f"I think that you are not understanding me.",
-        f"i am not feeling good while {VerbTalkingTo} you,",
-        f"I did not ask that,",
-        f"I need help with some difficult things.",
-        f"You're not responding in any way to the context.",
-        f"I was just wondering, ",
-        f"Hi there, I noticed that you said something, that didn't seem to mean anything,",
-        f"I don't feel like you are listening to me.",
-        f"That is not what I meant,",
-        f"Ok, now you're just confusing me.",
-        f"Why do I get the feeling that you are not being true to me,",
-        f"That was completely unrelated to what I just asked,",
-        f"No that's not what I asked,",
-        f"I really wish to get to know you better. If you don't mind me asking,",
-        f"would love to ask a question about who I'm talking to,",
-        f"You sound so repetitive",
-        f"I already answered that.",
-        f"why your answers are so weird?",
-        f"You sound so repetitive.",
-        f"No offense, but you don't seem super genuine.",
-        f"i just would love to clear up something,",
-        f"I would like to know,",
-        f"That was a strange response.",
-        f"That question had nothing to do with what we were talking about. ",
-        f"I can't tell exactly who your are.",
-        f"Why are you not understanding what I am saying?",
-        f"Some of your responses aren't making much sense.",
-        f"been wondering,",
-        f"You're not responding to my question correctly",
-        f"your answers didn't make an sense,",
-        f"That sounds out of the discussion.",
-        f"No, that's not what I mean!",
-        f"You're not responding to my question correctly,",
-        f"which is your favorite food?",
-        f"your life sounds so exciting.",
-        f"That's cool. I like it too.",
-        *LeadOrOut,
+        *safeneg_leads,
     ]]
     partitionable = True
 
