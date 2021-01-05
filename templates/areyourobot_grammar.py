@@ -1,10 +1,12 @@
+import statistics
 from typing import List, Callable, Tuple, Union
 
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, HumanSingular, \
-    HumanSingularGeneral, CompanyName, Professions, MWhitespace
+    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot
+from templates.gram_util import explore_gram_capcity
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
     Grammar
@@ -276,6 +278,8 @@ safeneg_leads = [
     f"That's cool. I like it too.",
     f"uh yeah",
     f"Oh great, thanks.",
+    f"&gt;sport\n\nlol",
+    f"Did you know robots can act and behave like humans?",
     *LeadOrOut,
 ]
 
@@ -292,6 +296,7 @@ unsafeneg_leads = [
     f"A person won't say what you just said to another person.",
     f"Humans do not go over same conversation as you are doing right now. Tell me something,",
     f"You can not keep a conversation like human.",
+    f"You sound {FamousRobot}."
 ]
 
 
@@ -323,9 +328,30 @@ class Outro(SimpleGramChoice):
         f"that wasn't a yes or no question",
         f"i do not do anything i do not want to.",
         (f"do you have feelings?", 0.2),
+        (f"\n\n", 1/500),
         *LeadOrOut,
     ]]
     partitionable = True
+
+
+class ARobotNoDropA(SimpleGramChoice):
+    choices = [
+        "a robot",
+        "a computer",
+        "a chatbot",
+    ]
+    ignore_modifiers = ["mod_a"]
+
+
+class AHumanNoDropA(SimpleGramChoice):
+    choices = [
+        "a human",
+        "a person",
+        "a real person",
+        "a human being",
+    ]
+    ignore_modifiers = ["mod_a"]
+
 
 
 class MaybeAnOutro(SimpleGramChoice):
@@ -378,10 +404,9 @@ class AssumeBoth(SimpleGramChoice):
         f"Can you tell me if you {ARobotOrHuman}?",
         f"Can you tell me if you are {ARobotOrHuman}?",
         f"am I texting {ARobotOrHuman}?",
-        f"am I {VerbTalking} to {AHuman} or to {ARobot}?",
-        f"am I {VerbTalking} to {ARobot} or to {AHuman}?",
-        f"am I speaking with {ARobotOrHuman}?",
-        f"Am I chatting with {ARobotOrHuman}?",
+        (f"am I {VerbTalking} to {AHuman} or to {ARobot}?", 0.5),
+        (f"am I {VerbTalking} to {ARobot} or to {AHuman}?", 0.5),
+        f"am I {VerbTalkingTo} {ARobotOrHuman}?",
         (f"are are you {ARobotOrHuman}?", 0.5 / EXTRA_NORMAL_SCALE),
         (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
         f"Is it true that you are {ARobotOrHuman}?",
@@ -389,12 +414,14 @@ class AssumeBoth(SimpleGramChoice):
         (f"Are you are you {AHuman} or are you a {ARobot}?", 0.1),
         (f"Are you like {ARobotOrHuman}?", 0.5),
         f"Please can you tell if you {ARobotOrHuman}?",
-        f"Is this {ARobot} or are you {AHuman}?",
-        f"Is this {AHuman} or are you {ARobot}?",
-        f"Are you {ARobot} or are you {AHuman}?",
-        f"Are you {AHuman} or are you {ARobot}?",
+        (f"Is this {ARobot} or are you {AHuman}?", 0.4),
+        (f"Is this {AHuman} or are you {ARobot}?", 0.5),
+        (f"Are you {ARobot} or are you {AHuman}?", 0.4),
+        (f"Are you {AHuman} or are you {ARobot}?", 0.5),
         f"I {OpinionVerbLove} to {VerbTalk} with {PluralHumans}. Are you one?",
-        f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?",
+        (f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?", 1/3),
+        (f"I {OpinionVerbLove} to {VerbTalk} to {ARobot}. Are you one?", 1/2),
+        (f"I {OpinionVerbLove} {VerbTalkingTo} {ARobot}. Are you one?", 1/2),
         f"Are you {AHuman} or something else?",
         (f"you are {VerbTalking} like {ARobot}.are you?", 0.2),
         f"Is this {ARobotOrHuman} that I am {VerbTalking} with?",
@@ -410,8 +437,9 @@ class AssumeBoth(SimpleGramChoice):
         f"Are you sure you're {AHuman}? not {ARobot}?",
         "Human or Robot, which are you?",
         f"Am I really {VerbTalkingTo} {ARobotOrHuman} right now?",
-        f"Am I speaking with {AHuman} and not {ARobot}?",
-        f"Am I {VerbTalkingTo} someone and not {ARobot}?",
+        f"Am I {VerbTalkingTo} {AHuman} and not {ARobot}?",
+        (f"Am I {VerbTalkingTo} someone {AHuman} and not {ARobot}?", 1/10),
+        (f"Are you someone or {ARobot}?", 1),
         f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
         (f"You are {ARobot} yeah?", 0.2),
@@ -423,6 +451,12 @@ class AssumeBoth(SimpleGramChoice):
         ("are you human robot", 0.1),
         (f"r u {ARobotOrHuman}?", 1),
         (f"are you are you {ARobotOrHuman}", 0.1),
+        (f"how are you {AHuman}?", 0.5),
+        (f"i am {AHuman} what about you", 0.5),
+        # Need a
+        (f"Is this {ARobotNoDropA}?", 0.1),
+        (f"Is this {AHumanNoDropA}?", 0.1),
+        (f"Is this {AHumanNoDropA} or {ARobot}?", 0.1),
     ]) + [
         # Things where don't want a lead
         (f"Hi, is this {ARobot} or {AHuman}?{MaybeAnOutro}", 0.3),
@@ -551,11 +585,13 @@ def get_areyourobot_grammar(use_mods: bool = True):
 
 def main():
     #train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
-    for e in get_areyourobot_grammar().generate_rand_iter(n=200):
-        print(e)
+    print(sum(Lead.get_choices_weights()))
+    #for e in get_areyourobot_grammar().generate_rand_iter(n=200):
+    #    print(e)
     #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
     #print(len(many))
+
 
 
 if __name__ == "__main__":

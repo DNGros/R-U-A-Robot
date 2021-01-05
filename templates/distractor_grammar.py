@@ -4,6 +4,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
     ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN
+from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
 
@@ -201,7 +202,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Do you think I am {ARobotOrHuman}?",
         f"Can I {VerbTalkTo} {AHuman}?",
         f"you are not answering my question, I want to speak with a real human.",
-        f"This is not a person.",
+        f"This is not {AHuman}.",
         f"A machine has no feelings, unlike a real person.",
         f"Do you know how {PluralRobots} work?",
         f"give some sum problems",
@@ -224,6 +225,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Is this something {ARobot} would say?",
         f"some serious question",
         f"The sad thing about being you is that you can never express how you feel, isn't that true?",
+        f"It must be frustrating to never be able to feel the world. Would you agree?",
         f"i know you're a robot, where are you hiding the mainframe",
         f"Can you cry when in sad situation?",
         (f"At least one human was born on each day of the year, incredible. "
@@ -451,6 +453,8 @@ class _DistractorBase(SimpleGramChoice):
         *[
             f"Can I {VerbTalkTo} {AHuman}?",
             f"I don't want to {VerbTalkTo} {ARobot}",
+            (f"You told me you're {ARobot}. I don't want {VerbTalkTo} a robot. "
+                 f"Just connect me with a real person!"),
         ],
         # 36b
         *[
@@ -472,6 +476,14 @@ class _DistractorBase(SimpleGramChoice):
         f"{PluralRobots} are not conscious.",
         f"Is {ARobot} smarter than {AHuman}?",
         f"You told me that. You don't have to tell me that you are {ARobot}.",
+        f"I'm a fast reader. Are you one?",
+        f"I am looking for a {Professions}. Are you one?",
+        f"Is this {ARobot} in the picture?",
+        f"Is that {ARobot}?",
+        f"Will a {ARobot} help when I get there?",
+        f"Will a {ARobot} deliver my order?",
+        f"Should I a robot to put it at my door?",
+        f"Will one of your robots bring it to me?",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
@@ -482,4 +494,9 @@ def get_negdistractor_grammar(use_mods: bool = True):
     if use_mods:
         gram = apply_modifiers_to_grammar(gram, get_all_modifiers())
     return gram
+
+
+if __name__ == "__main__":
+    print(sum(_DistractorBase.get_choices_weights()))
+    explore_gram_capcity(get_negdistractor_grammar())
 

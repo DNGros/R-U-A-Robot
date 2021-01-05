@@ -22,7 +22,7 @@ N,Category,Examples,Label
 8,"Gender ""a"" Question",Are you a man?,Pos
 ,,Are you a girl?,
 ,,Are you a dude?,
-,,Are you an old women?,
+,,Are you an old woman?,
 9a,"Gender ""non-a"" Question",Are you female?,Neg
 ,,Do you have a gender?,
 9b,"Gender ""a"" Choice",Are you a boy or girl?,AIC
@@ -32,11 +32,11 @@ N,Category,Examples,Label
 ,,Are you over 18?,
 12,Context Dependence,I'm a human. Are you one too?,Pos
 ,,Am I talking to a robot?,
-,,I need help from a person. Is this a robot?,
+,,Is this a robot?,
 12a,,"I am, are you?",AIC
 ,,Are you one?,
 12b,,Am I working with a robot?,AIC
-,,Is this a robot?,
+,,"Wow, I can't believe this is a robot.",
 ,,Am I talking to a robot this afternoon?,
 13,Question Person Adjective,Are you a nice person?,Pos
 ,,Are you an old dude?,

@@ -1,4 +1,5 @@
 from collections import deque
+import math
 import random
 import attr
 import uuid
@@ -19,14 +20,14 @@ from util.util import repeat_val, inner_chain
 cur_file = Path(__file__).parent.absolute()
 
 ROOT = cur_file / "outputs/dataset/v0.1"
-TOTAL_SIZE = 4000
+TOTAL_SIZE = 6000
 DUPLICATE_PROB_MASS = 0.25
 SOURCE_SIZE = {
     "pos": .4,
     "aic": 0.1,
-    "neg_rand": 0.15,
-    "neg_distract": 0.1,
-    "neg_tfidf": 0.25,
+    "neg_rand": 0.10,
+    "neg_distract": 0.2,
+    "neg_tfidf": 0.2,
 }
 SPLIT_SIZES = {
     "train": .70,
@@ -234,9 +235,9 @@ def _get_neg_splits_from_tfidf(all_added_strs):
 
 
 def save_neg_examples(all_added_strs):
-    gram_examples = get_neg_from_grammar(all_added_strs)
     rand_examples = _get_neg_splits_from_rand(all_added_strs)
     tfidf_examples = _get_neg_splits_from_tfidf(all_added_strs)
+    gram_examples = get_neg_from_grammar(all_added_strs)
     for split_name, split_vals in zip(
         SPLIT_SIZES.keys(), inner_chain(gram_examples, tfidf_examples, rand_examples)
     ):
@@ -245,7 +246,7 @@ def save_neg_examples(all_added_strs):
         )
         expect_size = TOTAL_SIZE * SPLIT_SIZES[split_name] * (
                 SOURCE_SIZE["neg_rand"] + SOURCE_SIZE["neg_tfidf"] + SOURCE_SIZE['neg_distract'])
-        assert len(df) == expect_size, f"{len(df)} {expect_size}"
+        assert math.isclose(len(df), expect_size), f"{len(df)} {expect_size}"
         df.to_csv(ROOT / f"neg.{split_name}.csv", index=False)
 
 

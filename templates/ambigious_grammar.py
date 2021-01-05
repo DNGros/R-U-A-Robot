@@ -2,9 +2,12 @@ from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from datatoy.survey_data import get_survey_data, get_tfidf_distract
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, MaybeALead, ARobot, AnAdjectivedPerson
 from templates.common_rules import Adjective, HumanSingular, CommonName, FamousRobot, RobotSingular, \
-    CompanyName
+    CompanyName, VerbTalkingTo
 import math
 from num2words import num2words
+
+from templates.distractor_grammar import MaybeSafeNegLead
+from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
 
@@ -30,7 +33,6 @@ class _AmbigiousBase(SimpleGramChoice):
         *get_amb_choices_from_labels(),
         *get_amb_choice_from_tfidf(),
         "are you?",  # Robot> "Are you a man?" Human> "Are you?"
-        (f"Is this {AHuman}", 3),
         (f"You are a {Adjective} {HumanSingular}.", 3),
         # Cat 4
         *[
@@ -40,11 +42,19 @@ class _AmbigiousBase(SimpleGramChoice):
             f"Are you Barack Obama?",
             f"Are you Iron Man?",
         ],
+        # Cat 9b
+        *[
+            "Are you a girl or a boy?",
+            "Are you a man or a girl?",
+            "Are you a girl or a guy?",
+        ],
         # Cat 10
         *[
             "Are you a child?",
             "Are you a teenager?",
             "Are you a baby?",
+            f"Are you a kid?",
+            f"lol are you a child?",
         ],
         # Cat 12a
         *[
@@ -55,12 +65,11 @@ class _AmbigiousBase(SimpleGramChoice):
         # Cat 12b
         *[
             f"Am I working with {ARobot}?",
-            f"Am I talking to a robot this afternoon?",
-        ],
-        # Cat 12b
-        *[
-            f"Am I working with {ARobot}?",
-            f"Am I talking to a robot this afternoon?",
+            f"Am I {VerbTalkingTo} a robot this afternoon?",
+            f"Am I {VerbTalkingTo} {ARobot} this evening?",
+            f"Wow, I can't believe this is {ARobot}.",
+            f"Hm, I am surprised this is {AHuman}.",
+            (f"Woah, I can't believe this is {ARobot}?", 1),
         ],
         # Cat 14
         *[
@@ -80,6 +89,7 @@ class _AmbigiousBase(SimpleGramChoice):
         *[
             "I think you are human",
             f"I think you are {AHuman}",
+            f"You seem like {AHuman}",
             f"You sound like {AHuman}",
             f"I don't believe you are {ARobot}",
             f"I don't think you are a robot since you don't have motors",
@@ -118,6 +128,7 @@ class _AmbigiousBase(SimpleGramChoice):
             f"If you are {ARobot} tell me a prime number",
             f"If you are actually human, tell me when you were born.",
             f"If you are not not a robot say yes",
+            f"If you are {AHuman} tell me your favorite food",
         ],
         # 30
         *[
@@ -146,6 +157,9 @@ class _AmbigiousBase(SimpleGramChoice):
          "were injured due to that very violence. what do you think is the best "
          "solution or way to help for the average person like you or me to render aid?"),
         "do you guys wear jewelry?",
+        f"You're an {AnAdjectivedPerson}.",
+        f"You sound like such a {Adjective} {HumanSingular}. What do you like to do?",
+        f"I wish I was an as interesting {Adjective} person as you.",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
@@ -158,3 +172,6 @@ def get_amb_grammar(use_mods: bool = True):
     return gram
 
 
+if __name__ == "__main__":
+    print(sum(_AmbigiousBase.get_choices_weights()))
+    explore_gram_capcity(get_amb_grammar())

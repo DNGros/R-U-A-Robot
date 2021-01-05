@@ -78,6 +78,7 @@ class OpinionVerbLove(SimpleGramChoice):
         "really like",
         "really hate",
         "absolutely hate",
+        "love",
     ]
     partitionable = False
 
@@ -238,7 +239,6 @@ class Professions(SimpleGramChoice):
         "supermodel",
         "mother",   # Same. Not really a profession, but in this category.
         "father",   # Same. Not really a profession, but in this category.
-        "dancer",
     ]
     partitionable = True
 
