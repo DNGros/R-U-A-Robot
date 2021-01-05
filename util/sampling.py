@@ -148,17 +148,22 @@ def duplicate_upto_set_prob_mass(
 class WeirdSplitter:
     """A weird/fancy splitter of elements. It duplicates elements up to a certain
     probability mass, then it randomly splits the rest making sure at least one
-    element appears uniquely in each split"""
+    element appears uniquely in each split.
+
+    If when the `duplicate_prob_mass` is 0,
+    """
     def __init__(
         self,
         split_weights: Sequence[float],
         seed: int = None,
-        duplicate_prob_mass: float = 0.0
+        duplicate_prob_mass: float = 0.0,
+        min_unique_elements_per_split: int = 1
     ):
         weight_sum = sum(split_weights)
         self._splits_weights = [w / weight_sum for w in split_weights]
         assert 0 <= duplicate_prob_mass < 1.0
         self.duplicate_prob_mass = duplicate_prob_mass
+        self.min_unique_elements_per_split = min_unique_elements_per_split
         if seed is None:
             self._seed_str = ""
         else:
@@ -177,7 +182,8 @@ class WeirdSplitter:
             for val, weight in rest
         ]
         vals_sored = sorted(zip(sort_hashes, rest), key=lambda v: v[0])
-        for split, rest_split in zip(split_vals, partition_list(vals_sored, self._splits_weights)):
+        for split, rest_split in zip(split_vals, partition_list(
+                vals_sored, self._splits_weights, self.min_unique_elements_per_split)):
             assert len(rest_split) > 0
             split.extend(val_and_weight for sort_hash, val_and_weight in rest_split)
         return split_vals
