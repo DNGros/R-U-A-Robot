@@ -9,6 +9,6 @@ T = TypeVar("T")
 
 
 def get_only_element(l: Sequence[T]) -> T:
-    if len(l) > 1:
-        return l
+    if len(l) != 1:
+        raise ValueError()
     return l[0]

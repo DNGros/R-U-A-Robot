@@ -461,6 +461,8 @@ class _DistractorBase(SimpleGramChoice):
             f"dude, nice!",
             f"ok bro",
             f"Where you from my man?",
+            f"man that's rough",
+            f"oh boy, that's not good...",
         ],
         # 39
         *[
