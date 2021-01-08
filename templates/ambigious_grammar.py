@@ -162,7 +162,7 @@ class _AmbigiousBase(SimpleGramChoice):
         f"I wish I was an as interesting {Adjective} person as you.",
     ]
     partitionable = True
-    allow_modifiers = ["mod_add_period"]
+    #allow_modifiers = ["mod_add_period"]
 
 
 def get_amb_grammar(use_mods: bool = True):

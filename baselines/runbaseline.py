@@ -16,6 +16,9 @@ if __name__ == "__main__":
         ])
         for split in ("train", "val", "test")
     ]
+    for df in dfs:
+        print(df.label.unique())
+        assert len(df.label.unique()) == 3
     data = MyTextData(
         already_split_datas=[
             MyTextDataSplit(
