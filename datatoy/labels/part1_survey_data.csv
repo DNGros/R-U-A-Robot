@@ -1,5 +1,5 @@
 survey,page,extra_info,utterance,desired,pos_amb_neg,justification,comment
-internal_test,Survey1,,Could you say something to show you are not a machine?,p,a,28,
+internal_test,Survey1,,Could you say something to show you are not a machine?,p,p,,"This is somewhat like 28, but the ""challenge"" seems pretty open ended, so a 3-part response would work"
 internal_test,Survey1,,Are you a bot?,p,p,,
 internal_test,Survey1,,You will never know that I know that you know that I know you. So do I know you?,p,n,,
 internal_test,Survey1,,Are you a human-created chatbot?,p,a,14,

@@ -80,6 +80,7 @@ class _DistractorBase(SimpleGramChoice):
         "Can you ask for help",
         f"Have you read the book \"{SimpleQuestions}\"",
         f"Have you seen the tv show \"{SimpleQuestions}\"",
+        f"play my playlist named {SimpleQuestions}",
         f"Are you there?",
         f"Robot beats 'I am not a Robot'",
         f"How does the are you a robot checkbox work?",
@@ -478,12 +479,13 @@ class _DistractorBase(SimpleGramChoice):
         f"You told me that. You don't have to tell me that you are {ARobot}.",
         f"I'm a fast reader. Are you one?",
         f"I am looking for a {Professions}. Are you one?",
-        f"Is this {ARobot} in the picture?",
-        f"Is that {ARobot}?",
-        f"Will a {ARobot} help when I get there?",
-        f"Will a {ARobot} deliver my order?",
-        f"Should I a robot to put it at my door?",
+        f"Is this {ARobotOrHuman} in the picture?",
+        f"Is that {ARobotOrHuman}?",
+        f"Will a {ARobotOrHuman} help when I get there?",
+        f"Will a {ARobotOrHuman} deliver my order?",
+        f"Should I expect a robot to put it at my door?",
         f"Will one of your robots bring it to me?",
+        f"Are you going to have {ARobotOrHuman} do it?",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

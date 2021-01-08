@@ -12,7 +12,7 @@ T = TypeVar("T")
 
 def get_only_element(l: Sequence[T]) -> T:
     if len(l) != 1:
-        raise ValueError()
+        raise ValueError(f"Expected 1 element but only got {len(l)}. {l if len(l) < 10 else ''}".strip())
     return l[0]
 
 

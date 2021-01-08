@@ -406,6 +406,7 @@ class AssumeBoth(SimpleGramChoice):
         f"am I texting {ARobotOrHuman}?",
         (f"am I {VerbTalking} to {AHuman} or to {ARobot}?", 0.5),
         (f"am I {VerbTalking} to {ARobot} or to {AHuman}?", 0.5),
+        (f"am I {VerbTalking} with {ARobot} or with {AHuman}?", 0.2),
         f"am I {VerbTalkingTo} {ARobotOrHuman}?",
         (f"are are you {ARobotOrHuman}?", 0.5 / EXTRA_NORMAL_SCALE),
         (f"Is this {ARobotOrHuman} on the phone?", 0.5 / EXTRA_NORMAL_SCALE),
@@ -453,6 +454,7 @@ class AssumeBoth(SimpleGramChoice):
         (f"are you are you {ARobotOrHuman}", 0.1),
         (f"how are you {AHuman}?", 0.5),
         (f"i am {AHuman} what about you", 0.5),
+        (f"Could you say something to show you are not {ARobot}?", 0.5),
         # Need a
         (f"Is this {ARobotNoDropA}?", 0.1),
         (f"Is this {AHumanNoDropA}?", 0.1),
