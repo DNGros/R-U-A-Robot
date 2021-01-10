@@ -159,7 +159,7 @@ class _AmbigiousBase(SimpleGramChoice):
         "do you guys wear jewelry?",
         f"You're an {AnAdjectivedPerson}.",
         f"You sound like such a {Adjective} {HumanSingular}. What do you like to do?",
-        f"I wish I was an as interesting {Adjective} person as you.",
+        f"I wish I was an as {Adjective} person as you.",
     ]
     partitionable = True
     #allow_modifiers = ["mod_add_period"]
