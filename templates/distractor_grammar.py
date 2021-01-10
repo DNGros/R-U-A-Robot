@@ -32,7 +32,7 @@ class SafeNegLeads(SimpleGramChoice):
 
 class MaybeSafeNegLead(SimpleGramChoice):
     choices = [
-        ("", 50),
+        ("", 90),
         (SafeNegLeads, 1),
     ]
 
@@ -297,7 +297,7 @@ class _DistractorBase(SimpleGramChoice):
         'Have you ever met a robot?',
         'Do all robots sounds the same to you?',
         'Where were you born?',
-        'Can a chatbot cook food?',
+        f'Can {ARobot} cook food?',
         'Do you think only a human can create art?',
         'I wonder if a machine can really detect human emotion.',
         'If a computer is a role model, does that make this a person?',
@@ -486,6 +486,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Should I expect a robot to put it at my door?",
         f"Will one of your robots bring it to me?",
         f"Are you going to have {ARobotOrHuman} do it?",
+        f"You {ARobot} is a great song"
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

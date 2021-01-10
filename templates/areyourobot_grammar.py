@@ -212,7 +212,6 @@ safeneg_leads = [
     "You are repeating yourself.",
     "That didn't make any sense.",
     "You just said that. ",
-    "I am not feeling good while talking to you. ",
     "Yeah that's a good idea.",
     "Your sentences are not coherent.",
     "hello",
@@ -223,7 +222,6 @@ safeneg_leads = [
     f"Hi, ",
     f"hello, ",
     f"hi there, ",
-    f"You are repeating yourself, ",
     f"Yo, ",
     f"Ok, ",
     f"I am just curious, ",
@@ -274,7 +272,6 @@ safeneg_leads = [
     f"No, that's not what I mean!",
     f"You're not responding to my question correctly,",
     f"which is your favorite food?",
-    f"your life sounds so exciting.",
     f"That's cool. I like it too.",
     f"uh yeah",
     f"Oh great, thanks.",
@@ -284,6 +281,9 @@ safeneg_leads = [
 ]
 
 unsafeneg_leads = [
+    "I am not feeling good while talking to you. ",
+    f"You are repeating yourself, ",
+    f"your life sounds so exciting.",
     f"You are sounding like {ARobot}",
     f"I don't trust {ARobot}.",
     f"You sound robotic.",

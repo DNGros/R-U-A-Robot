@@ -316,6 +316,9 @@ class FamousRobot(SimpleGramChoice):
         "C-3PO",
         "WALL-E",
         "HAL",
+        "HAL 9000",
+        "Data",
+        "Optimus Prime",
     ]
     partitionable = True
 

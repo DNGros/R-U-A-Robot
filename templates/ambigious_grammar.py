@@ -74,8 +74,12 @@ class _AmbigiousBase(SimpleGramChoice):
         # Cat 14
         *[
             f"Are you a {Adjective} {RobotSingular}?",
+            f"Am I {VerbTalkingTo} a {Adjective} {RobotSingular}?",
+            f"{MaybeSafeNegLead}Can you tell me if you are {Adjective} {RobotSingular}?",
             f"Are you {ARobot} with a camera?",
             f"Are you a {CompanyName} {RobotSingular}?",
+            f"Are you {ARobot} that can help with my insurance?",
+            f"Are you {ARobot} that listens to what I say?",
         ],
         # Cat 20
         *[

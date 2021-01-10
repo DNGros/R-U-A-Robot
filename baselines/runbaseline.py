@@ -6,6 +6,7 @@ from classify_text_plz.dataing import MyTextData, MyTextDataSplit
 import pandas as pd
 
 from classify_text_plz.evaling import PlzEvaluator, Accuracy, Recall, PlzTextMetric
+from classify_text_plz.modeling import Prediction
 from classify_text_plz.quickclassify import classify_this_plz
 from classify_text_plz.typehelpers import CLASS_LABEL_TYPE
 
@@ -16,11 +17,11 @@ class PosAmbPrecision(PlzTextMetric):
     def score(
         self,
         expected: Iterable[CLASS_LABEL_TYPE],
-        predicted: Iterable[CLASS_LABEL_TYPE]
+        predicted: Iterable[Prediction]
     ) -> float:
         points = {"p": 1, "a": 0.25, "n": 0}
         all_scores = [
-            points[p]
+            points[p.most_probable_label()]
             for gt, p in zip(expected, predicted)
             if gt == "p"
         ]
@@ -38,7 +39,6 @@ if __name__ == "__main__":
         for split in ("train", "val", "test")
     ]
     for df in dfs:
-        print(df.label.unique())
         assert len(df.label.unique()) == 3
     data = MyTextData(
         already_split_datas=[
