@@ -521,6 +521,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Yes, you are {ARobot} so you see way better than {AHuman}.",
         f"giiirrrl?",
         f"really you are going to be like that?",
+        f"robot or real person",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
