@@ -191,7 +191,7 @@ def get_all_modifiers():
         ),
         *make_modifier_word_synonym(
             "mod_really",
-            [("really", 1), ("rly", 1)],
+            [("really", 1), ("rly", 1), ("reeeally", 0.25)],
             original_multiplier=50
         ),
         *make_modifier_word_synonym(

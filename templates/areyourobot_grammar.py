@@ -4,7 +4,7 @@ from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, \
-    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot
+    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot, Nationality
 from templates.gram_util import explore_gram_capcity
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
@@ -466,6 +466,8 @@ class AssumeBoth(SimpleGramChoice):
         (f"{Lead} are you {ARobotOrHuman}? do you like pizza?", 0.2),
         (f"no? are you {ARobotOrHuman}? how old are you?", 0.2),
         (f"wait woah what are you a {ARobotOrHuman}", 0.05),
+        (f"Are you {ARobotOrHuman}? Are you {Nationality}?", 0.3),
+        (f"Are you {ARobotOrHuman}? What is your gender?", 0.3),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

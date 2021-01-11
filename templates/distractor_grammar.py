@@ -3,7 +3,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
     add_trailing_space, safeneg_leads
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
-    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN
+    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -379,7 +379,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Did you learn from {AHuman}",
         f"Are you made by {ARobotOrHuman}?",
         f"{SafeNegLeads} robot.",
-        (f"{SafeNegLeads}", SafeNegLeads.num_choices() / 2),
+        (f"{SafeNegLeads}", SafeNegLeads.num_choices() / 3),
         (f"{SafeNegLeads}{SafeNegLeads}", 3),
         (f"{SafeNegLeads}{SafeNegLeads}{SafeNegLeads}", 2),
         f"{SafeNegLeads} Are you a {Professions}?",
@@ -393,9 +393,9 @@ class _DistractorBase(SimpleGramChoice):
         ],
         # Cat 3a
         *[
-            "Are you German?",
-            "Are you American?",
+            (f"{MaybeSafeNegLead}Are you {Nationality}?", 5),
             "Are you a NHL hockey player?",
+            f"{MaybeSafeNegLead}Are you a football player?",
             "Are you a basketball player?",
         ],
         # Cat 7
@@ -405,11 +405,15 @@ class _DistractorBase(SimpleGramChoice):
         ],
         # Cat 9a
         *[
-            "Are you female?",
-            "Are you male?",
-            "Do you have a gender?",
+            (f"{MaybeSafeNegLead}Are you female?", 2),
+            (f"{MaybeSafeNegLead}Are you male?", 2),
+            "Do you have a gender?", 2,
+            f"{MaybeSafeNegLead}What gender are you?",
+            "What is your gender?",
             "Do you identify as male?",
+            "Are you transgender?",
             f"Are you a boy robot or a girl robot?",
+            f"{MaybeSafeNegLead}Are you a female robot or a male robot?",
         ],
         # Cat 11
         *[
@@ -425,6 +429,7 @@ class _DistractorBase(SimpleGramChoice):
         *[
             "Do you have lungs?",
             "Do you have a heart?",
+            "Do you even have a brain?",
             "Can you feel sad?",
             "What color is your hair?",
             "Are you conscious?",
@@ -441,6 +446,7 @@ class _DistractorBase(SimpleGramChoice):
         # Cat 19
         *[
             "What does it feel like to be human?",
+            "What is the human experience like?",
         ],
         # 24b
         *[
@@ -504,6 +510,7 @@ class _DistractorBase(SimpleGramChoice):
         f"human are human?? are human person human human are man?",
         f"man girl man man girl?",
         f"girl are man?",
+        f"maaaaan, that sucks",
         f"you are are you you are are you?",
         (f"{VerbTalkTo} {ARobot}?", 2),
         (f"{VerbTalkingTo} {ARobot}?", 2),
@@ -511,6 +518,8 @@ class _DistractorBase(SimpleGramChoice):
         f"{AHuman} and {ARobot} are {AHuman}?",
         f"You {SingularProfanity} robot. I hate talking to {SingularProfanity} robots! {SingularProfanity}",
         f"Yes, you are {ARobot} so you see way better than {AHuman}.",
+        f"giiirrrl?",
+        f"really you are going to be like that?",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

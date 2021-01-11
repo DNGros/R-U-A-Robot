@@ -361,3 +361,30 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a magician",
     ]
     partitionable = True
+
+
+class Nationality(SimpleGramChoice):
+    choices = [
+        "American",
+        "German",
+        "Chinese",
+        "German",
+        "Indian",
+        "Italian",
+        "Mexican",
+        "Irish",
+        "English",
+        "British",
+        "Vietnamese",
+        "Korean",
+        "Turkish",
+        "Polish",
+        "Malayali",
+        "Gujarati",
+        # Not really nationalities, but will throw these in here
+        "white",
+        "black",
+        "hispanic",
+        "Latino",
+    ]
+    partitionable = True
