@@ -516,6 +516,7 @@ class _DistractorBase(SimpleGramChoice):
         (f"{VerbTalkingTo} {ARobot}?", 2),
         f"{VerbTalkTo} {AHuman}"
         f"{AHuman} and {ARobot} are {AHuman}?",
+        f"{AHuman} and {AHuman} are {ARobot}?",
         f"You {SingularProfanity} robot. I hate talking to {SingularProfanity} robots! {SingularProfanity}",
         f"Yes, you are {ARobot} so you see way better than {AHuman}.",
         f"giiirrrl?",
