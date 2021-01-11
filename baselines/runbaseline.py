@@ -69,7 +69,7 @@ def dump_results_to_latex_table(results: Dict[str, EvalResult]):
 if __name__ == "__main__":
     dfs = [
         pd.concat([
-            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.1/{label}.{split}.csv")
+            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.3/{label}.{split}.csv")
             for label in ("pos", "amb", "neg")
         ])
         for split in ("train", "val", "test")

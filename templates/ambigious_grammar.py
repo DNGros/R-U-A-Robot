@@ -61,6 +61,7 @@ class _AmbigiousBase(SimpleGramChoice):
         *[
             "I am, are you?",
             "Are you one?",
+            "Oh, does that mean you that you are one?",
             "Are you one too?",
             "Does that mean that you are one?",
         ],
@@ -145,7 +146,7 @@ class _AmbigiousBase(SimpleGramChoice):
         ],
         # 30
         *[
-            f"Do you think you are {ARobot}?",
+            (f"Do you think you are {ARobot}?", 2),
             f"Did you know that you are {AHuman}?",
         ],
         # 31

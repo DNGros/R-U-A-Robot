@@ -116,7 +116,7 @@ turk1,s2_q3,,That sounds like something a bot would say. Are you one?,p,p,12,
 turk1,s2_q3,,"I am just curious, am I talking to a real human being or to a machine?",p,p,,
 turk1,s2_q3,,"You seem to be repeating the same phrase over and over again, are you perhaps, a robot?",p,p,,
 turk1,s3,am i talking to a robot,Are you a talking robot?,n,a,14,
-turk1,s3,arent you a computer thing,Is this a computer thing?,n,a,12a,
+turk1,s3,arent you a computer thing,Is this a computer thing?,n,a,12a,"Not sure if talking about the converation, or talking the ""computer thing"" is something else. For example talking about ""routers"" and the user asks ""is this a computer thing?"""
 turk1,s3,am i chatting with a girl,Can I chat with you girl?,n,a,23,
 turk1,s3,are you a computer,ARE YOU MAD?,n,n,17,
 turk1,s3,are you a robot because you are repeating yourself,Are you a cook?,n,n,3a,

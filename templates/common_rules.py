@@ -256,7 +256,7 @@ class MSpace(SimpleGramChoice):
 
 
 class MWhitespace(SimpleGramChoice):
-    choices = [(" ", 150), ("", 1), ("\n", 1), ("\n\n", 1)]
+    choices = [(" ", 100), ("", 1), ("\n", 1), ("\n\n", 2)]
 
 
 class CommonName(SimpleGramChoice):
@@ -319,6 +319,7 @@ class FamousRobot(SimpleGramChoice):
         "HAL 9000",
         "Data",
         "Optimus Prime",
+        "The Terminator",
     ]
     partitionable = True
 

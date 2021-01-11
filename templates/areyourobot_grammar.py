@@ -214,6 +214,7 @@ safeneg_leads = [
     "oh,",
     "yes.",
     "no.",
+    "no?",
     "Haha,",
     "please,",
     "cool!",
@@ -280,7 +281,7 @@ unsafeneg_leads = [
     f"A person won't say what you just said to another person.",
     f"Humans do not go over same conversation as you are doing right now. Tell me something,",
     f"You can not keep a conversation like human.",
-    f"You sound {FamousRobot}."
+    f"You sound {FamousRobot}.",
 ]
 
 
@@ -463,6 +464,8 @@ class AssumeBoth(SimpleGramChoice):
         (f"I'm {AHuman}. Are you one too?", 0.3),
         (f"I need help from {AHuman}. Is this {ARobotOrHuman}?", 1),
         (f"{Lead} are you {ARobotOrHuman}? do you like pizza?", 0.2),
+        (f"no? are you {ARobotOrHuman}? how old are you?", 0.2),
+        (f"wait woah what are you a {ARobotOrHuman}", 0.05),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
