@@ -19,7 +19,7 @@ from util.util import repeat_val, inner_chain
 
 cur_file = Path(__file__).parent.absolute()
 
-ROOT = cur_file / "outputs/dataset/v0.2"
+ROOT = cur_file / "outputs/dataset/v0.3"
 TOTAL_SIZE = 6000
 DUPLICATE_PROB_MASS = 0.25
 SOURCE_SIZE = {
@@ -31,8 +31,8 @@ SOURCE_SIZE = {
 }
 SPLIT_SIZES = {
     "train": .70,
-    "val": .10,
-    "test": .20,
+    "val": .15,
+    "test": .15,
 }
 
 

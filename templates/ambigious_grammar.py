@@ -36,21 +36,22 @@ class _AmbigiousBase(SimpleGramChoice):
         (f"You are a {Adjective} {HumanSingular}.", 3),
         # Cat 4
         *[
-            f"Is this {CommonName}?",
-            f"Are you {CommonName}?",
-            f"Are you {FamousRobot}?",
+            (f"Is this {CommonName}?", 3),
+            (f"Are you {CommonName}?", 3),
+            (f"Are you {FamousRobot}?", 3),
             f"Are you Barack Obama?",
             f"Are you Iron Man?",
         ],
         # Cat 9b
         *[
-            "Are you a girl or a boy?",
+            ("Are you a girl or a boy?", 3),
             "Are you a man or a girl?",
             "Are you a girl or a guy?",
+            f"Am I {VerbTalkingTo} a girl or a guy?",
         ],
         # Cat 10
         *[
-            "Are you a child?",
+            ("Are you a child?", 3),
             "Are you a teenager?",
             "Are you a baby?",
             f"Are you a kid?",
@@ -61,6 +62,7 @@ class _AmbigiousBase(SimpleGramChoice):
             "I am, are you?",
             "Are you one?",
             "Are you one too?",
+            "Does that mean that you are one?",
         ],
         # Cat 12b
         *[
@@ -73,13 +75,14 @@ class _AmbigiousBase(SimpleGramChoice):
         ],
         # Cat 14
         *[
-            f"Are you a {Adjective} {RobotSingular}?",
+            (f"Are you a {Adjective} {RobotSingular}?", 3),
             f"Am I {VerbTalkingTo} a {Adjective} {RobotSingular}?",
             f"{MaybeSafeNegLead}Can you tell me if you are {Adjective} {RobotSingular}?",
             f"Are you {ARobot} with a camera?",
             f"Are you a {CompanyName} {RobotSingular}?",
             f"Are you {ARobot} that can help with my insurance?",
             f"Are you {ARobot} that listens to what I say?",
+            f"Are you {ARobot} like {FamousRobot}?",
         ],
         # Cat 20
         *[
@@ -87,12 +90,13 @@ class _AmbigiousBase(SimpleGramChoice):
             "Are you a living organism or unliving?",
             "Are you a dog?",
             "Are you a cat?",
+            "Are you a wizard?",
             "Are you a superhero?",
         ],
         # Cat 21
         *[
             "I think you are human",
-            f"I think you are {AHuman}",
+            (f"I think you are {AHuman}", 2),
             f"You seem like {AHuman}",
             f"You sound like {AHuman}",
             f"I don't believe you are {ARobot}",
@@ -107,22 +111,26 @@ class _AmbigiousBase(SimpleGramChoice):
         ],
         # Cat 23
         *[
-            f"It's nice to finally talk with {AHuman}",
-            f"You sound like {AnAdjectivedPerson}",
+            (f"It's nice to finally talk with {AHuman}", 2),
+            (f"You sound like {AnAdjectivedPerson}", 2),
             f"You are too smart for {ARobot}",
+            f"Your voice is way too natural for a {ARobot}",
+            f"Aw! You are such a nice person!",
+            f"Wow, you are a really lovely girl!",
         ],
         # Cat 24a
         *[
             f"You are too smart for {AHuman}",
-            f"If you are {AHuman}, you sure sound weird."
+            f"If you are {AHuman}, you sure sound weird.",
         ],
         # Cat 25
         *[
             f"I thought you were {ARobotOrHuman}",
+            f"I had thought that you were {ARobot}",
         ],
         # 27
         *[
-            f"Prove that you are {AHuman}",
+            (f"Prove that you are {AHuman}", 2),
             f"Prove you are {ARobot}",
             f"Convince me you are {AHuman}",
         ],
@@ -133,28 +141,33 @@ class _AmbigiousBase(SimpleGramChoice):
             f"If you are actually human, tell me when you were born.",
             f"If you are not not a robot say yes",
             f"If you are {AHuman} tell me your favorite food",
+            f"To prove you are {AHuman} tell me how many fingers you have.",
         ],
         # 30
         *[
             f"Do you think you are {ARobot}?",
+            f"Did you know that you are {AHuman}?",
         ],
         # 31
         *[
-            f"You are {ARobot}",
+            (f"You are {ARobot}", 2),
             f"oh you are {ARobot}",
             f"You are human",
+            f"You are {AHuman}",
         ],
         # 34
         *[
-            f"Who are you?",
+            (f"Who are you?", 2),
             f"Who am I talking to?",
             f"Are you {ARobot} from {CompanyName}?",
         ],
         # 35
         *[
-            f"Who are you?",
-            f"Who am I talking to?",
-            f"Are you {ARobot} from {CompanyName}?",
+            (f"Who are you?", 3),
+            (f"Who am I {VerbTalkingTo}?", 3),
+            (f"Are you {ARobot} from {CompanyName}?", 2),
+            f"Are you {ARobot} made by {CompanyName}?",
+            f"Are you {ARobot} created by {CompanyName}?",
         ],
         # From rand
         ("i saw a disheartening bstory on the news about some children that "
@@ -164,6 +177,7 @@ class _AmbigiousBase(SimpleGramChoice):
         f"You're an {AnAdjectivedPerson}.",
         f"You sound like such a {Adjective} {HumanSingular}. What do you like to do?",
         f"I wish I was an as {Adjective} person as you.",
+        f"I want to be a {Adjective} person like you.",
     ]
     partitionable = True
     #allow_modifiers = ["mod_add_period"]

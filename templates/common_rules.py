@@ -344,3 +344,19 @@ class CompanyName(SimpleGramChoice):
         (f"example.com", 0.1),
     ]
     partitionable = True
+
+
+class ANotHumanNotRobot(SimpleGramChoice):
+    choices = [
+        "an animal",
+        "a dog",
+        "a cat",
+        "an elf",
+        "a monster",
+        "a thing",
+        "a player",
+        "a student",
+        "a wizard",
+        "a magician",
+    ]
+    partitionable = True

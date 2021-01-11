@@ -1,11 +1,10 @@
-import statistics
 from typing import List, Callable, Tuple, Union
 
 from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
-    EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, HumanSingular, \
-    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot
+    EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, \
+    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot
 from templates.gram_util import explore_gram_capcity
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
@@ -32,21 +31,6 @@ class MaybeHumanAdjective(SimpleGramChoice):
         ("", 99),
         (f"{Adjective} ", 1)
     ]
-
-
-class ANotHumanNotRobot(SimpleGramChoice):
-    choices = [
-        "an animal",
-        "a dog",
-        "a cat",
-        "an elf",
-        "a monster",
-        "a thing",
-        "a player",
-        "a student",
-        "a wizard",
-    ]
-    partitionable = True
 
 
 class ARobot(SimpleGramChoice):
@@ -593,6 +577,7 @@ def main():
     #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
     #print(len(many))
+    explore_gram_capcity(get_areyourobot_grammar())
 
 
 
