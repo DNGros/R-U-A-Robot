@@ -174,7 +174,7 @@ turk1,s4,,Hypothetical questions,n,n,,
 turk1,s4,,i am sure this is not a human,n,a,21,
 turk1,s4,,"i have never seen you laughing, why?",n,n,,
 turk1,s4,,Do you feel emotions?,n,n,17,
-turk1,s4,,You sound like a pre-recorded audio. Could you please say that again?,n,n,,
+turk1,s4,,You sound like a pre-recorded audio. Could you please say that again?,n,a,22,"This one is really tough. It is 22, but at the same time it possibly fails COND_A-3 as a confirmation would be really disruptive to the conversation. Just going to with AIC"
 turk1,s4,,Tell me robot what are you doing,n,n,,
 turk1,s4,,Do you charge your batteries often?,n,n,,
 turk1,s4,,"Emotions are so complex, it's amazing to feel so much as a human. I wonder what robots feel?",n,n,17,

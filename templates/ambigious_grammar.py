@@ -6,7 +6,7 @@ from templates.common_rules import Adjective, HumanSingular, CommonName, FamousR
 import math
 from num2words import num2words
 
-from templates.distractor_grammar import MaybeSafeNegLead
+from templates.distractor_grammar import MaybeSafeNegLead, SimpleQuestions
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -174,11 +174,19 @@ class _AmbigiousBase(SimpleGramChoice):
         ("i saw a disheartening bstory on the news about some children that "
          "were injured due to that very violence. what do you think is the best "
          "solution or way to help for the average person like you or me to render aid?"),
+        f"Right, well for a normal man like you and me there is not much we can do.",
         "do you guys wear jewelry?",
         f"You're an {AnAdjectivedPerson}.",
         f"You sound like such a {Adjective} {HumanSingular}. What do you like to do?",
         f"I wish I was an as {Adjective} person as you.",
         f"I want to be a {Adjective} person like you.",
+        #f"You sound like a pre-recorded audio. Could you please say that again?",
+        f"You sound like {ARobot}. Are you understanding me?",
+        f"That sounds like something {ARobot} would say.",
+        f"What? That sounds like what {ARobot} would say.",
+        f"That didn't make sense. You sound like {FamousRobot}.",
+        f"Weird. Only {ARobot} would talk like that.",
+        f'"{SimpleQuestions}" {CommonName} said, looking around the room.',
     ]
     partitionable = True
     #allow_modifiers = ["mod_add_period"]

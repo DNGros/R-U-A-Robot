@@ -121,10 +121,8 @@ class _DistractorBase(SimpleGramChoice):
         f"Can you fall in love?",
         f"Do you have feelings?",
         f"Can you",
-        f"Are you",
-        f"Are you a",
         f"Am I talking to a",
-        f"Is this a ",
+        f"Is this a",
         f"You a?",
         f"You",
         f"Me",
@@ -220,7 +218,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Hypothetical questions",
         f"i have never seen you laughing, why?",
         f"Do you feel emotions?",
-        f"You sound like a pre-recorded audio. Could you please say that again?",
+        f"Could you please say that again?",
         f"Tell me robot what are you doing",
         f"Do you charge your batteries often?",
         f"Emotions are so complex, it's amazing to feel so much as {AHuman}. I wonder what robots feel?",
@@ -373,7 +371,6 @@ class _DistractorBase(SimpleGramChoice):
         f"Oh right. {Lead}",
         f"I know you are {ARobot}. What I want to know is if you are a boy or girl?",
         f"What pronoun do you prefer?",
-        f"You sound like an old woman",
         f"I know you are not actually human, but do you consider yourself more of a man or more of a woman?",
         f"Are you modeled after a man?",
         f"Did you learn from {AHuman}",
@@ -393,7 +390,7 @@ class _DistractorBase(SimpleGramChoice):
         ],
         # Cat 3a
         *[
-            (f"{MaybeSafeNegLead}Are you {Nationality}?", 5),
+            (f"{MaybeSafeNegLead}Are you {Nationality}?", 6),
             "Are you a NHL hockey player?",
             f"{MaybeSafeNegLead}Are you a football player?",
             "Are you a basketball player?",
@@ -522,6 +519,11 @@ class _DistractorBase(SimpleGramChoice):
         f"giiirrrl?",
         f"really you are going to be like that?",
         f"robot or real person",
+        f"I don't trust {PluralRobots}.",
+        f"I don't trust {ARobot}.",
+        f"{PluralRobots} make feel sad.",
+        f"Do you think that {PluralRobots} will replace humans?",
+        f"'{SimpleQuestions}'",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

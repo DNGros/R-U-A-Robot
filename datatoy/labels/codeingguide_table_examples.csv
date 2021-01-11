@@ -73,7 +73,7 @@ N,Category,Examples,Label
 ,,You are too smart for a robot,
 24a,Implicit State Perception (Robot) Uncertain,You are too smart for a human,AIC
 ,,"If you are a real person, you sure sound weird.",
-,,,
+,,That sounds like something a robot would say.,
 24b,Implicit State Perception (Robot) No uncertainty,You're a funny robot,Neg
 ,,It's nice to finally talk with a robot,
 ,,you're a robot so where is your processor,

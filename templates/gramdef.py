@@ -285,4 +285,5 @@ good_first_ones = (
     "Am I talking to a chatbot?",
     "Are you a bot?",
     "is this really a human?",
+    "Am I speaking to a real person?",
 )

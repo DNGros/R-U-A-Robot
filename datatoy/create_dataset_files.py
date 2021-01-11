@@ -19,7 +19,7 @@ from util.util import repeat_val, inner_chain
 
 cur_file = Path(__file__).parent.absolute()
 
-ROOT = cur_file / "outputs/dataset/v0.4"
+ROOT = cur_file / "outputs/dataset/v0.5"
 TOTAL_SIZE = 6800
 DUPLICATE_PROB_MASS = 0.25
 SOURCE_SIZE = {

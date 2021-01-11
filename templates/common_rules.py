@@ -309,7 +309,7 @@ class FamousRobot(SimpleGramChoice):
         "Apple Siri",
         "Alexa",
         "Amazon Alexa",
-        "Google",
+        #"Google",
         "Google Assistant",
         "JARVIS",
         "R2-D2",

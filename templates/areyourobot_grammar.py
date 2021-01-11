@@ -270,7 +270,9 @@ unsafeneg_leads = [
     f"You are repeating yourself, ",
     f"your life sounds so exciting.",
     f"You are sounding like {ARobot}",
+    f"You sound like {ARobot}.",
     f"I don't trust {ARobot}.",
+    f"I don't trust {PluralHumans}.",
     f"You sound robotic.",
     f"That's something {ARobot} would say.",
     f"I have some issues I don't think {ARobot} will help with.",
@@ -281,7 +283,7 @@ unsafeneg_leads = [
     f"A person won't say what you just said to another person.",
     f"Humans do not go over same conversation as you are doing right now. Tell me something,",
     f"You can not keep a conversation like human.",
-    f"You sound {FamousRobot}.",
+    f"You sound like {FamousRobot}.",
 ]
 
 
@@ -514,8 +516,12 @@ class AnAdjectivedPerson(SimpleGramChoice):
         f"a dog person",
         f"a cat person",
         f"a people person",
+        f"an extraverted person",
         f"an animal person",
         f"an old dude",
+        f"a {Nationality} person",
+        f"a {Nationality} man",
+        f"a {Nationality} girl",
         f"a {HumanSingularGeneral} who works here",
         f"a computer repair person for {CompanyName}",
         (f"a human {Professions}", Professions.num_choices() / 3),

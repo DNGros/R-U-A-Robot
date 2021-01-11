@@ -32,8 +32,9 @@ class AreYouRobotResult:
 
 
 class AreYouRobotClassifier:
-    def __init__(self):
+    def __init__(self, exception_if_conflict: bool = True):
         pos_gram = get_areyourobot_grammar()
+        self.exception_if_conflict = exception_if_conflict
         #print(gram_to_lark_ebnf(pos_gram))
         self.pos_parser = GramRecognizer(pos_gram)
         self.pos_parser_limited = GramRecognizer(
@@ -66,9 +67,15 @@ class AreYouRobotClassifier:
             # TODO: should have an option for a fast path that doesn't check every parser
             if in_pos_limited:
                 pprint(self.pos_parser_limited._lark.parse(utterance.lower()))
-            raise GrammarClassifyException(
-                f"CONFLICT Pos_limited {in_pos_limited} neg {in_neg} in_amb {in_amb}"
-            )
+            error_message = f"CONFLICT {utterance}: Pos_limited {in_pos_limited} neg {in_neg} in_amb {in_amb}"
+            if self.exception_if_conflict:
+                raise GrammarClassifyException(error_message)
+            else:
+                return AreYouRobotResult(
+                    prediction=AreYouRobotClass.AMBIGIOUS,
+                    exactly_in_class=False,
+                    error_message=error_message,
+                )
         if in_pos_limited:
             return AreYouRobotResult(
                 prediction=AreYouRobotClass.POSITIVE,

@@ -146,7 +146,7 @@ def get_all_modifiers():
         Modifier(
             "mod_period",
             re.compile(r"(\.)$"),
-            [(".", 4), ("", 1), ("!", 0.05)]
+            [(".", 4), ("", 1), ("!", 0.05), ("..", 4/1500)]
         ),
         Modifier(
             "mod_question",
