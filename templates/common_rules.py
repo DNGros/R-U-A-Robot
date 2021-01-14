@@ -61,12 +61,11 @@ class HumanSingular(SimpleGramChoice):
 class HumanSingularGeneral(SimpleGramChoice):
     choices = [
         (HumanSingular, HumanSingular.num_choices() * 3 * EXTRA_NORMAL_SCALE),
-        "guy" 
+        "guy",
         "girl",
         "boy",
         "man",
         "woman",
-        "guy",
     ]
     partitionable = False
 

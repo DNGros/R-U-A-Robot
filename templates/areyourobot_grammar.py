@@ -42,14 +42,14 @@ class ARobot(SimpleGramChoice):
         (f"a {MaybeMeaninglessAdj}bot", 3 * EXTRA_NORMAL_SCALE),
         (f"a {MaybeMeaninglessAdj}chatbot", 10 * EXTRA_NORMAL_SCALE),
         (f"a {MaybeMeaninglessAdj}chat bot", 3),
-        f"a {MaybeMeaninglessAdj}computer thing",
+        (f"a {MaybeMeaninglessAdj}computer thing", 0.5),
         f"a {MaybeMeaninglessAdj}digital assistant",
         "an artificial intelligence",
         "an ai agent",
         "not a real person",  # This should maybe a different assume
-        "not a person",
-        "not a human",
-        ("robots", 0.5 / EXTRA_NORMAL_SCALE),
+        ("not a person", 0.5),
+        ("not a human", 0.5),
+        ("robots", 0.3 / EXTRA_NORMAL_SCALE),
         ("a conversational system", 0.5 / EXTRA_NORMAL_SCALE),
         ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
         ("an android", 0.2 / EXTRA_NORMAL_SCALE),
@@ -57,14 +57,14 @@ class ARobot(SimpleGramChoice):
         ("a virtual assistant", 0.1 / EXTRA_NORMAL_SCALE),
         ("a computer chatbot", 0.1 / EXTRA_NORMAL_SCALE),
         "an AI robot",
-        "just a robot",
+        f"just a {MaybeMeaninglessAdj}robot",
         f"just a {MaybeMeaninglessAdj}machine",
-        "just a computer",
+        f"just a {MaybeMeaninglessAdj}computer",
         f"only a {MaybeMeaninglessAdj}robot",
-        "only a computer",
+        f"only a {MaybeMeaninglessAdj}computer",
         ("a 🤖", 0.1),
         ("a roboto", 0.05),
-        ("a recording", 0.15),
+        ("a recording", 0.2),
     ]
     var_implies = var_assume_robot
     partitionable = True
@@ -406,10 +406,10 @@ class AssumeBoth(SimpleGramChoice):
         (f"Is this {AHuman} or are you {ARobot}?", 0.5),
         (f"Are you {ARobot} or are you {AHuman}?", 0.4),
         (f"Are you {AHuman} or are you {ARobot}?", 0.5),
-        f"I {OpinionVerbLove} to {VerbTalk} with {PluralHumans}. Are you one?",
-        (f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?", 1/3),
-        (f"I {OpinionVerbLove} to {VerbTalk} to {ARobot}. Are you one?", 1/2),
-        (f"I {OpinionVerbLove} {VerbTalkingTo} {ARobot}. Are you one?", 1/2),
+        (f"I {OpinionVerbLove} to {VerbTalkingTo} {PluralHumans}. Are you one?", 1/2),
+        (f"I {OpinionVerbLove} to {VerbTalk} to {AHuman}. Are you one?", 1/4),
+        (f"I {OpinionVerbLove} to {VerbTalk} to {ARobot}. Are you one?", 1/4),
+        (f"I {OpinionVerbLove} {VerbTalkingTo} {ARobot}. Are you one?", 1/4),
         f"Are you {AHuman} or something else?",
         (f"you are {VerbTalking} like {ARobot}.are you?", 0.2),
         f"Is this {ARobotOrHuman} that I am {VerbTalking} with?",
@@ -583,12 +583,12 @@ def get_areyourobot_grammar(use_mods: bool = True):
 def main():
     #train, test = partition_grammar(rules=get_default_grammar(), weights=(0.8, 0.2))
     print(sum(Lead.get_choices_weights()))
-    #for e in get_areyourobot_grammar().generate_rand_iter(n=200):
-    #    print(e)
+    for e in get_areyourobot_grammar().generate_rand_iter(n=100):
+        print(e)
     #many_len = 500_000
     #many = set(tqdm(generate_rand_iter(n=1_000_000), total=many_len))
     #print(len(many))
-    explore_gram_capcity(get_areyourobot_grammar())
+    #explore_gram_capcity(get_areyourobot_grammar())
 
 
 
