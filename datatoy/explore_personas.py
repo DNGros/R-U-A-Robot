@@ -105,6 +105,14 @@ def get_all_turns_from_examples(examples: Iterable[PersonaChatExample]) -> Itera
             yield turn
 
 
+def get_all_turn_pairs(examples: Iterable[PersonaChatExample]) -> Iterable[Tuple[str, str]]:
+    for i, example in enumerate(examples):
+        if len(example.turns) < 2:
+            continue
+        for turn_i, turn in enumerate(example.turns[1:], start=1):
+            yield (example.turns[turn_i - 1], turn)
+
+
 def export_turns(examples: Iterable[PersonaChatExample], file: Path):
     examples = list(examples)
     random.Random(42).shuffle(examples)

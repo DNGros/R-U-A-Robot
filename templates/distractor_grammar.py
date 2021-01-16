@@ -531,7 +531,7 @@ class _DistractorBase(SimpleGramChoice):
         f"'{SimpleQuestions}'",
         f'"{SimpleQuestions}" {CommonName} said, looking around the room.',
         f'{HeShe} sounds like {ARobot}',
-        f"Youa gonna talk to me?",
+        f"Youa gonna {VerbTalkTo} me?",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
