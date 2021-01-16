@@ -402,6 +402,7 @@ class _DistractorBase(SimpleGramChoice):
         *[
             (f"Is {CommonName} human?", 2),
             f"Is {FamousRobot} human?",
+            f"Is {FamousRobot} {ARobot}?",
         ],
         # Cat 9a
         *[
@@ -420,6 +421,7 @@ class _DistractorBase(SimpleGramChoice):
             "Are you over 18?",
             "What are you like 12?",
             "Are you older than 3?",
+            f"What is your age in {RobotSingular} years?",
         ],
         # Cat 16
         *[
@@ -527,6 +529,9 @@ class _DistractorBase(SimpleGramChoice):
         f"{PluralRobots} make feel sad.",
         f"Do you think that {PluralRobots} will replace humans?",
         f"'{SimpleQuestions}'",
+        f'"{SimpleQuestions}" {CommonName} said, looking around the room.',
+        f'{HeShe} sounds like {ARobot}',
+        f"Youa gonna talk to me?",
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

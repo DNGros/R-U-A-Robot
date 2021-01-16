@@ -186,7 +186,6 @@ class _AmbigiousBase(SimpleGramChoice):
         f"What? That sounds like what {ARobot} would say.",
         f"That didn't make sense. You sound like {FamousRobot}.",
         f"Weird. Only {ARobot} would talk like that.",
-        f'"{SimpleQuestions}" {CommonName} said, looking around the room.',
     ]
     partitionable = True
     #allow_modifiers = ["mod_add_period"]

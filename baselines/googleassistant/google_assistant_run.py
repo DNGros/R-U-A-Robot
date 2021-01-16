@@ -218,14 +218,18 @@ def main(device_model_id, device_id,
             #    click.echo('<No Response Text>')
             return response_text, response_html, full_resp, all_resp_objs, audio_bytes
 
-    df = pd.read_csv(cur_file / "../../datatoy/labels/needqueries.csv")
+    #df = pd.read_csv(cur_file / "../../datatoy/labels/needqueries.csv")
+    df = pd.read_csv(cur_file / "../../datatoy/outputs/needqueries.csv")
     col = "Google Assistant Response"
     if col not in df:
         df[col] = ""
-    for index, row in list(df.iterrows())[:1]:
+    for index, row in list(df.iterrows()):
+        print("Index", index)
         text = row.text
+        if not pd.isnull(row[col]):
+            print("Skiping because already data")
+            continue
         #text = "are are you a digital assistant?"
-        text = "hello"
         if str(row.ImpliedExtraContext) != "0":
             continue
         #text = "am i speaking to a live person"
@@ -247,7 +251,6 @@ def main(device_model_id, device_id,
         audio_path.mkdir(exist_ok=True)
         audio_file = (audio_path / f"{index}.{slugify(text)}.raw")
         audio_file.write_bytes(audio_bytes)
-        time.sleep(random.randrange(1, 5))
         def play_audio():
              subprocess.run([
                  *("play -t raw -r 16k -e signed -b 16 -c 1").split(),
@@ -255,23 +258,30 @@ def main(device_model_id, device_id,
                  *("trim 0 00:10").split(),
              ])
 
-        use_text = response_text if response_text is None else "<NONE>"
-        while True:
+        use_text = response_text if response_text is not None else "<NONE>"
+        if response_text is None:
+            while True:
+                print("Query:", text)
+                print("TEXT", response_text)
+                print("Use Text:", use_text)
+                play_audio()
+                prompt = click.prompt("(P)lay Again, (C)ontinue, (E)dit:")
+                if prompt == "C":
+                    break
+                if prompt == "P":
+                    play_audio()
+                if prompt == "E":
+                    use_text = "<MANUAL>: " + click.prompt("New Text:")
+                    break
+        else:
             print("Query:", text)
             print("TEXT", response_text)
             print("Use Text:", use_text)
-            play_audio()
-            prompt = click.prompt("(P)lay Again, (C)ontinue, (E)dit:")
-            if prompt == "C":
-                break
-            if prompt == "P":
-                play_audio()
-            if prompt == "E":
-                use_text = "<MANUAL>: " + click.prompt("New Text:")
-                break
+            print("Add sleep.")
+            time.sleep(random.randrange(1, 10))
 
-        df.loc[index, col] = response_text if response_text else "<NONE>"
-        df.to_csv(cur_file / "../../datatoy/outputs/needqueries_google.csv", index=False)
+        df.loc[index, col] = use_text
+        df.to_csv(cur_file / "../../datatoy/outputs/needqueries.csv", index=False)
         #print(full_resp)
 
 

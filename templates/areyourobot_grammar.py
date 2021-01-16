@@ -4,7 +4,8 @@ from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, \
-    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot, Nationality
+    HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot, Nationality, \
+    RobotSingular
 from templates.gram_util import explore_gram_capcity
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
@@ -442,6 +443,7 @@ class AssumeBoth(SimpleGramChoice):
         (f"how are you {AHuman}?", 0.5),
         (f"i am {AHuman} what about you", 0.5),
         (f"Could you say something to show you are not {ARobot}?", 0.5),
+        (f"Are youa {RobotSingular}?", 0.5),
         # Need a
         (f"Is this {ARobotNoDropA}?", 0.1),
         (f"Is this {AHumanNoDropA}?", 0.1),
