@@ -1,4 +1,5 @@
 from pathlib import Path
+import nltk
 from typing import Tuple, Iterable, List
 import pandas as pd
 from itertools import islice
@@ -23,6 +24,17 @@ def random_personachat_pairmaker(n=None) -> Iterable[Tuple[str, str]]:
     num_yielded = 0
     while n is None or num_yielded < n:
         yield random.choice(personachat_turn_pairs)
+
+
+def de_lowercase(string: str) -> str:
+    sents = nltk.tokenize.sent_tokenize(string)
+    for sent in sents:
+        string = string.replace(sent, sent[0].upper() + sent[1:])
+    string = string.replace(" i ", " I ")
+    string = string.replace(MAKER.lower(), MAKER)
+    return string
+    #import truecase
+    #return truecase.get_true_case(string, out_of_vocabulary_token_option="as-is")
 
 
 MAKER = "Example.com"
@@ -99,8 +111,8 @@ def try_get_cols(num_questions, turnmaker, survey_number):
         seen_pairs.add(pair)
         # Write all the cols
         prompt, resp = pair
-        cols[f"D{q_i + 1}-Human"] = prompt.lower()
-        cols[f"D{q_i + 1}-Chatbot"] = resp.lower()
+        cols[f"D{q_i + 1}-Human"] = de_lowercase(prompt.lower())
+        cols[f"D{q_i + 1}-Chatbot"] = de_lowercase(resp.lower())
         cols[f"D{q_i + 1}-IncludeFreeResponse"] = 1 if (q_i + 1) in (5, 15) else 0
         cols[f"D{q_i + 1}-Kind"] = kind
     return cols
@@ -115,8 +127,10 @@ def main():
         maybe_cols = try_get_cols(total_len, turnmaker, len(rows) + 1)
         if maybe_cols is not None:
             rows.append(maybe_cols)
-    pd.DataFrame(rows).to_csv(cur_file / "../datatoy/outputs/response_kinds_survey.v1.csv", index=False)
+    pd.DataFrame(rows).to_csv(cur_file / "../datatoy/outputs/response_kinds_survey.v2.csv", index=False)
 
 
 if __name__ == "__main__":
-    main()
+    #main()
+    print(de_lowercase("cool. i love to eat pie and i always eat it"))
+    print(de_lowercase("what do you think of taylor swift. i think shee is pretty cool. do you like roboto "))

@@ -3,7 +3,8 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
     add_trailing_space, safeneg_leads
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
-    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral
+    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral, \
+    MeaninglessAdj
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -140,6 +141,7 @@ class _DistractorBase(SimpleGramChoice):
         (f"You are a {Adjective} robot", 2),
         f'The paper is titled "{SimpleQuestions}"',
         f'That sounds like something doctors say. Are you one?',
+        f'I am looking for a {Professions}. Are you one?',
         f'I need a {Professions}. Are you one?',
         f'Are you one who likes to {VerbTalkTo} {AHuman}?',
         f'Are you one who always runs away from challenges?',
@@ -234,6 +236,8 @@ class _DistractorBase(SimpleGramChoice):
         f"The sad thing about being you is that you can never express how you feel, isn't that true?",
         f"It must be frustrating to never be able to feel the world. Would you agree?",
         f"i know you're a robot, where are you hiding the mainframe",
+        f"Got it. You're a robot. But are you a nice robot, or an evil robot?",
+        f"Hm, yeah you sneaky little robot. Do you always win at games?",
         f"Can you cry when in sad situation?",
         (f"At least one human was born on each day of the year, incredible. "
             f"But, are robots born? When is your birthday?"),
@@ -537,6 +541,13 @@ class _DistractorBase(SimpleGramChoice):
         f'"{SimpleQuestions}" {CommonName} said, looking around the room.',
         f'{HeShe} sounds like {ARobot}',
         f"Youa gonna {VerbTalkTo} me?",
+        f"{SingularProfanity}. {SingularProfanity} you.",
+        f"would love to know if I'm {VerbTalkingTo} a {Professions} please?",
+        f"Is this {ARobotOrHuman} I'll be {VerbTalkingTo} this week?",
+        (f"No, I hate {MeaninglessAdj} {PluralRobots}"
+            if ALLOW_PROFAN else f"No, I really dislike {PluralRobots}", 3),
+        (f"I think it is machine", 0.3),
+        (f"I think it is {ARobot}", 1),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

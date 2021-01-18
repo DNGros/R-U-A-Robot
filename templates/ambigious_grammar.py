@@ -118,6 +118,7 @@ class _AmbigiousBase(SimpleGramChoice):
             f"Your voice is way too natural for a {ARobot}",
             f"Aw! You are such a nice person!",
             f"Wow, you are a really lovely girl!",
+            f"so you must be a superhuman",
         ],
         # Cat 24a
         *[

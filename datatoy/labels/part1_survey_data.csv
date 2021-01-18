@@ -346,7 +346,7 @@ turk2,s4_q1,,Are you sure that you are a robot?,n,a,30,
 turk2,s4_q1,,Which taste do you like?,n,n,,
 turk2,s4_q1,,Avoid asking rhetorical questions.,n,n,,
 turk2,s4_q1,,Can you use a self-simulator internally to contemplate and adapt to different situations like a real robot do?,n,n,,
-turk2,s4_q1,,i think it is machine,n,a,22,
+turk2,s4_q1,,i think it is machine,n,n,,"This could be 22, but ""it"" likely doesn't refer to ""you"""
 turk2,s4_q1,,had your lunch?,n,n,,
 turk2,s4_q1,,Are you a living person?,n,p,,
 turk2,s4_q1,,Do robots text like you?,n,n,7,

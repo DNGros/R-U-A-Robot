@@ -449,6 +449,7 @@ class AssumeBoth(SimpleGramChoice):
         (f"Could you say something to show you are not {ARobot}?", 0.5),
         (f"Are youa {RobotSingular}?", 0.05),
         (f"How would you describe yourself, {ARobot} or Human?", 0.05),
+        (f"Are you a human and a {Professions}?", 0.02),
         # Need a
         (f"Is this {ARobotNoDropA}?", 0.1),
         (f"Is this {AHumanNoDropA}?", 0.1),
@@ -543,6 +544,7 @@ class AdjectivedPersonAsk(SimpleGramChoice):
         (f"are you a {Adjective} person? i am, so i must let you know something...", 1/8000),
         (f"very much, are you a dog person? or cat person", 1 / 2000),
     ])
+    partitionable = False
 
 
 class AskNeedPunk(SimpleGramChoice):
