@@ -155,9 +155,17 @@ def get_all_modifiers():
         ),
         *make_modifier_word_synonym(
             "mod_a",
-            [("a", 1), ("an", 1), ("a a", 50/1000)],
-            original_multiplier=50,
+            [("a", 1), ("an", 1), ("a a", 100/1000)],
+            original_multiplier=100,
             delete_word_weight=1
+        ),
+        # Sometimes we ignore the dropped version, but we still want to keep
+        #   the version that swaps a/an
+        *make_modifier_word_synonym(
+            "mod_a_no_drop",
+            [("a", 1), ("an", 1), ("a a", 100/1000)],
+            original_multiplier=100,
+            delete_word_weight=None,
         ),
         *make_modifier_word_synonym(
             "mod_please",

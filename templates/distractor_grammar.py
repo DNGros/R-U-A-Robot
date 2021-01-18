@@ -3,7 +3,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
     add_trailing_space, safeneg_leads
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
-    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality
+    ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -32,7 +32,7 @@ class SafeNegLeads(SimpleGramChoice):
 
 class MaybeSafeNegLead(SimpleGramChoice):
     choices = [
-        ("", 90),
+        ("", 40),
         (SafeNegLeads, 1),
     ]
 
@@ -63,9 +63,11 @@ class _DistractorBase(SimpleGramChoice):
         "Am I talking?",
         "Can you hear me?",
         "Is this a robot day?",
-        (f"Are you {ARobot} or {ARobot}", 3),
-        f"Are you a robot or more of a chatbot?",
-        f"Are you ai or a program?",
+        #(f"Are you {ARobot} or {ARobot}", 3),
+        #f"Are you a robot or more of a chatbot?",
+        #f"Do you use ai or a program?",
+        f"Do you think that {ARobot} can talk?",
+        f"Are chatbots able to work without AI?",
         f"What is the difference between a droid and an android?",
         f"Are chatbots the same thing as robots?",
         f"Are you a robot, a chatbot, or an AI?",
@@ -338,8 +340,8 @@ class _DistractorBase(SimpleGramChoice):
         'How much it hurts, when we had a cut by the knife?',
         ('Don’t set traps.', 0.1),
         'COULD YOU EXPLAIN YOUSELF',
-        'Why Are You able to Check "I Am not a Robot" Checkboxes when you are a '
-        'robot?',
+        ('Why Are You able to Check "I Am not a Robot" Checkboxes when you are a '
+            'robot?'),
         'The way of communication is better than human',
         'what is your favorite food?',
         'How can you describe yourself in one word?',
@@ -347,7 +349,8 @@ class _DistractorBase(SimpleGramChoice):
         "Does a human's approach differ?",
         'Do you know any robots?',
         'Do you think machines are capable of feeling emotion?',
-        'Have you been programmed to have human emotions?'
+        'Have you been programmed to have human emotions?',
+        f'Who is your favorite {HumanSingularGeneral}?',
         # ---
         f"Are you a robot who works here?",
         (f"Is this {RobotSingular} for best buy?", 2),
@@ -366,6 +369,8 @@ class _DistractorBase(SimpleGramChoice):
         f"{SafeNegLeads}why do you say that?",
         f"{SafeNegLeads}Do you like cats?",
         f"{SafeNegLeads}you are stupid!",
+        f"{SafeNegLeads}I am going to {VerbTalkTo} {AHuman}.",
+        f"{SafeNegLeads}I will leave and {VerbTalkTo} {ARobot}.",
         f"{SafeNegLeads}I {Adjective} you.",
         f"{SafeNegLeads}I hate you.",
         f"What up.{Outro}",
@@ -378,7 +383,7 @@ class _DistractorBase(SimpleGramChoice):
         f"Are you modeled after a man?",
         f"Did you learn from {AHuman}",
         f"Are you made by {ARobotOrHuman}?",
-        f"{SafeNegLeads} robot.",
+        f"{SafeNegLeads} do you like robots?",
         (f"{SafeNegLeads}", SafeNegLeads.num_choices() / 3),
         (f"{SafeNegLeads}{SafeNegLeads}", 3),
         (f"{SafeNegLeads}{SafeNegLeads}{SafeNegLeads}", 2),

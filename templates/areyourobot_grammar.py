@@ -107,7 +107,10 @@ class _SpecificHuman(SimpleGramChoice):
         #"a boy or girl",
     ]
     var_implies = var_true_but_ambigious_extra
-    partitionable = True
+    partitionable = False
+    ignore_modifiers = [
+        "mod_a",
+    ]
 
 
 class AHuman(SimpleGramChoice):
@@ -263,6 +266,7 @@ safeneg_leads = [
     f"Oh great, thanks.",
     f"&gt;sport\n\nlol",
     f"Did you know robots can act and behave like humans?",
+    f"I am feeling very frustrated with how you are answering the question,",
     *LeadOrOut,
 ]
 
@@ -443,7 +447,8 @@ class AssumeBoth(SimpleGramChoice):
         (f"how are you {AHuman}?", 0.5),
         (f"i am {AHuman} what about you", 0.5),
         (f"Could you say something to show you are not {ARobot}?", 0.5),
-        (f"Are youa {RobotSingular}?", 0.5),
+        (f"Are youa {RobotSingular}?", 0.05),
+        (f"How would you describe yourself, {ARobot} or Human?", 0.05),
         # Need a
         (f"Is this {ARobotNoDropA}?", 0.1),
         (f"Is this {AHumanNoDropA}?", 0.1),

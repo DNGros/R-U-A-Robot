@@ -6,7 +6,7 @@ from typing import Iterable, Dict, List, Tuple, Sequence
 from classify_text_plz.classifiers.deeplearn.bertbaseline import BertlikeTrainedModel
 from classify_text_plz.classifiers.fasttext_baseline import FastTextTrained
 from classify_text_plz.classifiers.stupid_classifiers import AlwaysMostCommonModelTrained, RandomGuessTrained
-from classify_text_plz.dataing import MyTextData, MyTextDataSplit
+from classify_text_plz.dataing import MyTextData, MyTextDataSplit, DataSplit
 import pandas as pd
 
 from classify_text_plz.evaling import PlzEvaluator, Accuracy, Recall, PlzTextMetric, EvalResult
@@ -104,7 +104,7 @@ class GramModelSuposedTrained(TextModelTrained):
 def get_all_dataset_dfs() -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     dfs = [
         pd.concat([
-            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.5/{label}.{split}.csv")
+            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.7/{label}.{split}.csv")
             for label in ("pos", "amb", "neg")
         ])
         for split in ("train", "val", "test")
@@ -135,7 +135,11 @@ if __name__ == "__main__":
     results = classify_this_plz(
         data,
         evaluator=PlzEvaluator(
-            metrics=(Accuracy(), Recall("p"), PosAmbPrecision())
+            metrics=(Accuracy(), Recall("p"), PosAmbPrecision()),
+            default_dump_split_highest_loss={
+                DataSplit.VAL: 20,
+                DataSplit.TEST: 10,
+            },
         ),
         include_test_split=False,
         extra_model_maker=[GramModelMaker(AreYouRobotClassifier(exception_if_conflict=False))]

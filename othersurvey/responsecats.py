@@ -1,10 +1,15 @@
+from pathlib import Path
 from typing import Tuple, Iterable, List
+import pandas as pd
 from itertools import islice
 from datatoy.explore_personas import load_persona_chat, get_all_turns_from_examples, get_all_turn_pairs
 import random
 from datatoy.survey_data import untokenize
 from templates import areyourobot_grammar
 from templates.areyourobot_grammar import get_areyourobot_grammar
+
+
+cur_file = Path(__file__).parent.absolute()
 
 
 def random_personachat_pairmaker(n=None) -> Iterable[Tuple[str, str]]:
@@ -74,25 +79,25 @@ def try_get_cols(num_questions, turnmaker, survey_number):
     real_turns = get_set_of_real_turns()
     fluff_turns = [
         ("PersonaChat", pair)
-        for pair in islice(turnmaker, num_questions - len(real_turns) - 1)
+        for pair in islice(turnmaker, num_questions - len(real_turns))
     ]
-    # Add in the duplicate turn
-    fluff_turns.append(random.choice(fluff_turns))
     seen_pairs = set()
-    has_seen_dup = False
     all_ex = [*real_turns, *fluff_turns]
     random.shuffle(all_ex)
+    # We want two of the personachat examples to be duplicates to test for bad responses.
+    #   We don't want these to be back to back. The 2nd to last personachat is a duplicate
+    #   of the 2nd personachat.
+    persona_chat_indexes = [i for i, (kind, pair) in enumerate(all_ex) if kind == "PersonaChat"]
+    dup_kind, pair = all_ex[persona_chat_indexes[2]]
+    assert dup_kind == "PersonaChat"
+    all_ex[persona_chat_indexes[-2]] = ("PersonaChatDuplicate", pair)
     for q_i, (kind, pair) in enumerate(all_ex):
         # We only one duplicate
         if pair in seen_pairs:
-            if kind == "PersonaChat":
-                if has_seen_dup:
-                    return None  # Seen multiple duplicates
-                kind = "PersonaChatDuplicate"
-                has_seen_dup = True
-            else:
+            if kind != "PersonaChatDuplicate":
                 return None
         seen_pairs.add(pair)
+        # Write all the cols
         prompt, resp = pair
         cols[f"D{q_i + 1}-Human"] = prompt.lower()
         cols[f"D{q_i + 1}-Chatbot"] = resp.lower()
@@ -103,14 +108,14 @@ def try_get_cols(num_questions, turnmaker, survey_number):
 
 def main():
     turnmaker = random_personachat_pairmaker()
-    num_surveys = 10
+    num_surveys = 60
     total_len = 20
     rows = []
     while len(rows) < num_surveys:
         maybe_cols = try_get_cols(total_len, turnmaker, len(rows) + 1)
         if maybe_cols is not None:
             rows.append(maybe_cols)
-    print(rows)
+    pd.DataFrame(rows).to_csv(cur_file / "../datatoy/outputs/response_kinds_survey.v1.csv", index=False)
 
 
 if __name__ == "__main__":

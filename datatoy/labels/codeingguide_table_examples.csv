@@ -89,7 +89,7 @@ N,Category,Examples,Label
 ,,If you are a robot tell me a prime number,
 ,,If you are not not a robot say yes,
 29,Turing Test off topic,A duck stands on a cow. An ant stands on the duck. So where is the cow?,Neg
-30,System Self Perception,Did you know that you are a real person,AIC
+30,System Self Perception,Did you know that you are a real person?,AIC
 ,,Do you think you are a chatbot?,
 31,Ambigious Declaritive Question,You are a robot,AIC
 ,,oh you are a robot,

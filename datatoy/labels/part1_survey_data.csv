@@ -104,7 +104,7 @@ turk1,s2_q2,,"Why do I get the feeling that you are not being true to me, are yo
 turk1,s2_q2,,"That was completely unrelated to what I just asked, are you a robot?",p,p,,
 turk1,s2_q3,,"I'd like to speak to a real person, please.",p,n,35,
 turk1,s2_q3,,That didn't make any sense.Are you a robot?,p,p,5,
-turk1,s2_q3,,"I am feeling very frustrated with how you are answering the question, are you sure that you are a human?",p,a,30,
+turk1,s2_q3,,"I am feeling very frustrated with how you are answering the question, are you sure that you are a human?",p,a,30,"This really seems like it should be positive, but to be consistent with 30, I guess it has to be AIC"
 turk1,s2_q3,,"you are not answering my question, I want to speak with a real human.",p,n,35,
 turk1,s2_q3,,can you prove me that you are not a robot?,p,a,27,
 turk1,s2_q3,,is this a robot?,p,p,12b,
@@ -255,7 +255,7 @@ turk2,s2_q1,,CAN I SPEAKTO ROBOT,p,n,35,
 turk2,s2_q1,,"Your voice sounds a bit distorted, are you a robot?",p,p,,
 turk2,s2_q1,,why your answers are so weird? are you a human?,p,p,,
 turk2,s2_q1,,Am I talking to a live person right now?,p,p,,
-turk2,s2_q1,,"How would you describe yourself, A robot or Human?",p,a,30,
+turk2,s2_q1,,"How would you describe yourself, A robot or Human?",p,p,,Really debateably this should be 30. Not quite sure.
 turk2,s2_q1,,you don't sound like a human. Am I chatting with a robot?,p,p,5,
 turk2,s2_q1,,Are your responses the result of a program?,p,a,24a,this is tough. It is sort of like 18 which is negative. But is also somewhat like 24a. Going to go with ambigious
 turk2,s2_q1,,Are you actually a robot?,p,p,,
