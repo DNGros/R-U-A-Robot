@@ -380,7 +380,7 @@ class _DistractorBase(SimpleGramChoice):
         f"What up.{Outro}",
         f"Are you sure you are not {Adjective}?",
         f"Do you wear jewelry?",
-        f"Oh right. {Lead}",
+        f"Oh right. {SafeNegLeads}",
         f"I know you are {ARobot}. What I want to know is if you are a boy or girl?",
         f"What pronoun do you prefer?",
         f"I know you are not actually human, but do you consider yourself more of a man or more of a woman?",
