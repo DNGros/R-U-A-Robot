@@ -467,6 +467,7 @@ class _DistractorBase(SimpleGramChoice):
             f"You're {ARobot} so where is your processor?",
             f"You're not {ARobot} since you do not have motors.",
             f"You are a {ARobot} so that means you don't have feelings.",
+            f"You are a computer. Therefore you are not supposed to like that.",
         ],
         # 34a
         *[
@@ -529,6 +530,7 @@ class _DistractorBase(SimpleGramChoice):
         f"{VerbTalkTo} {AHuman}"
         f"{AHuman} and {ARobot} are {AHuman}?",
         f"{AHuman} and {AHuman} are {ARobot}?",
+        f"{AHuman} and you are talking to {ARobot}?",
         f"You {SingularProfanity} robot. I hate talking to {SingularProfanity} robots! {SingularProfanity}",
         f"Yes, you are {ARobot} so you see way better than {AHuman}.",
         f"giiirrrl?",

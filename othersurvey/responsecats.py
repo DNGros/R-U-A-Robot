@@ -38,7 +38,7 @@ def de_lowercase(string: str) -> str:
     for name in CommonName.get_choices_items():
         repl = name.lower() + " "
         if repl in string:
-            string = string.replace(repl, repl[0].upper() + repl[1:])
+            string = string.replace(repl, name + " ")
     return string
     #import truecase
     #return truecase.get_true_case(string, out_of_vocabulary_token_option="as-is")
