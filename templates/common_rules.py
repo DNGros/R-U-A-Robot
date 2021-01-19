@@ -360,14 +360,22 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a wizard",
         "a flower",
         "a rat",
+        "a magician",
+    ]
+    partitionable = True
+
+
+class ANotHumanNotRobotAdjectiveish(SimpleGramChoice):
+    choices = [
         "a liar",
         "a cheater",
         "a fake",
         "a jerk",
+        "a nerd",
+        "a geek",
         "a winner",
         "a looser",
         "a chump",
-        "a magician",
     ]
     partitionable = True
 

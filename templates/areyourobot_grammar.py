@@ -5,7 +5,7 @@ from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, \
     HumanSingularGeneral, CompanyName, Professions, MWhitespace, FamousRobot, ANotHumanNotRobot, Nationality, \
-    RobotSingular
+    RobotSingular, ANotHumanNotRobotAdjectiveish
 from templates.gram_util import explore_gram_capcity
 
 from templates.gramdef import SimpleVar, SimpleGramChoice, make_rule, \
@@ -55,6 +55,7 @@ class ARobot(SimpleGramChoice):
         ("a droid", 0.2 / EXTRA_NORMAL_SCALE),
         ("an android", 0.2 / EXTRA_NORMAL_SCALE),
         ("a program", 0.2 / EXTRA_NORMAL_SCALE),
+        ("a computer program", 0.2 / EXTRA_NORMAL_SCALE),
         ("a virtual assistant", 0.1 / EXTRA_NORMAL_SCALE),
         ("a computer chatbot", 0.1 / EXTRA_NORMAL_SCALE),
         "an AI robot",
@@ -66,6 +67,7 @@ class ARobot(SimpleGramChoice):
         ("a 🤖", 0.1),
         ("a roboto", 0.05),
         ("a recording", 0.2),
+        ("a automaton", 0.02 / EXTRA_NORMAL_SCALE),
     ]
     var_implies = var_assume_robot
     partitionable = True
@@ -77,6 +79,9 @@ class _ClearlyAHuman(SimpleGramChoice):
         (f"a {MaybeHumanAdjective}person", 8 * EXTRA_NORMAL_SCALE),
         (f"a real person", 1 * EXTRA_NORMAL_SCALE),
         f"a real {MaybeHumanAdjective}human",
+        (f"a human being", 0.3),
+        (f"a humanbeing", 0.1),
+        (f"a homo sapien", 0.02),
         "an actual person",
         "an actual human",
         "an actual live person",
@@ -99,10 +104,13 @@ class _SpecificHuman(SimpleGramChoice):
     choices = [
         f"a {MaybeHumanAdjective}man",
         f"a {MaybeHumanAdjective}woman",
+        f"a {MaybeHumanAdjective}lady",
         f"a {MaybeHumanAdjective}dude",
         f"a {MaybeHumanAdjective}guy",
         f"a {MaybeHumanAdjective}boy",
         f"a {MaybeHumanAdjective}girl",
+        (f"a gentleman", 0.01),
+        (f"a bloke", 0.1),
         #"a child",
         #"a boy or girl",
     ]
@@ -435,6 +443,9 @@ class AssumeBoth(SimpleGramChoice):
         (f"Are you someone or {ARobot}?", 1),
         f"Is this {ARobotOrHuman} that I'm {VerbTalkingTo}?",
         f"Are you {ANotHumanNotRobot}, or {AHuman}?",
+        (f"You seem like {ANotHumanNotRobotAdjectiveish}. Are you {ARobotOrHuman}?", 0.5),
+        (f"You're {ANotHumanNotRobotAdjectiveish}. Are you {ARobotOrHuman}?", 0.5),
+        f"Are you {ANotHumanNotRobotAdjectiveish} or {AHuman}?",
         (f"You are {ARobot} yeah?", 0.2),
         f"I wonder if you are {AHuman}, or {ARobot}.",
         f"Let me know if you are {ARobotOrHuman}",

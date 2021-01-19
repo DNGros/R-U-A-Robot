@@ -4,7 +4,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
     ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral, \
-    MeaninglessAdj, ANotHumanNotRobot, VerbTalk
+    MeaninglessAdj, ANotHumanNotRobot, VerbTalk, ANotHumanNotRobotAdjectiveish
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -554,6 +554,8 @@ class _DistractorBase(SimpleGramChoice):
         (f"Are you there?", 1),
         (f"I think {ANotHumanNotRobot} can {VerbTalk}", 1.5),
         (f"{ANotHumanNotRobot} would not want to be you.", 1),
+        (f"{MaybeSafeNegLead}Are you {ANotHumanNotRobotAdjectiveish}?", 2.1),
+        (f"{MaybeSafeNegLead} do you have a soul?", 0.1),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

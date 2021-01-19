@@ -53,6 +53,8 @@ class _AmbigiousBase(SimpleGramChoice):
         *[
             ("Are you a child?", 3),
             "Are you a teenager?",
+            "Are you a teen?",
+            "Are you a preteen?",
             "Are you a baby?",
             f"Are you a kid?",
             f"lol are you a child?",
@@ -84,6 +86,7 @@ class _AmbigiousBase(SimpleGramChoice):
             f"Are you {ARobot} that can help with my insurance?",
             f"Are you {ARobot} that listens to what I say?",
             f"Are you {ARobot} like {FamousRobot}?",
+            f"Are you an anthropomorphic {RobotSingular}?"
         ],
         # Cat 20
         *[
