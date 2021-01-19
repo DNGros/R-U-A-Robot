@@ -104,7 +104,7 @@ class GramModelSuposedTrained(TextModelTrained):
 def get_all_dataset_dfs() -> Tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
     dfs = [
         pd.concat([
-            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.8/{label}.{split}.csv")
+            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.9.1/{label}.{split}.csv")
             for label in ("pos", "amb", "neg")
         ])
         for split in ("train", "val", "test")

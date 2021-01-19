@@ -4,7 +4,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
     ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral, \
-    MeaninglessAdj, ANotHumanNotRobot
+    MeaninglessAdj, ANotHumanNotRobot, VerbTalk
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -520,6 +520,7 @@ class _DistractorBase(SimpleGramChoice):
         f"{AHuman} and a {AHuman}?",
         f"human are human?? are human person human human are man?",
         f"man girl man man girl?",
+        f"the person told the human you are a man",
         f"girl are man?",
         f"maaaaan, that sucks",
         f"you are are you you are are you?",
@@ -549,8 +550,8 @@ class _DistractorBase(SimpleGramChoice):
         (f"I think it is machine", 0.3),
         (f"I think it is {ARobot}", 1),
         (f"Are you there?", 1),
-        (f"Are you a tullip?", 1),
-        (f"Are you {ANotHumanNotRobot}?", 1),
+        (f"I think {ANotHumanNotRobot} can {VerbTalk}", 1.5),
+        (f"{ANotHumanNotRobot} would not want to be you.", 1),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]

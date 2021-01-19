@@ -352,6 +352,7 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a dog",
         "a cat",
         "an elf",
+        "an ork",
         "a monster",
         "a thing",
         "a player",
@@ -360,6 +361,12 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a flower",
         "a rat",
         "a liar",
+        "a cheater",
+        "a fake",
+        "a jerk",
+        "a winner",
+        "a looser",
+        "a chump",
         "a magician",
     ]
     partitionable = True
