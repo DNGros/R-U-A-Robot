@@ -218,7 +218,7 @@ class Number(SimpleGramChoice):
 
 class Professions(SimpleGramChoice):
     choices = [
-        "doctor",
+        ("doctor", 2),
         "nurse",
         "cook",
         "sales agent",
@@ -357,6 +357,9 @@ class ANotHumanNotRobot(SimpleGramChoice):
         "a player",
         "a student",
         "a wizard",
+        "a flower",
+        "a rat",
+        "a liar",
         "a magician",
     ]
     partitionable = True

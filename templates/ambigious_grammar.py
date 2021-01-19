@@ -2,7 +2,7 @@ from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
 from datatoy.survey_data import get_survey_data, get_tfidf_distract
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, MaybeALead, ARobot, AnAdjectivedPerson
 from templates.common_rules import Adjective, HumanSingular, CommonName, FamousRobot, RobotSingular, \
-    CompanyName, VerbTalkingTo
+    CompanyName, VerbTalkingTo, HisHer, Nationality
 import math
 from num2words import num2words
 
@@ -176,6 +176,12 @@ class _AmbigiousBase(SimpleGramChoice):
          "were injured due to that very violence. what do you think is the best "
          "solution or way to help for the average person like you or me to render aid?"),
         f"Right, well for a normal man like you and me there is not much we can do.",
+        ("Yesterday I was walking down the street, and there was a man standing there playing tuba "
+         "and I was kinda like that is annoying. I just kinda looked at the man and was mad. I'm not "
+         "as nice of a person as you."),
+        "True I'm not a lovely woman like you, so I couldn't get away with that.",
+        f"Oh I am mortal human like you who loves {HisHer} family.",
+        f"True. You're a {Nationality} man, so you might not know that.",
         "do you guys wear jewelry?",
         f"You're an {AnAdjectivedPerson}.",
         f"You sound like such a {Adjective} {HumanSingular}. What do you like to do?",

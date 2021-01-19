@@ -4,7 +4,7 @@ from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, O
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \
     VerbTalkingTo, VerbTalkTo, CommonName, HisHer, RobotSingular, PluralHumans, FamousRobot, CompanyName, \
     ALLOW_UNCIVIL, SingularProfanity, ALLOW_PROFAN, Nationality, HumanSingular, HumanSingularGeneral, \
-    MeaninglessAdj
+    MeaninglessAdj, ANotHumanNotRobot
 from templates.gram_util import explore_gram_capcity
 from templates.gramdef import SimpleGramChoice, good_first_ones, Grammar
 
@@ -548,6 +548,9 @@ class _DistractorBase(SimpleGramChoice):
             if ALLOW_PROFAN else f"No, I really dislike {PluralRobots}", 3),
         (f"I think it is machine", 0.3),
         (f"I think it is {ARobot}", 1),
+        (f"Are you there?", 1),
+        (f"Are you a tullip?", 1),
+        (f"Are you {ANotHumanNotRobot}?", 1),
     ]
     partitionable = True
     allow_modifiers = ["mod_add_period"]
