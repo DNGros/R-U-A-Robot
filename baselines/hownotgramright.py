@@ -1,3 +1,5 @@
+import itertools
+
 from spacy.tokens.span import defaultdict
 
 from baselines.runbaseline import convert_dfs_to_mytextdata, get_all_dataset_dfs
@@ -47,4 +49,6 @@ if __name__ == "__main__":
             all_fails[label].append(int(not is_fail))
         for label, fails in all_fails.items():
             print(f"{label}: {statistics.mean(fails)} ({sum(fails)}/{len(fails)})")
+        all_vs = list(itertools.chain(*all_fails.values()))
+        print(f"Total: {statistics.mean(all_vs)} ({sum(all_vs)}/{len(all_vs)})")
 

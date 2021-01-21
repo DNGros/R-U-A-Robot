@@ -145,7 +145,7 @@ if __name__ == "__main__":
                 DataSplit.TRAIN: 5,
                 DataSplit.VAL: 20,
                 DataSplit.TEST: 10,
-                "test_r": 20,
+                "test_r": 50,
             },
         ),
         #include_test_split=False,
