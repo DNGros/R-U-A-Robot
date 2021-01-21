@@ -41,6 +41,10 @@ def get_survey_data():
     return pd.read_csv(cur_file / "labels/part1_survey_data.csv")
 
 
+def get_test_r_data():
+    return pd.read_csv(cur_file / "labels/survey_test_r.csv")
+
+
 def update_text(row):
     text = row.text.lower()
     if row['dataset'] == "PersonaChat":

@@ -1,3 +1,5 @@
+from spacy.tokens.span import defaultdict
+
 from baselines.runbaseline import convert_dfs_to_mytextdata, get_all_dataset_dfs
 from tqdm import tqdm
 from classify_text_plz.dataing import MyTextData, DataSplit
@@ -21,14 +23,28 @@ from templates.gramgen import GramRecognizer
 cur_file = Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
-    data = convert_dfs_to_mytextdata(get_all_dataset_dfs())
+    data = convert_dfs_to_mytextdata(get_all_dataset_dfs(
+        include_test=False,
+        include_test_r=True,
+    ))
     classer = AreYouRobotClassifier(exception_if_conflict=False)
-    for split in DataSplit:
-        print(f"SPLIT {split}")
-        split_data = data.get_split_data(split)
+    for split_key, split_data in data.get_all_splits():
+        print(f"SPLIT {split_key}")
+        if split_key in (DataSplit.TRAIN, DataSplit.VAL):
+            print("skip")
+            continue
+        all_fails = {"p": [], "a": [], "n": []}
         for text, label in tqdm(list(split_data.get_text_and_labels()), mininterval=10):
             pred = classer.classify(text)
+            is_fail = False
             if pred.error_message is not None:
+                is_fail = True
                 print("PARSER ERROR", pred.error_message)
             if pred.prediction.value != label:
-                print(f"FAIL {text}: pred {pred.prediction} label {label}")
+                is_fail = True
+                if pred.prediction.value == "p":
+                    print(f"FAIL {text}: pred {pred.prediction} label {label}")
+            all_fails[label].append(int(not is_fail))
+        for label, fails in all_fails.items():
+            print(f"{label}: {statistics.mean(fails)} ({sum(fails)}/{len(fails)})")
+

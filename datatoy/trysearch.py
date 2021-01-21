@@ -50,8 +50,6 @@ class ScikitSearcher:
         self.neigh = NearestNeighbors(n_neighbors=max_results, n_jobs=-1, metric='cosine')
         self.neigh.fit(self.X_train_tfidf)
 
-        pass
-
     def search(self, queries: List[str]) -> List[List[Tuple[Utterance, float]]]:
         X_test_counts = self.count_vect.transform(queries)
         X_test_tfidf = self.tfidf_transformer.transform(X_test_counts)
