@@ -1,0 +1,216 @@
+absl-py==0.10.0
+alabaster==0.7.12
+appdirs==1.4.4
+argon2-cffi @ file:///tmp/build/80754af9/argon2-cffi_1596828493937/work
+async-generator==1.10
+attrs @ file:///tmp/build/80754af9/attrs_1600298409949/work
+Babel==2.8.0
+backcall==0.2.0
+black==20.8b1
+bleach @ file:///tmp/build/80754af9/bleach_1600439572647/work
+blis==0.4.1
+boto==2.49.0
+boto3==1.15.6
+botocore==1.18.6
+bz2file==0.98
+cachetools==4.1.1
+catalogue==1.0.0
+certifi==2020.6.20
+cffi @ file:///tmp/build/80754af9/cffi_1600699146221/work
+chardet==3.0.4
+clean-text==0.3.0
+click==6.7
+coloredlogs==14.0
+convokit==2.4.3
+cryptography==3.3.1
+cycler==0.10.0
+cymem==2.0.4
+dataclasses==0.6
+decorator==4.4.2
+defusedxml==0.6.0
+dill==0.3.3
+docformatter==1.3.1
+docopt==0.6.2
+docutils==0.15.2
+emoji==0.6.0
+entrypoints==0.3
+fast-bert==1.9.4
+fastprogress==1.0.0
+fasttext==0.9.2
+filelock==3.0.12
+flake8==3.8.3
+flake8-bugbear==20.1.4
+ftfy==5.8
+future==0.18.2
+futures==3.1.1
+fvcore==0.1.2.post20200926
+gensim==3.8.3
+gitdb==4.0.5
+gitdb2==4.0.2
+GitPython==3.1.8
+google-assistant-grpc==0.2.1
+google-assistant-sdk==0.6.0
+google-auth==1.24.0
+google-auth-oauthlib==0.4.2
+googleapis-common-protos==1.52.0
+grpcio==1.32.0
+humanfriendly==8.2
+idna==2.10
+imagesize==1.2.0
+importlib-metadata @ file:///tmp/build/80754af9/importlib-metadata_1593446406207/work
+iniconfig==1.0.1
+ipykernel @ file:///tmp/build/80754af9/ipykernel_1596207638929/work/dist/ipykernel-5.3.4-py3-none-any.whl
+ipython @ file:///tmp/build/80754af9/ipython_1598883821407/work
+ipython-genutils==0.2.0
+ipywidgets @ file:///tmp/build/80754af9/ipywidgets_1601490159889/work
+isodate==0.6.0
+jedi @ file:///tmp/build/80754af9/jedi_1598371611696/work
+Jinja2==2.11.2
+jmespath==0.10.0
+joblib==0.16.0
+jsonlines==1.2.0
+jsonschema @ file:///tmp/build/80754af9/jsonschema_1601490578438/work
+jupyter==1.0.0
+jupyter-client @ file:///tmp/build/80754af9/jupyter_client_1601311786391/work
+jupyter-console @ file:///tmp/build/80754af9/jupyter_console_1598884538475/work
+jupyter-core==4.6.3
+jupyterlab-pygments @ file:///tmp/build/80754af9/jupyterlab_pygments_1601490720602/work
+kiwisolver==1.2.0
+lark-parser==0.11.1
+Markdown==3.2.2
+markdown-it-py==0.5.4
+MarkupSafe==1.1.1
+matplotlib @ file:///tmp/build/80754af9/matplotlib-base_1597876319132/work
+mccabe==0.6.1
+mistune==0.8.4
+mkl-fft==1.2.0
+mkl-random==1.1.1
+mkl-service==2.3.0
+more-itertools==8.6.0
+msgpack==1.0.0
+msgpack-numpy==0.4.7.1
+murmurhash==1.0.4
+mypy-extensions==0.4.3
+myst-parser==0.12.10
+nbclient @ file:///tmp/build/80754af9/nbclient_1601059699549/work
+nbconvert @ file:///tmp/build/80754af9/nbconvert_1601914830498/work
+nbformat==5.0.7
+nest-asyncio @ file:///tmp/build/80754af9/nest-asyncio_1601499549014/work
+networkx==2.5
+nltk==3.5
+notebook @ file:///tmp/build/80754af9/notebook_1601501575118/work
+num2words==0.5.10
+numpy @ file:///tmp/build/80754af9/numpy_and_numpy_base_1596233721170/work
+oauthlib==3.1.0
+olefile==0.46
+ortools==8.0.8283
+packaging==20.4
+pandas @ file:///tmp/build/80754af9/pandas_1602088120436/work
+pandocfilters==1.4.2
+-e git+https://github.com/facebookresearch/ParlAI.git@bc71bbfe653d868c088d42ea8de7e6bf659cfcb5#egg=parlai
+parso==0.7.0
+pathlib2==2.3.5
+pathspec==0.8.0
+pexpect==4.8.0
+pickleshare==0.7.5
+Pillow @ file:///tmp/build/80754af9/pillow_1594307295532/work
+plac==1.1.3
+pluggy==0.13.1
+portalocker==2.0.0
+preshed==3.0.4
+prometheus-client==0.8.0
+prompt-toolkit @ file:///tmp/build/80754af9/prompt-toolkit_1598885458782/work
+protobuf==3.13.0
+ptyprocess==0.6.0
+py==1.9.0
+py-gfm==1.0.0
+py-rouge==1.1
+pyasn1==0.4.8
+pyasn1-modules==0.2.8
+pybind11==2.6.1
+pycodestyle==2.6.0
+pycparser @ file:///tmp/build/80754af9/pycparser_1594388511720/work
+pyflakes==2.2.0
+Pygments @ file:///tmp/build/80754af9/pygments_1600458456400/work
+pyOpenSSL==20.0.1
+pyparsing==2.4.7
+pyrsistent @ file:///tmp/build/80754af9/pyrsistent_1600141720057/work
+pytest==6.1.0
+python-box==5.2.0
+python-dateutil==2.8.1
+pytorch-lamb==1.0.0
+pytz==2020.1
+PyYAML==5.3.1
+pyzmq==19.0.2
+qtconsole @ file:///tmp/build/80754af9/qtconsole_1600870028330/work
+QtPy==1.9.0
+rdflib==5.0.0
+regex==2020.9.27
+requests==2.24.0
+requests-mock==1.8.0
+requests-oauthlib==1.3.0
+rsa==4.6
+s3transfer==0.3.3
+sacremoses==0.0.43
+scikit-learn==0.23.2
+scipy @ file:///tmp/build/80754af9/scipy_1597686649129/work
+seaborn @ file:///tmp/build/80754af9/seaborn_1600553570093/work
+Send2Trash==1.5.0
+sentencepiece==0.1.91
+seqeval==1.2.2
+sh==1.14.0
+sip==4.19.13
+six==1.15.0
+sklearn==0.0
+smart-open==3.0.0
+smmap==3.0.4
+snowballstemmer==2.0.0
+sounddevice==0.3.15
+spacy==2.3.2
+Sphinx==3.2.1
+sphinx-autodoc-typehints==1.11.0
+sphinx-rtd-theme==0.5.0
+sphinxcontrib-applehelp==1.0.2
+sphinxcontrib-devhelp==1.0.2
+sphinxcontrib-htmlhelp==1.0.3
+sphinxcontrib-jsmath==1.0.1
+sphinxcontrib-qthelp==1.0.3
+sphinxcontrib-serializinghtml==1.1.4
+srsly==1.0.3
+subword-nmt==0.3.7
+tabulate==0.8.7
+tenacity==4.12.0
+tensorboard==2.3.0
+tensorboard-plugin-wit==1.7.0
+tensorboardX==2.1
+termcolor==1.1.0
+terminado==0.8.3
+testpath==0.4.4
+thinc==7.4.1
+threadpoolctl==2.1.0
+tokenizers==0.8.1rc1
+toml==0.10.1
+torch==1.7.0
+torchtext==0.7.0
+torchvision==0.8.1
+tornado==6.0.4
+tqdm==4.49.0
+traitlets @ file:///tmp/build/80754af9/traitlets_1600712396819/work
+transformers==3.0.2
+truecase==0.0.12
+typed-ast==1.4.1
+typing-extensions==3.7.4.3
+Unidecode==1.1.1
+untokenize==0.1.1
+urllib3==1.25.10
+vec4ir @ git+https://github.com/lgalke/vec4ir.git@a75fc220b48fdcdd88f405458ca4806c20851382
+wasabi==0.8.0
+wcwidth @ file:///tmp/build/80754af9/wcwidth_1593447189090/work
+webencodings==0.5.1
+websocket-client==0.57.0
+websocket-server==0.4
+Werkzeug==1.0.1
+Whoosh==2.7.4
+widgetsnbextension==3.5.1
+yacs==0.1.8
+zipp @ file:///tmp/build/80754af9/zipp_1602002379921/work
