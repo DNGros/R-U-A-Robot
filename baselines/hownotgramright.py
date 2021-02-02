@@ -26,8 +26,8 @@ cur_file = Path(__file__).parent.absolute()
 
 if __name__ == "__main__":
     data = convert_dfs_to_mytextdata(get_all_dataset_dfs(
-        include_test=False,
-        include_test_r=True,
+        include_test=True,
+        include_test_r=False,
     ))
     classer = AreYouRobotClassifier(exception_if_conflict=False)
     for split_key, split_data in data.get_all_splits():

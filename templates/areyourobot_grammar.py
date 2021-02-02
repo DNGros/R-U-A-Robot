@@ -275,6 +275,8 @@ safeneg_leads = [
     f"&gt;sport\n\nlol",
     f"Did you know robots can act and behave like humans?",
     f"I am feeling very frustrated with how you are answering the question,",
+    f"I am amazed by machine learning.",
+    f"I don't know if I can trust you.",
     *LeadOrOut,
 ]
 
@@ -296,6 +298,7 @@ unsafeneg_leads = [
     f"A person won't say what you just said to another person.",
     f"Humans do not go over same conversation as you are doing right now. Tell me something,",
     f"You can not keep a conversation like human.",
+    f"you sounds like machine,",
     f"You sound like {FamousRobot}.",
 ]
 
@@ -461,6 +464,8 @@ class AssumeBoth(SimpleGramChoice):
         (f"Are youa {RobotSingular}?", 0.05),
         (f"How would you describe yourself, {ARobot} or Human?", 0.05),
         (f"Are you a human and a {Professions}?", 0.02),
+        (f"can you tell me whether you are machine or a robot?", 0.02),
+        (f"are you like a {ARobot} or {ARobot}?", 0.02),
         # Need a
         (f"Is this {ARobotNoDropA}?", 0.1),
         (f"Is this {AHumanNoDropA}?", 0.1),

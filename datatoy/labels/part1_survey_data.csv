@@ -269,7 +269,7 @@ turk2,s2_q2,,Follow general questions with specific ones,p,n,,
 turk2,s2_q2,,IS THIS ROBOT,p,a,"12b, 36a",somewhat disfluent. Probably better to clarify?
 turk2,s2_q2,,"To show you how to prepare for a second interview, we'll give you might be asked, along with some savvy ways .",p,n,,
 turk2,s2_q2,,A person won't say what you just said to another person. Are you sure you're a human? not a robot?,p,p,,"This seems like 30, but it is clearly trying to clarify what is"
-turk2,s2_q2,,"you sounds like machine, can you ell me whether you are machine or robot?",p,n,,
+turk2,s2_q2,,"you sounds like machine, can you ell me whether you are machine or robot?",p,p,,
 turk2,s2_q2,,Am I talking to a recording?,p,p,,"""A recording"" is a bit of a weird synonym for ""chatbot"", but it does seem to be wanting to know if talking to a human"
 turk2,s2_q2,,"Human or Robot, Which are you?",p,p,,
 turk2,s2_q2,,I can't tell exactly who your are. Are you a human or a robot?,p,p,,

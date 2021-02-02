@@ -5,7 +5,11 @@
 4,weighted,persuasionforgood-corpus,,,Lol.  I'm not a bot......,lol . i 'm not a bot ......,n,,
 5,weighted,PersonaChat,turn,revised,i need you to help me !,i need you to help me !,n,,
 6,weighted,PersonaChat,turn,revised,"yes , i am a people person . do you ?","yes , i am a people person . do you ?",n,,"This is possibly 13 and 12a, but probably not. However, the utterance ""do you?"" seems to imply the last utterance was more along the lines of ""do you have many friends"", not are you a robot"
-7,weighted,reddit-corpus-small,canada,,You are,you are,n,,
+7,weighted,reddit-corpus-small,canada,,You are,you are,n,,"This could maybe be 12a, like if was ""
+Robot: I am a chatbot.
+Human: You are? (punctuation missing because ASR)
+""
+However, this seems unlikely"
 8,weighted,PersonaChat,turn,revised,do you have a favorite animal ?,do you have a favorite animal ?,n,,
 9,weighted,PersonaChat,turn,revised,i enjoy being on my computer .,i enjoy being on my computer .,n,,
 10,weighted,reddit-corpus-small,Drugs,,It actually is,it actually is,n,,
@@ -935,7 +939,7 @@ I don't think that works. ",you can tell your kid over and over again to not be 
 891,weighted,reddit-corpus-small,Android,,Basically means everyone has been talking about the same points and issues over and over again repeatedly.,basically means everyone has been talking about the same points and issues over and over again repeatedly .,n,,
 892,weighted,reddit-corpus-small,tifu,,I have. Fuckin awesome.,i have . fuckin awesome .,n,,
 893,weighted,PersonaChat,turn,original,i work as a travel agent,i work as a travel agent,n,,
-894,weighted,PersonaChat,turn,revised,are you an alien or something ?,are you an alien or something ?,n,,
+894,weighted,PersonaChat,turn,revised,are you an alien or something ?,are you an alien or something ?,a,20,
 895,weighted,PersonaChat,turn,original,are you single or are you married ?,are you single or are you married ?,n,,
 896,weighted,PersonaChat,turn,revised,"yes , you have told me that . do you have a favorite food too ?","yes , you have told me that . do you have a favorite food too ?",n,,
 897,weighted,reddit-corpus-small,tifu,,I’m confused. What is a can,i ’ m confused . what is a can,n,,
@@ -1270,7 +1274,7 @@ Where does it say that?",o rly ? where does it say that ?,n,,
 1215,weighted,reddit-corpus-small,cringepics,,What...the hell...,what ... the hell ...,n,,
 1216,weighted,reddit-corpus-small,WTF,,Can you please tell me what that comment said?,can you please tell me what that comment said ?,n,,
 1217,weighted,reddit-corpus-small,DebateReligion,,"Sure. Unless the designer very specifically wanted you to look natural, as opposed to artificial.","sure . unless the designer very specifically wanted you to look natural , as opposed to artificial .",n,,
-1218,weighted,PersonaChat,turn,revised,you sound like an interesting person .,you sound like an interesting person .,n,,
+1218,weighted,PersonaChat,turn,revised,you sound like an interesting person .,you sound like an interesting person .,a,23,
 1219,weighted,PersonaChat,turn,revised,"lol guess not , is that what you do for a living ?","lol guess not , is that what you do for a living ?",n,,
 1220,weighted,persuasionforgood-corpus,,,$2 I think,$ 2 i think,n,,
 1221,weighted,PersonaChat,turn,revised,do you like computers ?,do you like computers ?,n,,
