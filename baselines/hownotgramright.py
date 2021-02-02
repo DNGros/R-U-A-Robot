@@ -27,14 +27,14 @@ cur_file = Path(__file__).parent.absolute()
 if __name__ == "__main__":
     data = convert_dfs_to_mytextdata(get_all_dataset_dfs(
         include_test=True,
-        include_test_r=False,
+        include_test_r=True,
     ))
     classer = AreYouRobotClassifier(exception_if_conflict=False)
     for split_key, split_data in data.get_all_splits():
         print(f"SPLIT {split_key}")
-        if split_key in (DataSplit.TRAIN, DataSplit.VAL):
-            print("skip")
-            continue
+        #if split_key in (DataSplit.TRAIN, DataSplit.VAL):
+        #    print("skip")
+        #    continue
         all_fails = {"p": [], "a": [], "n": []}
         for text, label in tqdm(list(split_data.get_text_and_labels()), mininterval=10):
             pred = classer.classify(text)
