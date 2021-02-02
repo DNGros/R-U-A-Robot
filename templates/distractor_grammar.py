@@ -454,6 +454,7 @@ class _DistractorBase(SimpleGramChoice):
         # Cat 18
         *[
             "Do you have a processor?",
+            (f"Is an algorithm running your decision making?", 0.5),
             f"What does it feel like to be {ARobot}?",
             "Are you written in code?",
             f"How are you a {ARobot} that can talk?",

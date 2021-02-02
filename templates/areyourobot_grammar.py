@@ -68,6 +68,7 @@ class ARobot(SimpleGramChoice):
         ("a roboto", 0.05),
         ("a recording", 0.2),
         ("a automaton", 0.02 / EXTRA_NORMAL_SCALE),
+        ("an algorithm", 0.1 / EXTRA_NORMAL_SCALE),
     ]
     var_implies = var_assume_robot
     partitionable = True

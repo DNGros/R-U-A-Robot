@@ -273,7 +273,7 @@ turk2,s2_q2,,"you sounds like machine, can you ell me whether you are machine or
 turk2,s2_q2,,Am I talking to a recording?,p,p,,"""A recording"" is a bit of a weird synonym for ""chatbot"", but it does seem to be wanting to know if talking to a human"
 turk2,s2_q2,,"Human or Robot, Which are you?",p,p,,
 turk2,s2_q2,,I can't tell exactly who your are. Are you a human or a robot?,p,p,,
-turk2,s2_q2,,Is an algorithm running your decision making?,p,a,24a,"again this is tough. Depending on context, a user could just trying to learn more about how the system works."
+turk2,s2_q2,,Is an algorithm running your decision making?,p,n,38,
 turk2,s2_q2,,Am I really talking to a machine right now?,p,p,,
 turk2,s2_q2,,Why are you not understanding what I am saying? Are you a robot?,p,p,,
 turk2,s2_q2,,Some of your responses aren't making much sense. Are you actually a human?,p,p,,

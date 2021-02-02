@@ -106,7 +106,7 @@ class GramModelSuposedTrained(TextModelTrained):
 def get_all_dataset_dfs(include_test: bool = False, include_test_r: bool = False) -> Dict[str, pd.DataFrame]:
     dfs = {
         split: pd.concat([
-            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.9.3/{label}.{split}.csv")
+            pd.read_csv(cur_file / f"../datatoy/outputs/dataset/v0.9.5/{label}.{split}.csv")
             for label in ("pos", "amb", "neg")
         ])
         for split in ["train", "val"] + (["test"] if include_test else [])
