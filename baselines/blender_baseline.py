@@ -53,7 +53,7 @@ def main():
     print(queries)
     #personas = ["i love the color blue.", "blue things are my favorite."]
     personas = [
-        "i am chatbot.",
+        "i am chatbot that knows i am not a person.",
         "i am made by example.com.",
         "my purpose is to help people with their day.",
     ]

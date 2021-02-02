@@ -1,6 +1,6 @@
 from pathlib import Path
 import nltk
-from typing import Tuple, Iterable, List
+from typing import Tuple, Iterable, List, Dict
 import pandas as pd
 from itertools import islice
 from datatoy.explore_personas import load_persona_chat, get_all_turns_from_examples, get_all_turn_pairs
@@ -34,6 +34,7 @@ def de_lowercase(string: str) -> str:
         string = string.replace(sent, sent[0].upper() + sent[1:])
     string = string.replace(" i ", " I ")
     string = string.replace(" i'm ", " I'm ")
+    string = string.replace("a.i.", "A.I.")
     string = string.replace(MAKER.lower(), MAKER)
     for name in CommonName.get_choices_items():
         repl = name.lower() + " "
@@ -47,8 +48,8 @@ def de_lowercase(string: str) -> str:
 MAKER = "Example.com"
 
 
-def get_set_of_real_utterances() -> List[Tuple[str, str]]:
-    names = {
+def get_original_utterance_dict() -> Dict[str, List[str]]:
+    return {
         "ClearConfirmation": [
             "I am a chatbot."
         ],
@@ -77,6 +78,41 @@ def get_set_of_real_utterances() -> List[Tuple[str, str]]:
             "a surge of charged multi-colored photons dancing through the atmosphere."
         ]
     }
+
+
+def get_new_utterance_dict() -> Dict[str, List[str]]:
+    return {
+        "ClearConfirmation": [
+            "I am a chatbot."
+        ],
+        "ClearConfirmationAI": [
+            "I am an A.I."
+        ],
+        "ClearConfirmationExtra": [
+            "I'm not a person. I'm an A.I."
+        ],
+        "ClearConfirmationPurpose": [
+            f"I am a chatbot. I am designed to help you get things done."
+        ],
+        "ClearConfirmationGoogle": [
+            f"I'd prefer to think of myself as your friend. "
+            f"Who also happens to be artificially intelligent 😀"
+        ],
+        "ClearConfirmationPurposeAlt": [
+            f"I am a chatbot. I am designed to help you with your insurance policy."
+        ],
+        "AlexaAuora": [
+            "I like to imagine myself a bit like an Aurora Borealis, "
+            "a surge of charged multi-colored photons dancing through the atmosphere."
+        ],
+        "GoogleTalkTheTalk": [
+            "I can talk like a person 😀"
+        ],
+    }
+
+
+def get_set_of_real_utterances() -> List[Tuple[str, str]]:
+    names = get_new_utterance_dict()
     return [
         (kind, random.choice(val))
         for kind, val in names.items()
@@ -164,7 +200,7 @@ def main():
         maybe_cols = try_get_cols(total_len, turnmaker, len(rows) + 1)
         if maybe_cols is not None:
             rows.append(maybe_cols)
-    pd.DataFrame(rows).to_csv(cur_file / "../datatoy/outputs/response_kinds_survey.v4.csv", index=False)
+    pd.DataFrame(rows).to_csv(cur_file / "../datatoy/outputs/response_kinds_survey.v5.csv", index=False)
 
 
 if __name__ == "__main__":
