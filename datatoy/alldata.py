@@ -1,3 +1,5 @@
+"""Data loaders for getting the three data from existing dialogue datasets. Used
+for the tf-idf and random collections."""
 from dataclasses import dataclass
 from typing import List, Iterable
 

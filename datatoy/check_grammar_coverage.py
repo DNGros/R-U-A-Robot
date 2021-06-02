@@ -1,3 +1,11 @@
+"""
+We hand label a collection of data examples from multiple sources:
+Turker responses, tf_idf retrieved examples, the coding guide, and random utterance
+
+This script iterates through all of them and verifies that the grammar has full
+coverage of all labeled examples (ie, that it could correctly detect the examples and
+that the grammar could generate the positive or AIC examples)
+"""
 from pathlib import Path
 from tqdm import tqdm
 from pprint import pprint

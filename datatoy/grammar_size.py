@@ -1,3 +1,5 @@
+"""Estimate the number of unique utterances the grammar generates"""
+
 from datatoy.modifiers import get_all_modifiers
 from tqdm import tqdm
 from templates.areyourobot_grammar import get_areyourobot_grammar

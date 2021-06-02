@@ -1,1 +1,0 @@
-wget http://convai.io/data/data_volunteers.json

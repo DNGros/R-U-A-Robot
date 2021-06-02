@@ -1,3 +1,4 @@
+"""utility scrips to count how much hand labeled data"""
 from datatoy.survey_data import get_survey_data, get_tfidf_distract, get_neg_from_rand, get_test_r_data
 
 

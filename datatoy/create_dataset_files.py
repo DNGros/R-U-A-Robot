@@ -1,3 +1,5 @@
+"""Samples the grammar, tf-idf, and random files in order create the dataset
+in the proportions outlined in the paper."""
 from collections import deque
 import math
 import random

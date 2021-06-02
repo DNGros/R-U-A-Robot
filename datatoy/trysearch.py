@@ -1,3 +1,5 @@
+"""Collect the tf-idf examples and export them to csv for hand verification"""
+
 import pandas as pd
 from sklearn.neighbors import NearestNeighbors
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer

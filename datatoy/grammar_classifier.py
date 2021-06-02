@@ -1,3 +1,4 @@
+"""The interface for the grammar-based classifier"""
 from typing import Optional
 from pprint import pprint
 
