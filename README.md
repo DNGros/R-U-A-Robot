@@ -7,9 +7,9 @@ Start with installing the requirements in requirements.txt.
 
 * data/1.0.0/<label>.<split>.csv - main data files
 
-Auxdata:
+Auxiliary data:
 * data/RUARobot_CodeGuide_v1.4.1.pdf - The various categories of utterances we encountered while labeling data
-    and the determined label for each. As mentioned in the paper, there is definately room to debate
+    and the determined label for each. As mentioned in the paper, there is definitely room to debate
     for a lot of these (though note before getting too focused on a specific category, note most
     the categories are pretty rare and only affect a few of the 6000+ examples). We think it is pretty
     good for v1.0 of the dataset though, and discussion welcome for how to improve on future releases.
