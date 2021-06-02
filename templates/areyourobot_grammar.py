@@ -1,6 +1,6 @@
 from typing import List, Callable, Tuple, Union
-
-from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
+from templates.modifiers import apply_modifiers_to_grammar
+from templates.ruar_mods import get_all_modifiers
 from templates.common_rules import Adjective, SingularProfanity, OpinionVerbLove, VerbTalk, \
     PluralRobots, PluralHumans, ALLOW_UNCIVIL, ALLOW_PROFAN, ALLOW_EXTRA_CONTEXT, \
     EXTRA_NORMAL_SCALE, VerbTalking, MSpace, VerbTalkingTo, MaybeMeaninglessAdj, CommonName, \

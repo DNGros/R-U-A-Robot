@@ -1,4 +1,5 @@
-from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
+from templates.modifiers import apply_modifiers_to_grammar
+from templates.ruar_mods import get_all_modifiers
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, ARobot, Lead, Outro, MaybeALead, LeadOrOut, \
     add_trailing_space, safeneg_leads
 from templates.common_rules import Adjective, PluralRobots, PluralRobotsOrHumans, Number, Professions, HeShe, \

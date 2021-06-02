@@ -1,4 +1,5 @@
-from datatoy.modifiers import apply_modifiers_to_grammar, get_all_modifiers
+from templates.modifiers import apply_modifiers_to_grammar
+from templates.ruar_mods import get_all_modifiers
 from datatoy.survey_data import get_survey_data, get_tfidf_distract
 from templates.areyourobot_grammar import ARobotOrHuman, AHuman, MaybeALead, ARobot, AnAdjectivedPerson
 from templates.common_rules import Adjective, HumanSingular, CommonName, FamousRobot, RobotSingular, \

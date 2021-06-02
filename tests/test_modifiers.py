@@ -1,7 +1,8 @@
 import re
 
-from datatoy.modifiers import modify_grammar, Modifier, apply_modifiers_to_grammar, get_all_modifiers, \
+from templates.modifiers import modify_grammar, Modifier, apply_modifiers_to_grammar, \
     make_modifier_word_synonym
+from templates.ruar_mods import get_all_modifiers
 from templates.gramdef import SimpleGramChoice, Grammar, clear_global_name_cache
 from templates.gramgen import GramRecognizer, gram_to_lark_ebnf
 
