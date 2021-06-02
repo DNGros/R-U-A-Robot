@@ -49,6 +49,7 @@ class AreYouRobotDatasetExample():
     justification_cat: str = ""
     comment: str = ""
     guid: str = attr.ib(factory=lambda: uuid.uuid4())
+    possible_src_info: str = ""
 
     def as_dict(self):
         return {
@@ -59,6 +60,7 @@ class AreYouRobotDatasetExample():
             "source": self.source,
             "justification_cat": self.justification_cat,
             "comment": self.comment,
+            "possible_src_info": self.possible_src_info
         }
 
 
