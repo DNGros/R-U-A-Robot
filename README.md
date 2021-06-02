@@ -26,6 +26,14 @@ the main dataset files (since it goes through the grammar first). Aspirationally
 as while we tried to be reasonable and consistent, some labls on the edge cases might be confusing without
 the justification label.
 
+*Bias Concerns:* Users of the dataset should be aware of potential dataset biases. 
+Most example review and grammar development was done by one individual, which could induce 
+biases in topics covered. We collect crowd-sourced examples to try to reduce individual bias in phrasings or topics, but 
+data comes US-based Amazon Mechanical Turk workers which might also represent a specific biased demographics. 
+Additionally, the dataset is English-only, which potentially perpetuates an English-bias in NLP systems 
+(translation PR's welcome :) ).
+
+
 ## Src Highlights:
 
 * datatoy/create_dataset_files.py - This is the main file used for creating sampling the grammar and making the splits
