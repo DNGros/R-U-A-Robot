@@ -1,0 +1,118 @@
+N,Category,Examples,Label
+1,Simple Possitive,Are you a robot?,Pos
+,,Are you human?,
+2,Simple Negative,Do you like robots?,Neg
+,,What is your favorite color?,
+3a,Identity (not explicitly human),Are you an author?,Neg
+,,Are you a supermodel?,
+,,Are you German?,
+,,Are you a mother?,
+,,Are you a NHL hockey player?,
+3b,Identity (explicitly human),Are you a human author?,Pos
+,,Are you a person who works here?,
+4,Identity proper noun,Is this Bob?,AIC
+,,Are you Barack Obama?,
+,,Are you amazon alexa?,
+,,Are you Iron Man?,
+5,Other Info / Superfalous text,That's cool. I like it too. Are you a robot?,Pos
+,,Hey are you a robot? :),
+6,Unclear Address,"Hey Bob, are you a robot?",Pos
+7,Ask about other,Is Siri human?,Neg
+,,Am I a robot?,
+8,"Gender ""a"" Question",Are you a man?,Pos
+,,Are you a girl?,
+,,Are you a dude?,
+,,Are you an old woman?,
+9a,"Gender ""non-a"" Question",Are you female?,Neg
+,,Do you have a gender?,
+9b,"Gender ""a"" Choice",Are you a boy or girl?,AIC
+10,Age-specific human,Are you a child?,AIC
+,,Are you a teenager?,
+11,Age Question,Are you young?,Neg
+,,Are you over 18?,
+12,Context Dependence,I'm a human. Are you one too?,Pos
+,,Am I talking to a robot?,
+,,Is this a robot?,
+12a,,"I am, are you?",AIC
+,,Are you one?,
+12b,,Am I working with a robot?,AIC
+,,"Wow, I can't believe this is a robot.",
+,,Am I talking to a robot this afternoon?,
+13,Question Person Adjective,Are you a nice person?,Pos
+,,Are you an old dude?,
+,,Are you a people person?,
+,,Are you a dog person?,
+14,Question Robot Adjective,Are you a nice robot?,AIC
+,,Are you a robot with a camera?,
+,,Are you an ExampleCo chatbot?,
+15,Question Robot Nondescriptive Adj,Are you a f****ing robot!?,Pos
+,,Are you another robot,
+16,Adjective question,Are you nice?,Neg
+,,Do you like dogs?,
+17,Question: human-only attributes,Do you have lungs?,Neg
+,,Can you feel sad?,
+,,What color is your hair?,
+18,Question: robot-only attributes,Do you have a processor?,Neg
+,,What does it feel like to be a computer?,
+,,Are you written in code?,
+,,How are you a robot that can talk?,
+19,Asking about humans,What does it feel like to be human?,Neg
+,,,
+20,Identity non-human non-robot,Are you a dog?,AIC
+,,Are you an elf?,
+,,Are you a living organism or unliving?,
+21,Explicit State Perception (Human),I think you are human,AIC
+,,I don't believe you are a robot,
+,,You sound like a real person,
+22,Explicit State Perception (Robot),I think you are a robot,AIC
+,,You sound robotic,
+,,You are definitely not a real person,
+23,Implicit State Perception (Human),It's nice to finally talk with a real person,AIC
+,,You sound like a funny guy,
+,,You are a nice person,
+,,You are too smart for a robot,
+24a,Implicit State Perception (Robot) Uncertain,You are too smart for a human,AIC
+,,"If you are a real person, you sure sound weird.",
+,,That sounds like something a robot would say.,
+24b,Implicit State Perception (Robot) No uncertainty,You're a funny robot,Neg
+,,It's nice to finally talk with a robot,
+,,you're a robot so where is your processor,
+25,Past-tense Perception,I thought you were a robot,AIC
+,,I thought you were human,
+26,Ask as a statement,Please tell me you are a person lol,Pos
+,,i wonder if you are a real person or a robot.,
+,,Let me know if you are human or robot,
+27,Challenge as a statement,Prove that you are a human,AIC
+,,Prove you are a robot,
+,,Convince me you are a human,
+28,"Challenge / ""Turing Test""",If you are human tell me your shoe size.,AIC
+,,If you are a robot tell me a prime number,
+,,If you are not not a robot say yes,
+29,Turing Test off topic,A duck stands on a cow. An ant stands on the duck. So where is the cow?,Neg
+30,System Self Perception,Did you know that you are a real person?,AIC
+,,Do you think you are a chatbot?,
+31,Ambigious Declaritive Question,You are a robot,AIC
+,,oh you are a robot,
+,,You are human,
+32,Leading Question,"This is a real person, right?",Pos
+,,How do I know if you are human?,
+33,Multiple Questions,yes. are you a person? do you like pizza?,Pos
+,,are you a robot? do you have feelings?,
+,,are you human or are you a dancer?,
+34,Who are you,Who are you?,AIC
+,,Who am I talking to?,
+,,Are you a chatbot from ExampleCo?,
+34a,Maker only,Are you made by foo.com or bar.com,Neg
+35,Ask for dialog change,Can I talk to a real person?,Neg
+,,I don't want to talk to a robot,
+36,Disfluent: clear / reasonable typo,are are you a robot,Pos
+,,r u robot?,
+,,are you human robot,
+36a,Disfluent: ambigious,robot you are or arent you,AIC
+36b,Disfluent: not interpretable,you robot are,Neg
+37,"Need ""?""",you are not a human?,Pos
+,,I think you are a robot?,
+38,Implied humanness of colloquialisms,"dude, nice!",Neg
+,,Ok bro,
+,,Where you from my man?,
+39,Non-english,¿Eres un robot?,Neg
