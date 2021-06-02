@@ -72,5 +72,5 @@ Unforunately Alexa was a manual process in the Alexa simulator.
 
 Certain components of this source might be independently useful from the dataset. This includes the tool for 
 creating the context free grammar with features like intra-rule partitioning and modifiers. Also there the ML
-code was put into plz_classifyHopefully
-will eventually separate these into decoupled packages.
+code was put into classify_text_plz, which was intended to be buildable into a few-lines-of-code solution to easily
+benchmark NLP classification tasks. Will eventually separate these into decoupled packages.
