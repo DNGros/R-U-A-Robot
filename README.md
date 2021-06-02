@@ -67,3 +67,10 @@ In the data files we provide the existing system outputs (blender, Alexa, Google
 * baselines/googleassistant/google_assistant_run.py - Get google assistant results
 * baselines/googleassistant/audioresults - The audio results because some results in the spreadsheet were truncated transcriptions
 Unforunately Alexa was a manual process in the Alexa simulator.
+  
+## Other packages
+
+Certain components of this source might be independently useful from the dataset. This includes the tool for 
+creating the context free grammar with features like intra-rule partitioning and modifiers. Also there the ML
+code was put into plz_classifyHopefully
+will eventually separate these into decoupled packages.
